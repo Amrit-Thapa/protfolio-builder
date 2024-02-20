@@ -1,10 +1,10 @@
 import React, {ComponentProps, useState} from "react";
 import Image from "next/image";
-import addSectionIcon from "../../../public/assets/icons/addSection.png";
-import plusIcon from "../../../public/assets/icons/plus.png";
-import {sectionConfig} from "@/app/utils";
-import {useAppContext} from "@/app/context/AppContext";
-import {Section} from "@/app/types";
+import addSectionIcon from "@/../public/assets/icons/addSection.png";
+import plusIcon from "@/../public/assets/icons/plus.png";
+import {sectionConfig} from "@/utils";
+import {useAppContext} from "@/context/AppContext";
+import {Section} from "@/types";
 
 export const SectionMenu = ({children, ...props}: ComponentProps<"div">) => {
   return (

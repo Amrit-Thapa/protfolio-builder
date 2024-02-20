@@ -4,4 +4,6 @@ export enum Section {
   Projects = "Projects",
   Experience = "Experience",
   CTA = "CTA",
+  HeroSection = "HeroSection",
+  ContactMe = "ContactMe",
 }

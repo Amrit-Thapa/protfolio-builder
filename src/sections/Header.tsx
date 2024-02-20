@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
-import logo from "../../../public/assets/logo.png";
-import downArrow from "../../../public/assets/icons/downArrow.png";
-import exclamationMark from "../../../public/assets/icons/exclamationMark.png";
+import logo from "@/../public/assets/logo.png";
+import downArrow from "@/../public/assets/icons/downArrow.png";
+import exclamationMark from "@/../public/assets/icons/exclamationMark.png";
 import {useAppContext} from "../context/AppContext";
-import {ComponentProps, useState} from "react";
+import {useState} from "react";
 import {Section} from "../types";
 import {sectionConfig} from "../utils";
 import {SectionMenu} from "../component/AddSection";
