@@ -5,7 +5,7 @@ import {CodeHighlightNode, CodeNode} from "@lexical/code";
 import {TableNode, TableCellNode, TableRowNode} from "@lexical/table";
 import {ListNode, ListItemNode} from "@lexical/list";
 
-function onError(error) {
+function onError(error: any) {
   console.error(error);
 }
 
