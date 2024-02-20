@@ -1,108 +1,162 @@
 import classNames from "classnames";
-import React, {ChangeEvent} from "react";
+import React from "react";
 import {useAppContext} from "../context/AppContext";
 import Image from "next/image";
 import ImagePicker from "../component/ImagePicker";
 import plusIcon from "@/../public/assets/icons/plus.png";
+import {Section} from "@/types";
+import useAutoResizeTextarea from "@/hooks/useAutoResizeTextarea";
 
 const Experience = () => {
-  const {experienceSection, setExperienceSection} = useAppContext();
+  const {
+    experienceSection,
+    setExperienceSection,
+    setActiveSection,
+    activeSection,
+  } = useAppContext();
 
-  const handleChange = (
-    event: ChangeEvent<HTMLTextAreaElement>,
-    field: string,
-  ) => {
-    const textareaLineHeight = 24;
-    event.target.style.height = "auto";
-    event.target.style.height =
-      event.target.scrollHeight + textareaLineHeight + "px";
+  const [descriptionRef] = useAutoResizeTextarea();
+
+  const handleChange = (id: string, key: string, value: string) => {
     setExperienceSection((prev) => {
       return {
         ...prev,
-        [field]: event.target.value,
+        items: prev.items.map((item) =>
+          item.id === id ? {...item, [key]: value} : item,
+        ),
       };
     });
   };
 
   return (
     <section className="w-full mt-24 flex justify-end">
-      <aside className="md:w-[852px] md:p-10 md:min-h-[428px] border border-[#828282] rounded-lg">
+      <aside
+        className={classNames(
+          "md:w-[852px] md:p-10 md:min-h-[428px] rounded-lg",
+          {
+            "border border-[#828282]": activeSection === Section.Experience,
+          },
+        )}
+        onClick={() => setActiveSection(Section.Experience)}
+      >
         <input
           className="bg-transparent text-black w-full font-bold text-3xl outline-none"
           value={experienceSection.title}
-          onChange={(e) => handleChange(e, "title")}
+          onChange={(e) =>
+            setExperienceSection((prev) => {
+              return {...prev, title: e.target.value};
+            })
+          }
         />
         <textarea
+          ref={descriptionRef}
           className={classNames(
             "bg-transparent text-black outline-none w-full mt-2 font-medium text-base",
             "resize-none overflow-hidden border-none p-0 m-0",
           )}
           value={experienceSection.description}
           placeholder="Add subtext here.."
-          onChange={(e) => handleChange(e, "description")}
+          onChange={(e) =>
+            setExperienceSection((prev) => {
+              return {...prev, description: e.target.value};
+            })
+          }
         />
         <div>
-          <div className="bg-white text-[#C6C6C6] rounded-2xl border w-full p-10 min-h-[222px]">
-            <div>
-              <div className="flex gap-3 items-end">
-                <ImagePicker
-                  height={50}
-                  width={50}
-                  prevH={24}
-                  prevW={24}
-                  id="project-icon"
-                  className="rounded w-[50px]"
-                />
+          {experienceSection.items.map((exp) => {
+            return (
+              <div className="bg-white text-[#C6C6C6] rounded-2xl border w-full p-10 min-h-[222px] mt-5">
                 <div>
-                  <input
-                    className="bg-transparent text-black outline-none font-semibold text-base"
-                    // value={title}
-                    placeholder="Enter company title"
-                    // onChange={(e) => setTitle(e.target.value)}
-                  />
-                  <input
-                    className="bg-transparent text-black outline-none font-medium text-sm"
-                    // value={title}
-                    placeholder="Enter designation"
-                    // onChange={(e) => setTitle(e.target.value)}
-                  />
-                  <input
-                    className="bg-transparent text-[#858585] outline-none font-medium text-xs"
-                    // value={title}
-                    placeholder="+Add location"
-                    // onChange={(e) => setTitle(e.target.value)}
-                  />
-                  .
-                  <input
-                    className="bg-transparent text-[#858585] outline-none font-medium text-xs"
-                    // value={title}
-                    placeholder="year"
-                    // onChange={(e) => setTitle(e.target.value)}
+                  <div className="flex gap-3 items-end">
+                    <ImagePicker
+                      src={exp.logo}
+                      onChange={(b64) =>
+                        handleChange(exp.id, "logo", b64 as string)
+                      }
+                      height={50}
+                      width={50}
+                      id={`${exp.id}_logo`}
+                      className="rounded w-[50px]"
+                    />
+                    <div>
+                      <input
+                        className="bg-transparent text-black outline-none font-semibold text-base"
+                        value={exp.name}
+                        placeholder="Enter company title"
+                        onChange={(e) =>
+                          handleChange(exp.id, "name", e.target.value)
+                        }
+                      />
+                      <input
+                        className="bg-transparent text-black outline-none font-medium text-sm"
+                        value={exp.designation}
+                        placeholder="Enter designation"
+                        onChange={(e) =>
+                          handleChange(exp.id, "designation", e.target.value)
+                        }
+                      />
+                      <input
+                        className="bg-transparent text-[#858585] outline-none font-medium text-xs"
+                        value={exp.location}
+                        placeholder="+Add location"
+                        onChange={(e) =>
+                          handleChange(exp.id, "location", e.target.value)
+                        }
+                      />
+                      <input
+                        className="bg-transparent text-[#858585] outline-none font-medium text-xs"
+                        value={exp.timeLine}
+                        placeholder="year"
+                        onChange={(e) =>
+                          handleChange(exp.id, "timeLine", e.target.value)
+                        }
+                      />
+                    </div>
+                  </div>
+                  <textarea
+                    className={classNames(
+                      "bg-transparent text-black outline-none w-full font-medium max-w-[501px] text-sm",
+                      "resize-none overflow-hidden border-none p-0 mt-10",
+                    )}
+                    value={exp.description}
+                    placeholder="Add subtext here..."
+                    onChange={(e) =>
+                      handleChange(exp.id, "description", e.target.value)
+                    }
                   />
                 </div>
               </div>
-              <textarea
-                className={classNames(
-                  "bg-transparent text-black outline-none w-full font-medium max-w-[501px] text-sm",
-                  "resize-none overflow-hidden border-none p-0 mt-10",
-                )}
-                // value={subText}
-                placeholder="Add subtext here..."
-                // onChange={(e) => handleChange(e, setSubTitle)}
-              />
+            );
+          })}
+          {activeSection === Section.Experience && (
+            <div className="rounded-2xl border p-3 mt-5 w-full flex items-center justify-center bg-[#EFEFEF]">
+              <div
+                className="cursor-pointer"
+                onClick={() =>
+                  setExperienceSection((prev) => {
+                    return {
+                      ...prev,
+                      items: [
+                        ...prev.items,
+                        {
+                          id: `exp_${prev.items.length + 1}`,
+                          description: "",
+                          designation: "",
+                          location: "",
+                          logo: "",
+                          name: "",
+                          timeLine: "",
+                        },
+                      ],
+                    };
+                  })
+                }
+              >
+                <Image src={plusIcon} alt="add" className="m-auto" />
+                Add new card
+              </div>
             </div>
-          </div>
-          <div className="rounded-2xl border p-3 mt-5 w-full flex items-center justify-center bg-[#EFEFEF]">
-            <div
-              className="cursor-pointer"
-              // onClick={() =>
-              //   setSkillList((prev) => [...prev, `skill_${prev.length + 1}`])
-              // }
-            >
-              <Image src={plusIcon} alt="add" className="m-auto" />
-              Add new card
-            </div>
-          </div>
+          )}
         </div>
       </aside>
     </section>

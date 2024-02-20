@@ -1,40 +1,46 @@
-import React, {ChangeEvent, Dispatch, SetStateAction} from "react";
 import Image from "next/image";
 import plusIcon from "@/../public/assets/icons/plus.png";
-import SkillCard from "../../component/Card";
 import {useAppContext} from "../context/AppContext";
 import classNames from "classnames";
+import {Section} from "@/types";
 
 const Skills = () => {
-  const {skillSection, setSkillSection} = useAppContext();
+  const {skillSection, setSkillSection, setActiveSection, activeSection} =
+    useAppContext();
 
-  const handleChange = (
-    event: ChangeEvent<HTMLTextAreaElement>,
-    field: string,
-  ) => {
-    const textareaLineHeight = 24;
-    event.target.style.height = "auto";
-    event.target.style.height =
-      event.target.scrollHeight + textareaLineHeight + "px";
-
-    // setSkillSection(prev => {
-    //   return []
-    // })
+  const handleChange = (id: string, key: string, value: string) => {
+    setSkillSection((prev) => {
+      return prev.map((item) =>
+        item.id === id ? {...item, [key]: value} : item,
+      );
+    });
   };
 
   return (
-    <section className="w-full mt-24 flex justify-end">
-      <aside className="w-full md:w-[852px] md:min-h-[428px] border border-[#828282] rounded-lg p-3 md:p-10 flex flex-wrap gap-4">
+    <section
+      className="w-full mt-24 flex justify-end"
+      onClick={() => setActiveSection(Section.Skills)}
+    >
+      <aside
+        className={classNames(
+          "w-full md:w-[852px] md:min-h-[428px] rounded-lg p-3 md:p-10 flex flex-wrap gap-4",
+          {"border border-[#828282]": activeSection === Section.Skills},
+        )}
+      >
         {skillSection.map((skill) => (
-          <div className="bg-white text-[#C6C6C6] rounded-2xl border max-w-[375px] p-10 min-h-[530px]">
+          <div
+            className="bg-white text-[#C6C6C6] rounded-2xl border max-w-[375px] p-10"
+            key={skill.id}
+          >
             <textarea
               className={classNames(
                 "bg-transparent text-black w-full font-bold text-xl outline-none",
                 "resize-none overflow-hidden border-none p-0 m-0",
               )}
               value={skill.title}
+              disabled={!(activeSection === Section.Skills)}
               placeholder="Untitled"
-              onChange={(e) => handleChange(e, "title")}
+              onChange={(e) => handleChange(skill.id, "title", e.target.value)}
             />
             <textarea
               className={classNames(
@@ -42,8 +48,11 @@ const Skills = () => {
                 "resize-none overflow-hidden border-none p-0 m-0",
               )}
               value={skill.description}
+              disabled={!(activeSection === Section.Skills)}
               placeholder="Write description here..."
-              onChange={(e) => handleChange(e, "description")}
+              onChange={(e) =>
+                handleChange(skill.id, "description", e.target.value)
+              }
             />
             <textarea
               className={classNames(
@@ -51,21 +60,33 @@ const Skills = () => {
                 "resize-none overflow-hidden border-none p-0 m-0",
               )}
               value={skill.text}
+              disabled={!(activeSection === Section.Skills)}
               placeholder="Start writing"
-              onChange={(e) => handleChange(e, "text")}
+              onChange={(e) => handleChange(skill.id, "text", e.target.value)}
             />
           </div>
         ))}
-        <div className="rounded-2xl border p-3 w-[375px] min-h-[530px] flex items-center justify-center bg-[#EFEFEF]">
-          <div
-            className="cursor-pointer"
-            // onClick={() =>
-            // }
-          >
-            <Image src={plusIcon} alt="add" className="m-auto" />
-            Add new card
+        {activeSection === Section.Skills && (
+          <div className="rounded-2xl border p-3 w-[375px] min-h-[530px] flex items-center justify-center bg-[#EFEFEF]">
+            <div
+              className="cursor-pointer"
+              onClick={() =>
+                setSkillSection((prev) => [
+                  ...prev,
+                  {
+                    id: `project_${prev.length + 1}`,
+                    description: "",
+                    text: "",
+                    title: "",
+                  },
+                ])
+              }
+            >
+              <Image src={plusIcon} alt="add" className="m-auto" />
+              Add new card
+            </div>
           </div>
-        </div>
+        )}
       </aside>
     </section>
   );

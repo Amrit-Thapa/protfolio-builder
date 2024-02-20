@@ -1,4 +1,5 @@
 "use client";
+import ConnectMe from "@/sections/ConnectMe";
 import {Fragment} from "react";
 import AddSection from "../component/AddSection";
 import {useAppContext} from "../context/AppContext";
@@ -17,6 +18,7 @@ const sectionMap = {
   [Section.Projects]: <Projects />,
   [Section.Experience]: <Experience />,
   [Section.CTA]: <CTA />,
+  [Section.ContactMe]: <ConnectMe />,
 };
 
 export default function Home() {
@@ -37,7 +39,7 @@ export default function Home() {
             })}
         </div>
       </div>
-      {section.length < 5 && <AddSection />}
+      {section.length < 7 && <AddSection />}
     </>
   );
 }

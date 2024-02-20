@@ -60,9 +60,10 @@ const initialState = {
     description: "",
     items: [
       {
-        id: "",
+        id: "exp_1",
         logo: "",
         designation: "",
+        name: "",
         location: "",
         timeLine: "",
         description: "",
@@ -75,6 +76,7 @@ const initialState = {
     items: [
       {
         id: "",
+        title: "",
         icon: "",
         description: "",
         link: "",

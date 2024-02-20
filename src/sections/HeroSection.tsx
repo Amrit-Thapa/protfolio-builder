@@ -1,6 +1,6 @@
 "use client";
+import useAutoResizeTextarea from "@/hooks/useAutoResizeTextarea";
 import classNames from "classnames";
-import {ChangeEvent} from "react";
 import ImagePicker from "../component/ImagePicker";
 import {useAppContext} from "../context/AppContext";
 import {Section} from "../types";
@@ -8,18 +8,8 @@ import {Section} from "../types";
 const HeroSection = () => {
   const {heroSection, setHeroSection, setActiveSection, activeSection} =
     useAppContext();
-
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>, field: string) => {
-    const textareaLineHeight = 24;
-    e.target.style.height = "auto";
-    e.target.style.height = e.target.scrollHeight + "px";
-    setHeroSection((prev) => {
-      return {
-        ...prev,
-        [field]: e.target.value,
-      };
-    });
-  };
+  const [introTextRef] = useAutoResizeTextarea();
+  const [subTextRef] = useAutoResizeTextarea();
 
   return (
     <section
@@ -45,6 +35,7 @@ const HeroSection = () => {
           className="bg-transparent text-black outline-none font-medium text-base"
           value={heroSection.title}
           placeholder="Enter site title"
+          disabled={!activeSection}
           onChange={(e) =>
             setHeroSection((prev) => {
               return {
@@ -75,22 +66,40 @@ const HeroSection = () => {
         </div>
         <div className="w-full item-center text-[#AAAAAA] md:w-[852px] p-3 md:p-10">
           <textarea
+            ref={introTextRef}
+            disabled={!activeSection}
             className={classNames(
               "bg-transparent text-black w-full font-medium md:text-7xl text-4xl outline-none",
               "resize-none overflow-hidden border-none p-0 m-0",
             )}
             value={heroSection.introText}
             placeholder="Click to add title"
-            onChange={(e) => handleChange(e, "introText")}
+            onChange={(e) =>
+              setHeroSection((prev) => {
+                return {
+                  ...prev,
+                  introText: e.target.value as string,
+                };
+              })
+            }
           />
           <textarea
+            ref={subTextRef}
+            disabled={!activeSection}
             className={classNames(
               "bg-transparent text-black outline-none w-full md:max-w-[340px] font-normal text-lg",
               "resize-none overflow-hidden border-none p-0 m-0",
             )}
             value={heroSection.subText}
             placeholder="Click to add subtitle"
-            onChange={(e) => handleChange(e, "subText")}
+            onChange={(e) =>
+              setHeroSection((prev) => {
+                return {
+                  ...prev,
+                  subText: e.target.value as string,
+                };
+              })
+            }
           />
         </div>
       </div>
@@ -100,6 +109,7 @@ const HeroSection = () => {
             className="bg-transparent text-black outline-none font-bold w-full"
             value={heroSection.name}
             placeholder="Enter your name here"
+            disabled={!activeSection}
             onChange={(e) =>
               setHeroSection((prev) => {
                 return {
@@ -113,6 +123,7 @@ const HeroSection = () => {
             className="bg-transparent text-black outline-none mt-3 text-sm font-normal w-full"
             value={heroSection.email}
             placeholder="Enter email"
+            disabled={!activeSection}
             onChange={(e) =>
               setHeroSection((prev) => {
                 return {
