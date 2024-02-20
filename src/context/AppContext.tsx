@@ -2,16 +2,6 @@
 import React, {createContext, useState, useContext} from "react";
 import {Section} from "../types";
 
-type HeroSection = {
-  title: string;
-  logo: string;
-  name: string;
-  email: string;
-  introText: string;
-  subText: string;
-  profileImage: string;
-};
-
 const initialState = {
   [Section.HeroSection]: {
     title: "AMRITTHAPA",
@@ -36,7 +26,7 @@ const initialState = {
   },
   [Section.Skills]: [
     {
-      id: "1",
+      id: "skill_1",
       title: "Untitled",
       description: "Write description here...",
       text: "Start writing",
@@ -47,7 +37,7 @@ const initialState = {
     description: "",
     items: [
       {
-        id: "",
+        id: "project_1",
         logo: "",
         title: "",
         link: "",
@@ -75,7 +65,7 @@ const initialState = {
     description: "",
     items: [
       {
-        id: "",
+        id: "cta_1",
         title: "",
         icon: "",
         description: "",

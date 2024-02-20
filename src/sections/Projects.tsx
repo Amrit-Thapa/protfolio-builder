@@ -131,7 +131,7 @@ const Projects = () => {
                       items: [
                         ...prev.items,
                         {
-                          id: `skill_${prev.items.length + 1}`,
+                          id: `project_${prev.items.length + 1}`,
                           description: "",
                           link: "",
                           logo: "",

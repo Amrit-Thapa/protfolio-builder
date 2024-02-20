@@ -79,7 +79,7 @@ const Skills = () => {
                 setSkillSection((prev) => [
                   ...prev,
                   {
-                    id: `project_${prev.length + 1}`,
+                    id: `skill_${prev.length + 1}`,
                     description: "",
                     text: "",
                     title: "",
