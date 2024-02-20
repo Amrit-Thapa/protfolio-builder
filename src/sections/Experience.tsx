@@ -5,7 +5,7 @@ import Image from "next/image";
 import ImagePicker from "../component/ImagePicker";
 import plusIcon from "@/../public/assets/icons/plus.png";
 import {Section} from "@/types";
-import useAutoResizeTextarea from "@/hooks/useAutoResizeTextarea";
+import {resizeTextArea} from "@/utils";
 
 const Experience = () => {
   const {
@@ -14,8 +14,6 @@ const Experience = () => {
     setActiveSection,
     activeSection,
   } = useAppContext();
-
-  const [descriptionRef] = useAutoResizeTextarea();
 
   const handleChange = (id: string, key: string, value: string) => {
     setExperienceSection((prev) => {
@@ -49,7 +47,6 @@ const Experience = () => {
           }
         />
         <textarea
-          ref={descriptionRef}
           className={classNames(
             "bg-transparent text-black outline-none w-full mt-2 font-medium text-base",
             "resize-none overflow-hidden border-none p-0 m-0",
@@ -58,7 +55,7 @@ const Experience = () => {
           placeholder="Add subtext here.."
           onChange={(e) =>
             setExperienceSection((prev) => {
-              return {...prev, description: e.target.value};
+              return {...prev, description: resizeTextArea(e)};
             })
           }
         />
@@ -121,7 +118,7 @@ const Experience = () => {
                     value={exp.description}
                     placeholder="Add subtext here..."
                     onChange={(e) =>
-                      handleChange(exp.id, "description", e.target.value)
+                      handleChange(exp.id, "description", resizeTextArea(e))
                     }
                   />
                 </div>

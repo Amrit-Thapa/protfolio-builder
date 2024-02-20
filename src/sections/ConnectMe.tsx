@@ -1,6 +1,7 @@
 import ImagePicker from "@/component/ImagePicker";
 import {useAppContext} from "@/context/AppContext";
 import {Section} from "@/types";
+import {resizeTextArea} from "@/utils";
 import classNames from "classnames";
 import React from "react";
 
@@ -32,7 +33,7 @@ const ConnectMe = () => {
             setContactMeSection((prev) => {
               return {
                 ...prev,
-                title: e.target.value,
+                title: resizeTextArea(e),
               };
             })
           }
@@ -49,7 +50,7 @@ const ConnectMe = () => {
             setContactMeSection((prev) => {
               return {
                 ...prev,
-                description: e.target.value,
+                description: resizeTextArea(e),
               };
             })
           }

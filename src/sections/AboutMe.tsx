@@ -1,15 +1,13 @@
 import classNames from "classnames";
-import useAutoResizeTextarea from "@/hooks/useAutoResizeTextarea";
+
 import {useAppContext} from "../context/AppContext";
 import {Section} from "../types";
+import {resizeTextArea} from "@/utils";
 
 const AboutMe = () => {
   const {aboutMeSection, setAboutMeSection, setActiveSection, activeSection} =
     useAppContext();
 
-  const [introTextRef] = useAutoResizeTextarea();
-  const [subTextRef] = useAutoResizeTextarea();
-  console.log(activeSection);
   return (
     <section className="w-full mt-28 md:mt-20 flex justify-end">
       <aside
@@ -23,7 +21,6 @@ const AboutMe = () => {
         }}
       >
         <textarea
-          ref={introTextRef}
           className="bg-transparent text-black w-full font-bold text-3xl outline-none"
           value={aboutMeSection.title}
           disabled={activeSection !== Section.AboutMe}
@@ -32,13 +29,12 @@ const AboutMe = () => {
             setAboutMeSection((prev) => {
               return {
                 ...prev,
-                title: e.target.value,
+                title: resizeTextArea(e),
               };
             })
           }
         />
         <textarea
-          ref={subTextRef}
           className={classNames(
             "bg-transparent text-black outline-none w-full font-medium text-base",
             "resize-none overflow-hidden border-none p-0 m-0",
@@ -50,7 +46,7 @@ const AboutMe = () => {
             setAboutMeSection((prev) => {
               return {
                 ...prev,
-                description: e.target.value,
+                description: resizeTextArea(e),
               };
             })
           }

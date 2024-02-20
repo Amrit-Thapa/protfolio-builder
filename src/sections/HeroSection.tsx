@@ -1,5 +1,5 @@
 "use client";
-import useAutoResizeTextarea from "@/hooks/useAutoResizeTextarea";
+import {resizeTextArea} from "@/utils";
 import classNames from "classnames";
 import ImagePicker from "../component/ImagePicker";
 import {useAppContext} from "../context/AppContext";
@@ -8,8 +8,6 @@ import {Section} from "../types";
 const HeroSection = () => {
   const {heroSection, setHeroSection, setActiveSection, activeSection} =
     useAppContext();
-  const [introTextRef] = useAutoResizeTextarea();
-  const [subTextRef] = useAutoResizeTextarea();
 
   return (
     <section
@@ -66,7 +64,6 @@ const HeroSection = () => {
         </div>
         <div className="w-full item-center text-[#AAAAAA] md:w-[852px] p-3 md:p-10">
           <textarea
-            ref={introTextRef}
             disabled={!activeSection}
             className={classNames(
               "bg-transparent text-black w-full font-medium md:text-7xl text-4xl outline-none",
@@ -78,13 +75,12 @@ const HeroSection = () => {
               setHeroSection((prev) => {
                 return {
                   ...prev,
-                  introText: e.target.value as string,
+                  introText: resizeTextArea(e),
                 };
               })
             }
           />
           <textarea
-            ref={subTextRef}
             disabled={!activeSection}
             className={classNames(
               "bg-transparent text-black outline-none w-full md:max-w-[340px] font-normal text-lg",
@@ -96,7 +92,7 @@ const HeroSection = () => {
               setHeroSection((prev) => {
                 return {
                   ...prev,
-                  subText: e.target.value as string,
+                  subText: resizeTextArea(e),
                 };
               })
             }

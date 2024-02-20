@@ -1,3 +1,4 @@
+import {ChangeEvent} from "react";
 import {Section} from "./types";
 
 export const sectionConfig = {
@@ -91,4 +92,10 @@ export const configJson = {
       link: "",
     },
   },
+};
+
+export const resizeTextArea = (event: ChangeEvent<HTMLTextAreaElement>) => {
+  event.target.style.height = "auto";
+  event.target.style.height = `${event.target.scrollHeight}px`;
+  return event.target.value;
 };

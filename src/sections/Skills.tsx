@@ -3,6 +3,7 @@ import plusIcon from "@/../public/assets/icons/plus.png";
 import {useAppContext} from "../context/AppContext";
 import classNames from "classnames";
 import {Section} from "@/types";
+import {resizeTextArea} from "@/utils";
 
 const Skills = () => {
   const {skillSection, setSkillSection, setActiveSection, activeSection} =
@@ -40,7 +41,9 @@ const Skills = () => {
               value={skill.title}
               disabled={!(activeSection === Section.Skills)}
               placeholder="Untitled"
-              onChange={(e) => handleChange(skill.id, "title", e.target.value)}
+              onChange={(e) =>
+                handleChange(skill.id, "title", resizeTextArea(e))
+              }
             />
             <textarea
               className={classNames(
@@ -51,7 +54,7 @@ const Skills = () => {
               disabled={!(activeSection === Section.Skills)}
               placeholder="Write description here..."
               onChange={(e) =>
-                handleChange(skill.id, "description", e.target.value)
+                handleChange(skill.id, "description", resizeTextArea(e))
               }
             />
             <textarea
@@ -62,7 +65,9 @@ const Skills = () => {
               value={skill.text}
               disabled={!(activeSection === Section.Skills)}
               placeholder="Start writing"
-              onChange={(e) => handleChange(skill.id, "text", e.target.value)}
+              onChange={(e) =>
+                handleChange(skill.id, "text", resizeTextArea(e))
+              }
             />
           </div>
         ))}

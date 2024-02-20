@@ -6,6 +6,7 @@ import plusIcon from "@/../public/assets/icons/plus.png";
 import {useAppContext} from "@/context/AppContext";
 import {Section} from "@/types";
 import PreviousMap from "postcss/lib/previous-map";
+import {resizeTextArea} from "@/utils";
 
 const Projects = () => {
   const {projectSection, setProjectSection, setActiveSection, activeSection} =
@@ -54,7 +55,7 @@ const Projects = () => {
           placeholder="Add subtext here..."
           onChange={(e) =>
             setProjectSection((prev) => {
-              return {...prev, description: e.target.value};
+              return {...prev, description: resizeTextArea(e)};
             })
           }
         />
@@ -112,7 +113,7 @@ const Projects = () => {
                     value={project.description}
                     placeholder="Add subtext here..."
                     onChange={(e) =>
-                      handleChange(project.id, "description", e.target.value)
+                      handleChange(project.id, "description", resizeTextArea(e))
                     }
                   />
                 </div>

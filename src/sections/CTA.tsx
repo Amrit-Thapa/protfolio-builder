@@ -5,6 +5,7 @@ import plusIcon from "@/../public/assets/icons/plus.png";
 import ImagePicker from "../component/ImagePicker";
 import {useAppContext} from "@/context/AppContext";
 import {Section} from "@/types";
+import {resizeTextArea} from "@/utils";
 
 const CTA = () => {
   const {ctaSection, setCtaSection, setActiveSection, activeSection} =
@@ -53,7 +54,7 @@ const CTA = () => {
             setCtaSection((prev) => {
               return {
                 ...prev,
-                description: e.target.value,
+                description: resizeTextArea(e),
               };
             })
           }
@@ -107,7 +108,7 @@ const CTA = () => {
                     value={cta.description}
                     placeholder="Add subtext here..."
                     onChange={(e) =>
-                      handleChange(cta.id, "description", e.target.value)
+                      handleChange(cta.id, "description", resizeTextArea(e))
                     }
                   />
                 </div>
