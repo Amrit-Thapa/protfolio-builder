@@ -7,7 +7,7 @@ import {RichTextPlugin} from "@lexical/react/LexicalRichTextPlugin";
 import {ContentEditable} from "@lexical/react/LexicalContentEditable";
 import {HistoryPlugin} from "@lexical/react/LexicalHistoryPlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
-import ToolbarPlugin from "./plugin/ToolBarPlugin";
+import ToolbarPlugin from "./plugin/ToolbarPlugin";
 import {lexicalEditorConfig} from "./config";
 
 const Editor = ({
@@ -37,7 +37,7 @@ const Editor = ({
           contentEditable={
             <ContentEditable className="relative p-1 rounded-lg outline-none" />
           }
-          placeholder={placeholder}
+          placeholder={placeholder as JSX.Element}
           ErrorBoundary={LexicalErrorBoundary}
         />
         <OnChangePlugin onChange={onChange} />
