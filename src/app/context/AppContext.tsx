@@ -14,7 +14,7 @@ export const useAppContext = () => useContext(AppContext);
 
 export const AppContextProvider = ({children}: {children: React.ReactNode}) => {
   const [activeSection, setActiveSection] = useState<Section | undefined>();
-  const [section, updateSection] = useState<Section[]>([Section.AboutMe]);
+  const [section, updateSection] = useState<Section[]>([]);
 
   return (
     <AppContext.Provider

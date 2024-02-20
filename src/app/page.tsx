@@ -2,12 +2,15 @@
 import {Fragment} from "react";
 import AddSection from "./component/AddSection";
 import {useAppContext} from "./context/AppContext";
+import AboutMe from "./sections/AboutMe";
 import Header from "./sections/Header";
 import HeroSection from "./sections/HeroSection";
+import Skills from "./sections/Skills";
 import {Section} from "./types";
 
 const sectionMap = {
-  [Section.AboutMe]: <HeroSection />,
+  [Section.AboutMe]: <AboutMe />,
+  [Section.Skills]: <Skills />,
 };
 
 export default function Home() {
@@ -15,6 +18,7 @@ export default function Home() {
   return (
     <>
       <Header />
+      <HeroSection />
       {!!section?.length &&
         section.map((item) => {
           return (
@@ -23,7 +27,7 @@ export default function Home() {
             </Fragment>
           );
         })}
-      {!!section?.length && section.length < 5 && <AddSection />}
+      {section.length < 5 && <AddSection />}
     </>
   );
 }

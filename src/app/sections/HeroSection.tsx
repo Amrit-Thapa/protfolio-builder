@@ -3,10 +3,13 @@ import classNames from "classnames";
 import {ChangeEvent, Dispatch, SetStateAction, useState} from "react";
 import ImagePicker from "../component/ImagePicker";
 
+const text = "Hey! I'm Neeraj Walia, a full stack developer.";
+const intrp = "Ready to bring your dream product to life in the virtual world.";
+
 const HeroSection = () => {
   const [title, setTitle] = useState("");
-  const [introTitle, setIntroTitle] = useState("");
-  const [subText, setSubTitle] = useState("");
+  const [introTitle, setIntroTitle] = useState(text);
+  const [subText, setSubTitle] = useState(intrp);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
@@ -50,14 +53,17 @@ const HeroSection = () => {
         </div>
         <div className="w-full item-center text-[#AAAAAA]">
           <textarea
-            className="bg-transparent text-black w-full font-normal text-7xl outline-none"
+            className={classNames(
+              "bg-transparent text-black w-full font-medium md:text-7xl text-4xl outline-none pt-10",
+              "resize-none overflow-hidden border-none p-0 m-0",
+            )}
             value={introTitle}
             placeholder="Click to add title"
             onChange={(e) => handleChange(e, setIntroTitle)}
           />
           <textarea
             className={classNames(
-              "bg-transparent text-black outline-none w-full font-normal text-lg",
+              "bg-transparent text-black outline-none w-full md:max-w-[340px] font-normal text-lg",
               "resize-none overflow-hidden border-none p-0 m-0",
             )}
             value={subText}

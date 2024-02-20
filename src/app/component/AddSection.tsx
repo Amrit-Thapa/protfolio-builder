@@ -2,9 +2,9 @@ import React, {ComponentProps, useState} from "react";
 import Image from "next/image";
 import addSectionIcon from "../../../public/assets/icons/addSection.png";
 import plusIcon from "../../../public/assets/icons/plus.png";
-import {sectionConfig} from "../utils";
-import {useAppContext} from "../context/AppContext";
-import {Section} from "../types";
+import {sectionConfig} from "@/app/utils";
+import {useAppContext} from "@/app/context/AppContext";
+import {Section} from "@/app/types";
 
 export const SectionMenu = ({children, ...props}: ComponentProps<"div">) => {
   return (
@@ -22,7 +22,7 @@ const AddSection = () => {
 
   const [showSectionMenu, toggleSectionMenu] = useState(false);
   return (
-    <section className="px-5 md:px-[100px] relative mt-14">
+    <section className="px-5 md:px-[100px] relative mt-14 h-[200px]">
       <div
         className="border-dashed border border-black rounded-xl flex justify-center items-center bg-[#EFEFEF] h-16 hover:cursor-pointer"
         onClick={() => toggleSectionMenu((prev) => !prev)}
