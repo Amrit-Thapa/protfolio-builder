@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .font-condensed {
-    font-stretch: condensed;
-  }
-}
-
 body {
   max-width: 1440px;
   margin: 0 auto;
