@@ -65,7 +65,7 @@ const ConnectMe = () => {
               className="text-white rounded-3xl bg-[#0085FF] text-xs font-semibold px-4 py-1"
               onClick={(e) => {
                 e.stopPropagation();
-                storeAllData(Section.Skills, contactMe);
+                storeAllData(Section.ContactMe, contactMe);
                 setActiveSection(undefined);
               }}
             >
@@ -113,7 +113,7 @@ const ConnectMe = () => {
             setContactMe((prev) => {
               return {
                 ...prev,
-                description: b64 as string,
+                icon: b64 as string,
               };
             })
           }

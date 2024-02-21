@@ -47,7 +47,10 @@ const Experience = () => {
   return (
     <section
       className="flex justify-end w-full mt-24"
-      onClick={() => setActiveSection(undefined)}
+      onClick={(e) => {
+        e.stopPropagation();
+        setActiveSection(undefined);
+      }}
     >
       <aside
         className={classNames(
@@ -57,7 +60,10 @@ const Experience = () => {
               activeSection === Section.Experience,
           },
         )}
-        onClick={() => setActiveSection(Section.Experience)}
+        onClick={(e) => {
+          e.stopPropagation();
+          setActiveSection(Section.Experience);
+        }}
       >
         {activeSection === Section.Experience && (
           <div className="absolute right-0 flex gap-4 -top-14">
