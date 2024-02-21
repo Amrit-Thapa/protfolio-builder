@@ -79,7 +79,10 @@ const CTA = () => {
         <div className="flex flex-wrap gap-4">
           {ctaSection.items.map((cta) => {
             return (
-              <div className="bg-white text-[#C6C6C6] rounded-2xl border w-[375px] p-10 min-h-[222px]">
+              <div
+                className="bg-white text-[#C6C6C6] rounded-2xl border w-[375px] p-10 min-h-[222px]"
+                key={cta.id}
+              >
                 <div className="flex flex-col gap-2">
                   <ImagePicker
                     height={50}
