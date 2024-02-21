@@ -18,10 +18,9 @@ const initialState = {
 
 const HeroSection = () => {
   const {setActiveSection, activeSection} = useAppContext();
-  const [heroSection, setHeroSection] = useLocalStorage<typeof initialState>(
-    Section.HeroSection,
-    initialState,
-  );
+  const {updates: heroSection, setUpdates: setHeroSection} = useLocalStorage<
+    typeof initialState
+  >(Section.HeroSection, initialState);
 
   return (
     <section

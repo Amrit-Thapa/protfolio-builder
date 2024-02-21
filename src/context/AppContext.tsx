@@ -6,6 +6,8 @@ import {Section} from "../types";
 type appContext = {
   activeSection?: Section;
   section: Section[];
+  preview: boolean;
+  togglePreview: React.Dispatch<React.SetStateAction<boolean>>;
   setActiveSection: React.Dispatch<React.SetStateAction<Section | undefined>>;
   updateSection: React.Dispatch<React.SetStateAction<Section[]>>;
 };
@@ -25,6 +27,7 @@ export const useAppContext = () => useContext(AppContext);
 
 export const AppContextProvider = ({children}: {children: React.ReactNode}) => {
   const [activeSection, setActiveSection] = useState<Section | undefined>();
+  const [preview, togglePreview] = useState(false);
   const [section, updateSection] = useState<Section[]>([
     ...(checkKeysInLocalStorage() as Section[]),
   ]);
@@ -34,7 +37,9 @@ export const AppContextProvider = ({children}: {children: React.ReactNode}) => {
       value={{
         activeSection,
         section,
+        preview,
 
+        togglePreview,
         setActiveSection,
         updateSection,
       }}

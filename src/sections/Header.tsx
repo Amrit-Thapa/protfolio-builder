@@ -10,7 +10,8 @@ import {sectionConfig} from "../utils";
 import {SectionMenu} from "../component/AddSection";
 
 const Header = () => {
-  const {section, updateSection, setActiveSection} = useAppContext();
+  const {section, updateSection, setActiveSection, togglePreview} =
+    useAppContext();
 
   const [showSectionMenu, toggleSectionMenu] = useState(false);
 
@@ -82,7 +83,9 @@ const Header = () => {
           </div>
         </div>
         <div className="flex gap-16">
-          <div>Preview</div>
+          <button onClick={() => togglePreview((prev) => !prev)}>
+            Preview
+          </button>
           <div className="font-bold bg-[#0085FF] w-[87px] h-[30px] text-center rounded-[50px] p-1">
             Publish
           </div>

@@ -23,9 +23,8 @@ const initialState = {
 
 const Projects = () => {
   const {setActiveSection, activeSection} = useAppContext();
-  const [projectSection, setProjectSection] = useLocalStorage<
-    typeof initialState
-  >(Section.Projects, initialState);
+  const {updates: projectSection, setUpdates: setProjectSection} =
+    useLocalStorage<typeof initialState>(Section.Projects, initialState);
 
   const handleChange = (id: string, key: string, value: string) => {
     setProjectSection((prev) => {

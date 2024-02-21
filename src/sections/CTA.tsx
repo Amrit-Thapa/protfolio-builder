@@ -24,10 +24,9 @@ const initialState = {
 
 const CTA = () => {
   const {setActiveSection, activeSection} = useAppContext();
-  const [ctaSection, setCtaSection] = useLocalStorage<typeof initialState>(
-    Section.CTA,
-    initialState,
-  );
+  const {updates: ctaSection, setUpdates: setCtaSection} = useLocalStorage<
+    typeof initialState
+  >(Section.CTA, initialState);
   const handleChange = (id: string, key: string, value: string) => {
     setCtaSection((prev) => {
       return {

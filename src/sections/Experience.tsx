@@ -26,9 +26,8 @@ const initialState = {
 
 const Experience = () => {
   const {setActiveSection, activeSection} = useAppContext();
-  const [experienceSection, setExperienceSection] = useLocalStorage<
-    typeof initialState
-  >(Section.Experience, initialState);
+  const {updates: experienceSection, setUpdates: setExperienceSection} =
+    useLocalStorage<typeof initialState>(Section.Experience, initialState);
 
   const handleChange = (id: string, key: string, value: string) => {
     setExperienceSection((prev) => {

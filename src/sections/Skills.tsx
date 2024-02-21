@@ -17,10 +17,9 @@ const initialState = [
 
 const Skills = () => {
   const {setActiveSection, activeSection} = useAppContext();
-  const [skillSection, setSkillSection] = useLocalStorage<typeof initialState>(
-    Section.Skills,
-    initialState,
-  );
+  const {updates: skillSection, setUpdates: setSkillSection} = useLocalStorage<
+    typeof initialState
+  >(Section.Skills, initialState);
 
   const handleChange = (id: string, key: string, value: string) => {
     setSkillSection((prev) => {
