@@ -43,14 +43,14 @@ const Projects = () => {
 
   return (
     <section
-      className="flex justify-end w-full mt-24"
+      className="flex justify-end w-full mt-20"
       onClick={() => setActiveSection(undefined)}
     >
       <aside
         className={classNames(
-          "md:w-[852px] md:p-10 md:min-h-[428px] rounded-lg",
+          "md:w-[852px] w-full md:p-10 md:min-h-[428px] rounded-lg",
           {
-            "border border-[#828282] relative":
+            "md:border border-[#828282] relative":
               activeSection === Section.Projects,
           },
         )}
@@ -60,7 +60,7 @@ const Projects = () => {
         }}
       >
         {activeSection === Section.Projects && (
-          <div className="absolute right-0 flex gap-4 -top-14">
+          <div className="absolute right-0 flex gap-4 -top-10 md:-top-14">
             <button
               className="text-xs font-semibold"
               onClick={(e) => {
@@ -91,7 +91,7 @@ const Projects = () => {
           </div>
         )}
         <input
-          className="w-full text-3xl font-bold text-black bg-transparent outline-none"
+          className="w-full text-2xl md:text-3xl font-bold text-black bg-transparent outline-none"
           value={projectSection.title}
           disabled={!(activeSection === Section.Projects)}
           placeholder="Click to add title"
@@ -103,8 +103,8 @@ const Projects = () => {
         />
         <textarea
           className={classNames(
-            "bg-transparent text-black outline-none w-full font-medium max-w-[501px] text-base mt-3",
-            "resize-none overflow-hidden border-none p-0 m-0",
+            "bg-transparent text-black outline-none w-full font-sm md:font-medium max-w-[501px] md:text-base mt-5",
+            "resize-none overflow-hidden border-none p-0 m-0 text-sm",
           )}
           value={projectSection.description}
           disabled={!(activeSection === Section.Projects)}
@@ -115,7 +115,7 @@ const Projects = () => {
             })
           }
         />
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4 mt-5">
           {projectSection.items?.map((project) => {
             return (
               <div
@@ -134,7 +134,7 @@ const Projects = () => {
                   />
                   <input
                     disabled={!(activeSection === Section.Projects)}
-                    className="text-base font-medium text-black bg-transparent outline-none"
+                    className="text-base font-medium text-black bg-transparent outline-none mt-3"
                     value={project.title}
                     placeholder="Enter site title"
                     onChange={(e) =>

@@ -34,14 +34,14 @@ const Skills = () => {
 
   return (
     <section
-      className="flex justify-end w-full mt-24"
+      className="flex justify-end w-full mt-10"
       onClick={() => setActiveSection(undefined)}
     >
       <aside
         className={classNames(
-          "w-full md:w-[852px] rounded-lg p-3 md:p-10 flex flex-wrap gap-4",
+          "w-full md:w-[852px] rounded-lg md:p-10 flex flex-wrap gap-4",
           {
-            "border border-[#828282] relative":
+            "md:border border-[#828282] relative":
               activeSection === Section.Skills,
           },
         )}
@@ -51,7 +51,7 @@ const Skills = () => {
         }}
       >
         {activeSection === Section.Skills && (
-          <div className="absolute right-0 flex gap-4 -top-14">
+          <div className="absolute right-0 flex gap-4 md:-top-14 -top-10">
             <button
               className="text-xs font-semibold"
               onClick={(e) => {

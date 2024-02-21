@@ -51,9 +51,9 @@ const Experience = () => {
     >
       <aside
         className={classNames(
-          "md:w-[852px] md:p-10 md:min-h-[428px] rounded-lg",
+          "md:w-[852px] w-full md:p-10 md:min-h-[428px] rounded-lg",
           {
-            "border border-[#828282] relative":
+            "md:border border-[#828282] relative":
               activeSection === Section.Experience,
           },
         )}
@@ -91,7 +91,7 @@ const Experience = () => {
           </div>
         )}
         <input
-          className="w-full text-3xl font-bold text-black bg-transparent outline-none"
+          className="w-full text-2xl md:text-3xl font-bold text-black bg-transparent outline-none"
           value={experienceSection.title}
           onChange={(e) =>
             setExperienceSection((prev) => {
@@ -101,8 +101,8 @@ const Experience = () => {
         />
         <textarea
           className={classNames(
-            "bg-transparent text-black outline-none w-full mt-2 font-medium text-base",
-            "resize-none overflow-hidden border-none p-0 m-0",
+            "bg-transparent text-black outline-none w-full font-sm md:font-medium max-w-[501px] md:text-base mt-5",
+            "resize-none overflow-hidden border-none p-0 m-0 text-sm",
           )}
           value={experienceSection.description}
           placeholder="Add subtext here.."
@@ -117,7 +117,7 @@ const Experience = () => {
             return (
               <div className="bg-white text-[#C6C6C6] rounded-2xl border w-full p-10 min-h-[222px] mt-5">
                 <div>
-                  <div className="flex items-end gap-3">
+                  <div className="flex flex-wrap items-end gap-3">
                     <ImagePicker
                       src={exp.logo}
                       onChange={(b64) =>
@@ -145,22 +145,24 @@ const Experience = () => {
                           handleChange(exp.id, "designation", e.target.value)
                         }
                       />
-                      <input
-                        className="bg-transparent text-[#858585] outline-none font-medium text-xs"
-                        value={exp.location}
-                        placeholder="+Add location"
-                        onChange={(e) =>
-                          handleChange(exp.id, "location", e.target.value)
-                        }
-                      />
-                      <input
-                        className="bg-transparent text-[#858585] outline-none font-medium text-xs"
-                        value={exp.timeLine}
-                        placeholder="year"
-                        onChange={(e) =>
-                          handleChange(exp.id, "timeLine", e.target.value)
-                        }
-                      />
+                      <div className="flex">
+                        <input
+                          className="bg-transparent text-[#858585] outline-none font-medium text-xs"
+                          value={exp.location}
+                          placeholder="+Add location"
+                          onChange={(e) =>
+                            handleChange(exp.id, "location", e.target.value)
+                          }
+                        />
+                        <input
+                          className="bg-transparent text-[#858585] outline-none font-medium text-xs"
+                          value={exp.timeLine}
+                          placeholder="year"
+                          onChange={(e) =>
+                            handleChange(exp.id, "timeLine", e.target.value)
+                          }
+                        />
+                      </div>
                     </div>
                   </div>
                   <textarea

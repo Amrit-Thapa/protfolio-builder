@@ -44,12 +44,12 @@ const CTA = () => {
 
   return (
     <section
-      className="flex justify-end w-full mt-24"
+      className="flex justify-end w-full mt-20"
       onClick={() => setActiveSection(undefined)}
     >
       <aside
-        className={classNames("md:w-[852px] md:p-10 md:min-h-[428px]", {
-          "border border-[#828282] rounded-lg relative":
+        className={classNames("md:w-[852px] w-full md:p-10 md:min-h-[428px]", {
+          "md:border border-[#828282] rounded-lg relative":
             activeSection === Section.CTA,
         })}
         onClick={(e) => {
@@ -58,7 +58,7 @@ const CTA = () => {
         }}
       >
         {activeSection === Section.CTA && (
-          <div className="absolute right-0 flex gap-4 -top-14">
+          <div className="absolute right-0 flex gap-4 -top-10 md:-top-14">
             <button
               className="text-xs font-semibold"
               onClick={(e) => {
@@ -89,7 +89,7 @@ const CTA = () => {
           </div>
         )}
         <input
-          className="w-full text-3xl font-bold text-black bg-transparent outline-none"
+          className="w-full text-2xl md:text-3xl font-bold text-black bg-transparent outline-none"
           value={ctaSection.title}
           placeholder="Click to add title"
           onChange={(e) =>
@@ -103,8 +103,8 @@ const CTA = () => {
         />
         <textarea
           className={classNames(
-            "bg-transparent text-black outline-none w-full font-medium max-w-[501px] text-base mt-3",
-            "resize-none overflow-hidden border-none p-0 m-0",
+            "bg-transparent text-black outline-none w-full font-sm md:font-medium max-w-[501px] md:text-base mt-5",
+            "resize-none overflow-hidden border-none p-0 m-0 text-sm",
           )}
           value={ctaSection.description}
           placeholder="Add subtext here..."

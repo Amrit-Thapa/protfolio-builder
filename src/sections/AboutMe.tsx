@@ -17,15 +17,15 @@ const AboutMe = () => {
 
   return (
     <section
-      className="flex justify-end w-full mt-28 md:mt-20"
+      className="flex justify-end w-full mt-20"
       onClick={(e) => {
         e.stopPropagation();
         setActiveSection(undefined);
       }}
     >
       <aside
-        className={classNames("md:w-[852px] rounded-lg p-3 md:p-10", {
-          "border border-[#828282] relative md:min-h-[428px]":
+        className={classNames("md:w-[852px] w-full rounded-lg md:p-10", {
+          "md:border border-[#828282] relative md:min-h-[428px]":
             activeSection === Section.AboutMe,
         })}
         onClick={(e) => {
@@ -34,7 +34,7 @@ const AboutMe = () => {
         }}
       >
         {activeSection === Section.AboutMe && (
-          <div className="absolute right-0 flex gap-4 -top-14">
+          <div className="absolute right-0 flex gap-4 -top-10 md:-top-14">
             <button
               className="text-xs font-semibold"
               onClick={(e) => {
@@ -66,7 +66,8 @@ const AboutMe = () => {
           </div>
         )}
         <textarea
-          className="w-full text-3xl font-bold text-black bg-transparent outline-none"
+          rows={1}
+          className="w-full text-2xl md:text-3xl font-bold text-black bg-transparent outline-none"
           value={updates.title}
           disabled={activeSection !== Section.AboutMe}
           placeholder="Click to add title"
@@ -81,8 +82,8 @@ const AboutMe = () => {
         />
         <textarea
           className={classNames(
-            "bg-transparent text-black outline-none w-full font-medium text-base",
-            "resize-none overflow-hidden border-none p-0 m-0",
+            "bg-transparent text-black outline-none w-full font-medium text-sm md:text-base",
+            "resize-none overflow-hidden border-none p-0 mt-5",
           )}
           value={updates.description}
           disabled={activeSection !== Section.AboutMe}

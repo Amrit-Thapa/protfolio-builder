@@ -39,7 +39,6 @@ const HeroSection = () => {
           src={heroSection.logo}
           height={25}
           width={25}
-          
           id="company-icon"
           onChange={(b64) =>
             setHeroSection((prev) => {
@@ -64,8 +63,8 @@ const HeroSection = () => {
           }
         />
       </div>
-      <div className="mt-12 md:mt-[200px] flex flex-wrap md:flex-nowrap justify-between">
-        <div className="md:w-[295px] flex flex-col md:mt-0">
+      <div className="mt-12 md:mt-[200px] flex flex-wrap md:flex-nowrap justify-between items-start">
+        <div className="md:w-[295px] flex flex-col md:mt-0 items-end justify-center">
           <ImagePicker
             src={heroSection.profileImage}
             height={295}
@@ -83,10 +82,10 @@ const HeroSection = () => {
             className="rounded-xl"
           />
         </div>
-        <div className="w-full item-center text-[#AAAAAA] md:w-[852px] p-3 md:p-10">
+        <div className="w-full item-center text-[#AAAAAA] md:w-[852px] md:p-10">
           <textarea
             className={classNames(
-              "bg-transparent text-black w-full font-medium md:text-7xl text-4xl outline-none",
+              "bg-transparent text-black w-full font-medium md:text-7xl mt-4 md:mt-0 text-4xl outline-none",
               "resize-none overflow-hidden border-none p-0 m-0",
             )}
             value={heroSection.introText}
