@@ -23,16 +23,18 @@ const AddSection = () => {
   const [showSectionMenu, toggleSectionMenu] = useState(false);
   return (
     <section className="px-5 md:px-[100px] relative mt-14 h-[200px]">
-      <div
-        className="border-dashed border border-black rounded-xl flex justify-center items-center bg-[#EFEFEF] h-16 hover:cursor-pointer"
-        onClick={() => toggleSectionMenu((prev) => !prev)}
-      >
-        <Image
-          src={addSectionIcon}
-          alt="Placeholder"
-          className="inline rounded"
-        />
-      </div>
+      {section.length < 7 && (
+        <div
+          className="border-dashed border border-black rounded-xl flex justify-center items-center bg-[#EFEFEF] h-16 hover:cursor-pointer"
+          onClick={() => toggleSectionMenu((prev) => !prev)}
+        >
+          <Image
+            src={addSectionIcon}
+            alt="Placeholder"
+            className="inline rounded"
+          />
+        </div>
+      )}
       {showSectionMenu && (
         <SectionMenu
           onMouseEnter={(e) => e.stopPropagation()}
