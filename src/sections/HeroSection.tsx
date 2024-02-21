@@ -1,13 +1,27 @@
 "use client";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import {resizeTextArea} from "@/utils";
 import classNames from "classnames";
 import ImagePicker from "../component/ImagePicker";
 import {useAppContext} from "../context/AppContext";
 import {Section} from "../types";
 
+const initialState = {
+  title: "AMRITTHAPA",
+  logo: "",
+  name: "Amrit Thapa",
+  email: "amritthapa@gmail.com",
+  introText: "Hey! I'm Neeraj Walia, a full stack developer.",
+  subText: "Ready to bring your dream product to life in the virtual world.",
+  profileImage: "",
+};
+
 const HeroSection = () => {
-  const {heroSection, setHeroSection, setActiveSection, activeSection} =
-    useAppContext();
+  const {setActiveSection, activeSection} = useAppContext();
+  const [heroSection, setHeroSection] = useLocalStorage<typeof initialState>(
+    Section.HeroSection,
+    initialState,
+  );
 
   return (
     <section
@@ -30,7 +44,7 @@ const HeroSection = () => {
           }
         />
         <input
-          className="bg-transparent text-black outline-none font-medium text-base"
+          className="text-base font-medium text-black bg-transparent outline-none"
           value={heroSection.title}
           placeholder="Enter site title"
           disabled={!activeSection}
@@ -102,7 +116,7 @@ const HeroSection = () => {
       <div className="mt-10">
         <div>
           <input
-            className="bg-transparent text-black outline-none font-bold w-full"
+            className="w-full font-bold text-black bg-transparent outline-none"
             value={heroSection.name}
             placeholder="Enter your name here"
             disabled={!activeSection}
@@ -116,7 +130,7 @@ const HeroSection = () => {
             }
           />
           <input
-            className="bg-transparent text-black outline-none mt-3 text-sm font-normal w-full"
+            className="w-full mt-3 text-sm font-normal text-black bg-transparent outline-none"
             value={heroSection.email}
             placeholder="Enter email"
             disabled={!activeSection}

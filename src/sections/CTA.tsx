@@ -6,11 +6,28 @@ import ImagePicker from "../component/ImagePicker";
 import {useAppContext} from "@/context/AppContext";
 import {Section} from "@/types";
 import {resizeTextArea} from "@/utils";
+import useLocalStorage from "@/hooks/useLocalStorage";
+
+const initialState = {
+  title: "Blogs & Resources",
+  description: "",
+  items: [
+    {
+      id: "cta_1",
+      title: "",
+      icon: "",
+      description: "",
+      link: "",
+    },
+  ],
+};
 
 const CTA = () => {
-  const {ctaSection, setCtaSection, setActiveSection, activeSection} =
-    useAppContext();
-
+  const {setActiveSection, activeSection} = useAppContext();
+  const [ctaSection, setCtaSection] = useLocalStorage<typeof initialState>(
+    Section.CTA,
+    initialState,
+  );
   const handleChange = (id: string, key: string, value: string) => {
     setCtaSection((prev) => {
       return {
@@ -23,7 +40,7 @@ const CTA = () => {
   };
 
   return (
-    <section className="w-full mt-24 flex justify-end">
+    <section className="flex justify-end w-full mt-24">
       <aside
         className={classNames("md:w-[852px] md:p-10 md:min-h-[428px]", {
           "border border-[#828282] rounded-lg": activeSection === Section.CTA,
@@ -31,7 +48,7 @@ const CTA = () => {
         onClick={() => setActiveSection(Section.CTA)}
       >
         <input
-          className="bg-transparent text-black w-full font-bold text-3xl outline-none"
+          className="w-full text-3xl font-bold text-black bg-transparent outline-none"
           value={ctaSection.title}
           placeholder="Click to add title"
           onChange={(e) =>
@@ -59,7 +76,7 @@ const CTA = () => {
             })
           }
         />
-        <div className="flex gap-4 flex-wrap">
+        <div className="flex flex-wrap gap-4">
           {ctaSection.items.map((cta) => {
             return (
               <div className="bg-white text-[#C6C6C6] rounded-2xl border w-[375px] p-10 min-h-[222px]">
@@ -75,7 +92,7 @@ const CTA = () => {
                     }
                   />
                   <input
-                    className="bg-transparent text-black outline-none font-medium text-base"
+                    className="text-base font-medium text-black bg-transparent outline-none"
                     value={cta.title}
                     placeholder="Enter site title"
                     onChange={(e) =>

@@ -4,10 +4,23 @@ import {useAppContext} from "../context/AppContext";
 import classNames from "classnames";
 import {Section} from "@/types";
 import {resizeTextArea} from "@/utils";
+import useLocalStorage from "@/hooks/useLocalStorage";
+
+const initialState = [
+  {
+    id: "skill_1",
+    title: "Untitled",
+    description: "Write description here...",
+    text: "Start writing",
+  },
+];
 
 const Skills = () => {
-  const {skillSection, setSkillSection, setActiveSection, activeSection} =
-    useAppContext();
+  const {setActiveSection, activeSection} = useAppContext();
+  const [skillSection, setSkillSection] = useLocalStorage<typeof initialState>(
+    Section.Skills,
+    initialState,
+  );
 
   const handleChange = (id: string, key: string, value: string) => {
     setSkillSection((prev) => {
@@ -19,7 +32,7 @@ const Skills = () => {
 
   return (
     <section
-      className="w-full mt-24 flex justify-end"
+      className="flex justify-end w-full mt-24"
       onClick={() => setActiveSection(Section.Skills)}
     >
       <aside

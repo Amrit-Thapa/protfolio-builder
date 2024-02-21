@@ -1,20 +1,26 @@
 import ImagePicker from "@/component/ImagePicker";
 import {useAppContext} from "@/context/AppContext";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import {Section} from "@/types";
 import {resizeTextArea} from "@/utils";
 import classNames from "classnames";
 import React from "react";
 
+const initialState = {
+  title: "",
+  description: "",
+  icon: "",
+  link: "",
+};
+
 const ConnectMe = () => {
-  const {
-    contactMeSection,
-    setContactMeSection,
-    setActiveSection,
-    activeSection,
-  } = useAppContext();
+  const {setActiveSection, activeSection} = useAppContext();
+  const [contactMeSection, setContactMeSection] = useLocalStorage<
+    typeof initialState
+  >(Section.ContactMe, initialState);
 
   return (
-    <section className="w-full mt-24 flex justify-end">
+    <section className="flex justify-end w-full mt-24">
       <aside
         className={classNames(
           "md:w-[852px] md:p-10 md:min-h-[295px] rounded-lg",
@@ -25,7 +31,7 @@ const ConnectMe = () => {
         onClick={() => setActiveSection(Section.ContactMe)}
       >
         <textarea
-          className="bg-transparent text-black w-full font-bold text-3xl outline-none"
+          className="w-full text-3xl font-bold text-black bg-transparent outline-none"
           value={contactMeSection.title}
           disabled={activeSection !== Section.AboutMe}
           placeholder="Click to add title"

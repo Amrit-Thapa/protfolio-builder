@@ -6,14 +6,29 @@ import ImagePicker from "../component/ImagePicker";
 import plusIcon from "@/../public/assets/icons/plus.png";
 import {Section} from "@/types";
 import {resizeTextArea} from "@/utils";
+import useLocalStorage from "@/hooks/useLocalStorage";
+
+const initialState = {
+  title: "Experience",
+  description: "",
+  items: [
+    {
+      id: "exp_1",
+      logo: "",
+      designation: "",
+      name: "",
+      location: "",
+      timeLine: "",
+      description: "",
+    },
+  ],
+};
 
 const Experience = () => {
-  const {
-    experienceSection,
-    setExperienceSection,
-    setActiveSection,
-    activeSection,
-  } = useAppContext();
+  const {setActiveSection, activeSection} = useAppContext();
+  const [experienceSection, setExperienceSection] = useLocalStorage<
+    typeof initialState
+  >(Section.Experience, initialState);
 
   const handleChange = (id: string, key: string, value: string) => {
     setExperienceSection((prev) => {
@@ -27,7 +42,7 @@ const Experience = () => {
   };
 
   return (
-    <section className="w-full mt-24 flex justify-end">
+    <section className="flex justify-end w-full mt-24">
       <aside
         className={classNames(
           "md:w-[852px] md:p-10 md:min-h-[428px] rounded-lg",
@@ -38,7 +53,7 @@ const Experience = () => {
         onClick={() => setActiveSection(Section.Experience)}
       >
         <input
-          className="bg-transparent text-black w-full font-bold text-3xl outline-none"
+          className="w-full text-3xl font-bold text-black bg-transparent outline-none"
           value={experienceSection.title}
           onChange={(e) =>
             setExperienceSection((prev) => {
@@ -64,7 +79,7 @@ const Experience = () => {
             return (
               <div className="bg-white text-[#C6C6C6] rounded-2xl border w-full p-10 min-h-[222px] mt-5">
                 <div>
-                  <div className="flex gap-3 items-end">
+                  <div className="flex items-end gap-3">
                     <ImagePicker
                       src={exp.logo}
                       onChange={(b64) =>
@@ -77,7 +92,7 @@ const Experience = () => {
                     />
                     <div>
                       <input
-                        className="bg-transparent text-black outline-none font-semibold text-base"
+                        className="text-base font-semibold text-black bg-transparent outline-none"
                         value={exp.name}
                         placeholder="Enter company title"
                         onChange={(e) =>
@@ -85,7 +100,7 @@ const Experience = () => {
                         }
                       />
                       <input
-                        className="bg-transparent text-black outline-none font-medium text-sm"
+                        className="text-sm font-medium text-black bg-transparent outline-none"
                         value={exp.designation}
                         placeholder="Enter designation"
                         onChange={(e) =>

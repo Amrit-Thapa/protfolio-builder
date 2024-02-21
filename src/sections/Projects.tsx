@@ -1,16 +1,31 @@
 import classNames from "classnames";
-import React, {ChangeEvent, Dispatch, SetStateAction, useState} from "react";
 import ImagePicker from "../component/ImagePicker";
 import Image from "next/image";
 import plusIcon from "@/../public/assets/icons/plus.png";
 import {useAppContext} from "@/context/AppContext";
 import {Section} from "@/types";
-import PreviousMap from "postcss/lib/previous-map";
 import {resizeTextArea} from "@/utils";
+import useLocalStorage from "@/hooks/useLocalStorage";
+
+const initialState = {
+  title: "Projects",
+  description: "",
+  items: [
+    {
+      id: "project_1",
+      logo: "",
+      title: "",
+      link: "",
+      description: "",
+    },
+  ],
+};
 
 const Projects = () => {
-  const {projectSection, setProjectSection, setActiveSection, activeSection} =
-    useAppContext();
+  const {setActiveSection, activeSection} = useAppContext();
+  const [projectSection, setProjectSection] = useLocalStorage<
+    typeof initialState
+  >(Section.Projects, initialState);
 
   const handleChange = (id: string, key: string, value: string) => {
     setProjectSection((prev) => {
@@ -25,7 +40,7 @@ const Projects = () => {
 
   return (
     <section
-      className="w-full mt-24 flex justify-end"
+      className="flex justify-end w-full mt-24"
       onClick={() => setActiveSection(Section.Projects)}
     >
       <aside
@@ -35,7 +50,7 @@ const Projects = () => {
         )}
       >
         <input
-          className="bg-transparent text-black w-full font-bold text-3xl outline-none"
+          className="w-full text-3xl font-bold text-black bg-transparent outline-none"
           value={projectSection.title}
           disabled={!(activeSection === Section.Projects)}
           placeholder="Click to add title"
@@ -60,9 +75,12 @@ const Projects = () => {
           }
         />
         <div className="flex flex-wrap gap-4">
-          {projectSection.items.map((project) => {
+          {projectSection.items?.map((project) => {
             return (
-              <div className="bg-white text-[#C6C6C6] rounded-2xl border w-[375px] p-10 min-h-[222px]">
+              <div
+                className="bg-white text-[#C6C6C6] rounded-2xl border w-[375px] p-10 min-h-[222px]"
+                key={project.id}
+              >
                 <div className="flex flex-col gap-2">
                   <ImagePicker
                     src={project.logo}
@@ -75,7 +93,7 @@ const Projects = () => {
                   />
                   <input
                     disabled={!(activeSection === Section.Projects)}
-                    className="bg-transparent text-black outline-none font-medium text-base"
+                    className="text-base font-medium text-black bg-transparent outline-none"
                     value={project.title}
                     placeholder="Enter site title"
                     onChange={(e) =>
