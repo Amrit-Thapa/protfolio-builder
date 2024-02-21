@@ -7,12 +7,12 @@ import {useAppContext} from "../context/AppContext";
 import {Section} from "../types";
 
 const initialState = {
-  title: "AMRITTHAPA",
+  title: "",
   logo: "",
-  name: "Amrit Thapa",
-  email: "amritthapa@gmail.com",
-  introText: "Hey! I'm Neeraj Walia, a full stack developer.",
-  subText: "Ready to bring your dream product to life in the virtual world.",
+  name: "",
+  email: "",
+  introText: "",
+  subText: "",
   profileImage: "",
 };
 

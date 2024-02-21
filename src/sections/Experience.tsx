@@ -26,8 +26,12 @@ const initialState = {
 
 const Experience = () => {
   const {setActiveSection, activeSection} = useAppContext();
-  const {updates: experienceSection, setUpdates: setExperienceSection} =
-    useLocalStorage<typeof initialState>(Section.Experience, initialState);
+  const {
+    updates: experienceSection,
+    setUpdates: setExperienceSection,
+    initialData,
+    storeAllData,
+  } = useLocalStorage<typeof initialState>(Section.Experience, initialState);
 
   const handleChange = (id: string, key: string, value: string) => {
     setExperienceSection((prev) => {
@@ -41,16 +45,44 @@ const Experience = () => {
   };
 
   return (
-    <section className="flex justify-end w-full mt-24">
+    <section
+      className="flex justify-end w-full mt-24"
+      onClick={() => setActiveSection(undefined)}
+    >
       <aside
         className={classNames(
           "md:w-[852px] md:p-10 md:min-h-[428px] rounded-lg",
           {
-            "border border-[#828282]": activeSection === Section.Experience,
+            "border border-[#828282] relative":
+              activeSection === Section.Experience,
           },
         )}
         onClick={() => setActiveSection(Section.Experience)}
       >
+        {activeSection === Section.Experience && (
+          <div className="absolute right-0 flex gap-4 -top-14">
+            <button
+              className="text-xs font-semibold"
+              onClick={(e) => {
+                e.stopPropagation();
+                setExperienceSection(initialData);
+                setActiveSection(undefined);
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="text-white rounded-3xl bg-[#0085FF] text-xs font-semibold px-4 py-1"
+              onClick={(e) => {
+                e.stopPropagation();
+                storeAllData(Section.Experience, experienceSection);
+                setActiveSection(undefined);
+              }}
+            >
+              Save
+            </button>
+          </div>
+        )}
         <input
           className="w-full text-3xl font-bold text-black bg-transparent outline-none"
           value={experienceSection.title}

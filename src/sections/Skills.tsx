@@ -17,9 +17,12 @@ const initialState = [
 
 const Skills = () => {
   const {setActiveSection, activeSection} = useAppContext();
-  const {updates: skillSection, setUpdates: setSkillSection} = useLocalStorage<
-    typeof initialState
-  >(Section.Skills, initialState);
+  const {
+    updates: skillSection,
+    setUpdates: setSkillSection,
+    storeAllData,
+    initialData,
+  } = useLocalStorage<typeof initialState>(Section.Skills, initialState);
 
   const handleChange = (id: string, key: string, value: string) => {
     setSkillSection((prev) => {
@@ -32,17 +35,48 @@ const Skills = () => {
   return (
     <section
       className="flex justify-end w-full mt-24"
-      onClick={() => setActiveSection(Section.Skills)}
+      onClick={() => setActiveSection(undefined)}
     >
       <aside
         className={classNames(
-          "w-full md:w-[852px] md:min-h-[428px] rounded-lg p-3 md:p-10 flex flex-wrap gap-4",
-          {"border border-[#828282]": activeSection === Section.Skills},
+          "w-full md:w-[852px] rounded-lg p-3 md:p-10 flex flex-wrap gap-4",
+          {
+            "border border-[#828282] relative":
+              activeSection === Section.Skills,
+          },
         )}
+        onClick={(e) => {
+          e.stopPropagation();
+          setActiveSection(Section.Skills);
+        }}
       >
+        {activeSection === Section.Skills && (
+          <div className="absolute right-0 flex gap-4 -top-14">
+            <button
+              className="text-xs font-semibold"
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveSection(undefined);
+                setSkillSection(initialData || initialState);
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="text-white rounded-3xl bg-[#0085FF] text-xs font-semibold px-4 py-1"
+              onClick={(e) => {
+                e.stopPropagation();
+                storeAllData(Section.Skills, skillSection);
+                setActiveSection(undefined);
+              }}
+            >
+              Save
+            </button>
+          </div>
+        )}
         {skillSection.map((skill) => (
           <div
-            className="bg-white text-[#C6C6C6] rounded-2xl border max-w-[375px] p-10"
+            className="bg-white text-[#C6C6C6] rounded-2xl border max-w-[375px] p-10 h-fit"
             key={skill.id}
           >
             <textarea

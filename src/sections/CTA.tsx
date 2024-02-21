@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React from "react";
+import React, {useEffect} from "react";
 import Image from "next/image";
 import plusIcon from "@/../public/assets/icons/plus.png";
 import ImagePicker from "../component/ImagePicker";
@@ -24,9 +24,13 @@ const initialState = {
 
 const CTA = () => {
   const {setActiveSection, activeSection} = useAppContext();
-  const {updates: ctaSection, setUpdates: setCtaSection} = useLocalStorage<
-    typeof initialState
-  >(Section.CTA, initialState);
+  const {
+    updates: ctaSection,
+    setUpdates: setCtaSection,
+    initialData,
+    storeAllData,
+  } = useLocalStorage<typeof initialState>(Section.CTA, initialState);
+
   const handleChange = (id: string, key: string, value: string) => {
     setCtaSection((prev) => {
       return {
@@ -38,14 +42,49 @@ const CTA = () => {
     });
   };
 
+  useEffect(() => {
+    console.log(activeSection);
+  }, [activeSection]);
+
   return (
-    <section className="flex justify-end w-full mt-24">
+    <section
+      className="flex justify-end w-full mt-24"
+      onClick={() => setActiveSection(undefined)}
+    >
       <aside
         className={classNames("md:w-[852px] md:p-10 md:min-h-[428px]", {
-          "border border-[#828282] rounded-lg": activeSection === Section.CTA,
+          "border border-[#828282] rounded-lg relative":
+            activeSection === Section.CTA,
         })}
-        onClick={() => setActiveSection(Section.CTA)}
+        onClick={(e) => {
+          e.stopPropagation();
+          setActiveSection(Section.CTA);
+        }}
       >
+        {activeSection === Section.CTA && (
+          <div className="absolute right-0 flex gap-4 -top-14">
+            <button
+              className="text-xs font-semibold"
+              onClick={(e) => {
+                e.stopPropagation();
+                setCtaSection(initialData);
+                setActiveSection(undefined);
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="text-white rounded-3xl bg-[#0085FF] text-xs font-semibold px-4 py-1"
+              onClick={(e) => {
+                e.stopPropagation();
+                storeAllData(Section.CTA, ctaSection);
+                setActiveSection(undefined);
+              }}
+            >
+              Save
+            </button>
+          </div>
+        )}
         <input
           className="w-full text-3xl font-bold text-black bg-transparent outline-none"
           value={ctaSection.title}

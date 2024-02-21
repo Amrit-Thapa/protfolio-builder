@@ -24,13 +24,10 @@ const AboutMe = () => {
       }}
     >
       <aside
-        className={classNames(
-          "md:w-[852px] md:min-h-[428px] rounded-lg p-3 md:p-10",
-          {
-            "border border-[#828282] relative":
-              activeSection === Section.AboutMe,
-          },
-        )}
+        className={classNames("md:w-[852px] rounded-lg p-3 md:p-10", {
+          "border border-[#828282] relative md:min-h-[428px]":
+            activeSection === Section.AboutMe,
+        })}
         onClick={(e) => {
           e.stopPropagation();
           setActiveSection(Section.AboutMe);
@@ -42,7 +39,7 @@ const AboutMe = () => {
               className="text-xs font-semibold"
               onClick={(e) => {
                 e.stopPropagation();
-                setUpdates(initialData);
+                // setUpdates(initialData);
                 setActiveSection(undefined);
               }}
             >
