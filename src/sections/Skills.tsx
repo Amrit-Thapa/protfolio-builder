@@ -16,7 +16,7 @@ const initialState = [
 ];
 
 const Skills = () => {
-  const {setActiveSection, activeSection} = useAppContext();
+  const {setActiveSection, activeSection, updateSection} = useAppContext();
   const {
     updates: skillSection,
     setUpdates: setSkillSection,
@@ -57,7 +57,13 @@ const Skills = () => {
               onClick={(e) => {
                 e.stopPropagation();
                 setActiveSection(undefined);
-                setSkillSection(initialData || initialState);
+                initialData
+                  ? setSkillSection(initialData)
+                  : updateSection((sections) => {
+                      const index = sections.indexOf(Section.ContactMe);
+
+                      return [...sections.splice(index, 1)];
+                    });
               }}
             >
               Cancel

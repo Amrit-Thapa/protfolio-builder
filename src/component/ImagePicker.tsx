@@ -3,9 +3,8 @@ import imageIcon from "@/../public/assets/icons/imageIcon.png";
 import Image from "next/image";
 
 type ImgPicker = {
-  prevH?: number;
-  prevW?: number;
   onChange: (b64: string) => void;
+  disabled?: boolean;
 };
 
 function ImagePicker({
@@ -14,6 +13,7 @@ function ImagePicker({
   height,
   width,
   onChange,
+  disabled = false,
 }: ComponentProps<"img"> & ImgPicker) {
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -34,12 +34,13 @@ function ImagePicker({
           height={+height!}
           width={+width!}
           alt="Placeholder"
-          className="inline rounded-lg"
+          className="inline rounded-lg cursor-pointer"
         />
       </label>
       <input
         type="file"
         id={id}
+        disabled={disabled}
         accept="image/*"
         onChange={handleImageChange}
         className="hidden"

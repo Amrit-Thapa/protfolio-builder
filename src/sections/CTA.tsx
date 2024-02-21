@@ -23,7 +23,7 @@ const initialState = {
 };
 
 const CTA = () => {
-  const {setActiveSection, activeSection} = useAppContext();
+  const {setActiveSection, activeSection, updateSection} = useAppContext();
   const {
     updates: ctaSection,
     setUpdates: setCtaSection,
@@ -41,10 +41,6 @@ const CTA = () => {
       };
     });
   };
-
-  useEffect(() => {
-    console.log(activeSection);
-  }, [activeSection]);
 
   return (
     <section
@@ -67,7 +63,14 @@ const CTA = () => {
               className="text-xs font-semibold"
               onClick={(e) => {
                 e.stopPropagation();
-                setCtaSection(initialData);
+                initialData
+                  ? setCtaSection(initialData)
+                  : updateSection((sections) => {
+                      const index = sections.indexOf(Section.CTA);
+
+                      return [...sections.splice(index, 1)];
+                    });
+
                 setActiveSection(undefined);
               }}
             >

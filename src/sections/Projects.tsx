@@ -22,7 +22,7 @@ const initialState = {
 };
 
 const Projects = () => {
-  const {setActiveSection, activeSection} = useAppContext();
+  const {setActiveSection, activeSection, updateSection} = useAppContext();
   const {
     updates: projectSection,
     setUpdates: setProjectSection,
@@ -65,7 +65,14 @@ const Projects = () => {
               className="text-xs font-semibold"
               onClick={(e) => {
                 e.stopPropagation();
-                setProjectSection(initialData);
+                initialData
+                  ? setProjectSection(initialData)
+                  : updateSection((sections) => {
+                      const index = sections.indexOf(Section.ContactMe);
+
+                      return [...sections.splice(index, 1)];
+                    });
+
                 setActiveSection(undefined);
               }}
             >

@@ -67,7 +67,8 @@ const Header = () => {
                   <div
                     className="m-auto text-center border-black border rounded-3xl py-2 w-[130px] h-[36px] text-[12px] font-semibold hover:cursor-pointer"
                     onClick={() => {
-                      updateSection([Section.AboutMe]);
+                      updateSection([Section.HeroSection]);
+                      setActiveSection(Section.HeroSection);
                       toggleSectionMenu(false);
                     }}
                   >

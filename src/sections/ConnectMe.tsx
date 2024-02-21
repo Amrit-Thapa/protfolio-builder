@@ -14,7 +14,7 @@ const initialState = {
 };
 
 const ConnectMe = () => {
-  const {setActiveSection, activeSection} = useAppContext();
+  const {setActiveSection, activeSection, updateSection} = useAppContext();
   const {
     updates: contactMe,
     setUpdates: setContactMe,
@@ -49,7 +49,13 @@ const ConnectMe = () => {
               className="text-xs font-semibold"
               onClick={(e) => {
                 e.stopPropagation();
-                setContactMe(initialData);
+                initialData
+                  ? setContactMe(initialData)
+                  : updateSection((sections) => {
+                      const index = sections.indexOf(Section.ContactMe);
+
+                      return [...sections.splice(index, 1)];
+                    });
                 setActiveSection(undefined);
               }}
             >

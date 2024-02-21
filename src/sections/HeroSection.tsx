@@ -2,6 +2,7 @@
 import useLocalStorage from "@/hooks/useLocalStorage";
 import {resizeTextArea} from "@/utils";
 import classNames from "classnames";
+import {useEffect} from "react";
 import ImagePicker from "../component/ImagePicker";
 import {useAppContext} from "../context/AppContext";
 import {Section} from "../types";
@@ -18,9 +19,15 @@ const initialState = {
 
 const HeroSection = () => {
   const {setActiveSection, activeSection} = useAppContext();
-  const {updates: heroSection, setUpdates: setHeroSection} = useLocalStorage<
-    typeof initialState
-  >(Section.HeroSection, initialState);
+  const {
+    updates: heroSection,
+    setUpdates: setHeroSection,
+    storeAllData,
+  } = useLocalStorage<typeof initialState>(Section.HeroSection, initialState);
+
+  useEffect(() => {
+    storeAllData(Section.HeroSection, heroSection);
+  }, [heroSection]);
 
   return (
     <section
@@ -32,6 +39,7 @@ const HeroSection = () => {
           src={heroSection.logo}
           height={25}
           width={25}
+          
           id="company-icon"
           onChange={(b64) =>
             setHeroSection((prev) => {
@@ -46,7 +54,6 @@ const HeroSection = () => {
           className="text-base font-medium text-black bg-transparent outline-none"
           value={heroSection.title}
           placeholder="Enter site title"
-          disabled={!activeSection}
           onChange={(e) =>
             setHeroSection((prev) => {
               return {
@@ -63,6 +70,7 @@ const HeroSection = () => {
             src={heroSection.profileImage}
             height={295}
             width={295}
+            disabled={false}
             onChange={(b64) =>
               setHeroSection((prev) => {
                 return {
@@ -77,7 +85,6 @@ const HeroSection = () => {
         </div>
         <div className="w-full item-center text-[#AAAAAA] md:w-[852px] p-3 md:p-10">
           <textarea
-            disabled={!activeSection}
             className={classNames(
               "bg-transparent text-black w-full font-medium md:text-7xl text-4xl outline-none",
               "resize-none overflow-hidden border-none p-0 m-0",
@@ -94,7 +101,6 @@ const HeroSection = () => {
             }
           />
           <textarea
-            disabled={!activeSection}
             className={classNames(
               "bg-transparent text-black outline-none w-full md:max-w-[340px] font-normal text-lg",
               "resize-none overflow-hidden border-none p-0 m-0",
@@ -118,7 +124,6 @@ const HeroSection = () => {
             className="w-full font-bold text-black bg-transparent outline-none"
             value={heroSection.name}
             placeholder="Enter your name here"
-            disabled={!activeSection}
             onChange={(e) =>
               setHeroSection((prev) => {
                 return {
@@ -132,7 +137,6 @@ const HeroSection = () => {
             className="w-full mt-3 text-sm font-normal text-black bg-transparent outline-none"
             value={heroSection.email}
             placeholder="Enter email"
-            disabled={!activeSection}
             onChange={(e) =>
               setHeroSection((prev) => {
                 return {

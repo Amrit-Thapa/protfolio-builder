@@ -10,7 +10,7 @@ const initialState = {
 };
 
 const AboutMe = () => {
-  const {setActiveSection, activeSection} = useAppContext();
+  const {setActiveSection, activeSection, updateSection} = useAppContext();
   const {updates, setUpdates, storeAllData, initialData} = useLocalStorage<
     typeof initialState
   >(Section.AboutMe, initialState);
@@ -39,7 +39,15 @@ const AboutMe = () => {
               className="text-xs font-semibold"
               onClick={(e) => {
                 e.stopPropagation();
-                // setUpdates(initialData);
+
+                initialData
+                  ? setUpdates(initialData)
+                  : updateSection((sections) => {
+                      const index = sections.indexOf(Section.AboutMe);
+
+                      return [...sections.splice(index, 1)];
+                    });
+
                 setActiveSection(undefined);
               }}
             >

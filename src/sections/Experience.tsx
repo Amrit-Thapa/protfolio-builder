@@ -25,7 +25,7 @@ const initialState = {
 };
 
 const Experience = () => {
-  const {setActiveSection, activeSection} = useAppContext();
+  const {setActiveSection, activeSection, updateSection} = useAppContext();
   const {
     updates: experienceSection,
     setUpdates: setExperienceSection,
@@ -65,7 +65,14 @@ const Experience = () => {
               className="text-xs font-semibold"
               onClick={(e) => {
                 e.stopPropagation();
-                setExperienceSection(initialData);
+                initialData
+                  ? setExperienceSection(initialData)
+                  : updateSection((sections) => {
+                      const index = sections.indexOf(Section.ContactMe);
+
+                      return [...sections.splice(index, 1)];
+                    });
+
                 setActiveSection(undefined);
               }}
             >
