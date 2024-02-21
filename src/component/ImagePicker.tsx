@@ -34,7 +34,7 @@ function ImagePicker({
           height={+height!}
           width={+width!}
           alt="Placeholder"
-          className="inline rounded-lg cursor-pointer object-cover"
+          className="inline rounded-lg cursor-pointer object-scale-down"
         />
       </label>
       <input
