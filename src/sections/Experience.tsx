@@ -121,7 +121,14 @@ const Experience = () => {
         <div>
           {experienceSection.items.map((exp) => {
             return (
-              <div className="bg-white text-[#C6C6C6] rounded-2xl border w-full p-10 min-h-[222px] mt-5">
+              <div
+                className={classNames(
+                  "bg-white text-[#C6C6C6] rounded-2xl border w-full p-10 min-h-[222px] mt-5",
+                  {
+                    "shadow-xl": exp.id.includes("1"),
+                  },
+                )}
+              >
                 <div>
                   <div className="flex flex-wrap items-end gap-3">
                     <ImagePicker
