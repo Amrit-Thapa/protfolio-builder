@@ -5,13 +5,14 @@ import classNames from "classnames";
 import {Section} from "@/types";
 import {resizeTextArea} from "@/utils";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import If from "@/component/If";
 
 const initialState = [
   {
     id: "skill_1",
-    title: "Untitled",
-    description: "Write description here...",
-    text: "Start writing",
+    title: "",
+    description: "",
+    text: "",
   },
 ];
 
@@ -32,6 +33,8 @@ const Skills = () => {
     });
   };
 
+  const isSectionActive = activeSection === Section.Skills;
+
   return (
     <section
       className="flex justify-end w-full mt-10"
@@ -41,8 +44,7 @@ const Skills = () => {
         className={classNames(
           "w-full md:w-[852px] rounded-lg md:p-10 flex flex-wrap gap-4",
           {
-            "md:border border-[#828282] relative":
-              activeSection === Section.Skills,
+            "md:border border-[#828282] relative": isSectionActive,
           },
         )}
         onClick={(e) => {
@@ -82,45 +84,64 @@ const Skills = () => {
         )}
         {skillSection.map((skill) => (
           <div
-            className="bg-white text-[#C6C6C6] rounded-2xl border max-w-[375px] p-10 h-fit"
+            className={classNames(
+              "bg-white text-[#C6C6C6] rounded-2xl border max-w-[375px] p-10 h-fit",
+              {"h-full": isSectionActive},
+            )}
             key={skill.id}
           >
-            <textarea
-              className={classNames(
-                "bg-transparent text-black w-full font-bold text-xl outline-none",
-                "resize-none overflow-hidden border-none p-0 m-0",
-              )}
-              value={skill.title}
-              disabled={!(activeSection === Section.Skills)}
-              placeholder="Untitled"
-              onChange={(e) =>
-                handleChange(skill.id, "title", resizeTextArea(e))
+            <If
+              condition={isSectionActive || !!(!isSectionActive && skill.title)}
+            >
+              <textarea
+                className={classNames(
+                  "bg-transparent text-black w-full font-bold text-xl outline-none",
+                  "resize-none overflow-hidden border-none p-0 m-0",
+                )}
+                value={skill.title}
+                disabled={!(activeSection === Section.Skills)}
+                placeholder="Untitled"
+                onChange={(e) =>
+                  handleChange(skill.id, "title", resizeTextArea(e))
+                }
+              />
+            </If>
+
+            <If
+              condition={
+                isSectionActive || !!(!isSectionActive && skill.description)
               }
-            />
-            <textarea
-              className={classNames(
-                "bg-transparent text-black outline-none w-full font-normal text-sm",
-                "resize-none overflow-hidden border-none p-0 m-0",
-              )}
-              value={skill.description}
-              disabled={!(activeSection === Section.Skills)}
-              placeholder="Write description here..."
-              onChange={(e) =>
-                handleChange(skill.id, "description", resizeTextArea(e))
-              }
-            />
-            <textarea
-              className={classNames(
-                "bg-transparent text-black outline-none w-full font-medium text-base",
-                "resize-none overflow-hidden border-none p-0 m-0",
-              )}
-              value={skill.text}
-              disabled={!(activeSection === Section.Skills)}
-              placeholder="Start writing"
-              onChange={(e) =>
-                handleChange(skill.id, "text", resizeTextArea(e))
-              }
-            />
+            >
+              <textarea
+                className={classNames(
+                  "bg-transparent text-black outline-none w-full font-normal text-sm",
+                  "resize-none overflow-hidden border-none p-0 m-0",
+                )}
+                value={skill.description}
+                disabled={!(activeSection === Section.Skills)}
+                placeholder="Write description here..."
+                onChange={(e) =>
+                  handleChange(skill.id, "description", resizeTextArea(e))
+                }
+              />
+            </If>
+
+            <If
+              condition={isSectionActive || !!(!isSectionActive && skill.text)}
+            >
+              <textarea
+                className={classNames(
+                  "bg-transparent text-black outline-none w-full font-medium text-base",
+                  "resize-none overflow-hidden border-none p-0 m-0",
+                )}
+                value={skill.text}
+                disabled={!(activeSection === Section.Skills)}
+                placeholder="Start writing"
+                onChange={(e) =>
+                  handleChange(skill.id, "text", resizeTextArea(e))
+                }
+              />
+            </If>
           </div>
         ))}
         {activeSection === Section.Skills && (
