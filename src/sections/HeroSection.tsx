@@ -32,7 +32,6 @@ const HeroSection = () => {
     storeAllData(Section.HeroSection, heroSection);
   }, [heroSection]);
 
-  const isActive = activeSection === Section.HeroSection;
   return (
     <section
       className="px-5 md:px-[100px]"

@@ -1,5 +1,6 @@
 import classNames from "classnames";
-import React, {useEffect} from "react";
+import React from "react";
+import imageIcon from "@/../public/assets/icons/imageIcon.png";
 import Image from "next/image";
 import plusIcon from "@/../public/assets/icons/plus.png";
 import ImagePicker from "../component/ImagePicker";
@@ -15,7 +16,7 @@ const initialState = {
     {
       id: "cta_1",
       title: "",
-      icon: "",
+      icon: imageIcon.src,
       description: "",
       link: "",
     },

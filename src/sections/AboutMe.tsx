@@ -66,21 +66,26 @@ const AboutMe = () => {
             </button>
           </div>
         )}
-        <textarea
-          rows={1}
-          className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
-          value={updates.title}
-          disabled={activeSection !== Section.AboutMe}
-          placeholder="Click to add title"
-          onChange={(e) =>
-            setUpdates((prev) => {
-              return {
-                ...prev,
-                title: resizeTextArea(e),
-              };
-            })
-          }
-        />
+        <If
+          condition={isSectionActive || !!(!isSectionActive && updates.title)}
+        >
+          <textarea
+            rows={1}
+            className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
+            value={updates.title}
+            disabled={activeSection !== Section.AboutMe}
+            placeholder="Click to add title"
+            onChange={(e) =>
+              setUpdates((prev) => {
+                return {
+                  ...prev,
+                  title: resizeTextArea(e),
+                };
+              })
+            }
+          />
+        </If>
+
         <If
           condition={
             isSectionActive || !!(!isSectionActive && updates.description)

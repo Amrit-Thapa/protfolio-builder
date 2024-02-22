@@ -1,4 +1,5 @@
 import ImagePicker from "@/component/ImagePicker";
+import imageIcon from "@/../public/assets/icons/imageIcon.png";
 import {useAppContext} from "@/context/AppContext";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import {Section} from "@/types";
@@ -9,7 +10,7 @@ import React from "react";
 const initialState = {
   title: "",
   description: "",
-  icon: "",
+  icon: imageIcon.src,
   link: "",
 };
 

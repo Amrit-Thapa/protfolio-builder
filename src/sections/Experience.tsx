@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import React from "react";
+import imageIcon from "@/../public/assets/icons/imageIcon.png";
 import {useAppContext} from "../context/AppContext";
 import Image from "next/image";
 import ImagePicker from "../component/ImagePicker";
@@ -14,7 +15,7 @@ const initialState = {
   items: [
     {
       id: "exp_1",
-      logo: "",
+      logo: imageIcon.src,
       designation: "",
       name: "",
       location: "",

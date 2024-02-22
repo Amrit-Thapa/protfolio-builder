@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import imageIcon from "@/../public/assets/icons/imageIcon.png";
 import ImagePicker from "../component/ImagePicker";
 import Image from "next/image";
 import plusIcon from "@/../public/assets/icons/plus.png";
@@ -13,7 +14,7 @@ const initialState = {
   items: [
     {
       id: "project_1",
-      logo: "",
+      logo: imageIcon.src,
       title: "",
       link: "",
       description: "",
