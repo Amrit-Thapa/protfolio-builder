@@ -45,6 +45,43 @@ const Projects = () => {
 
   const isSectionActive = activeSection === Section.Projects;
 
+  const handleCancelButton = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+    if (initialData) {
+      setProjectSection(initialData);
+    } else {
+      updateSection((sections) => {
+        const index = sections.indexOf(Section.Projects);
+        sections.splice(index, 1);
+        return [...sections];
+      });
+    }
+    setActiveSection(undefined);
+  };
+
+  const handleSaveClick = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+
+    const {items, ...details} = projectSection;
+    const hasUpdatedDetails = Object.values(details).filter((item) => !!item);
+    const hasUpdatedProject = projectSection.items.filter((project) => {
+      const values = Object.values(project).filter((value) => value);
+      return values.length > 1;
+    });
+
+    if (hasUpdatedDetails.length || hasUpdatedProject.length) {
+      storeAllData(Section.Projects, {items, ...details});
+    } else {
+      updateSection((sections) => {
+        const index = sections.indexOf(Section.Projects);
+        sections.splice(index, 1);
+        return [...sections];
+      });
+      setProjectSection(initialState);
+    }
+    setActiveSection(undefined);
+  };
+
   return (
     <section
       className="flex justify-end w-full mt-20"
@@ -66,28 +103,13 @@ const Projects = () => {
           <div className="absolute right-0 flex gap-4 -top-10 md:-top-14">
             <button
               className="text-xs font-semibold"
-              onClick={(e) => {
-                e.stopPropagation();
-                initialData
-                  ? setProjectSection(initialData)
-                  : updateSection((sections) => {
-                      const index = sections.indexOf(Section.Projects);
-                      sections.splice(index, 1);
-                      return [...sections];
-                    });
-
-                setActiveSection(undefined);
-              }}
+              onClick={handleCancelButton}
             >
               Cancel
             </button>
             <button
               className="text-white rounded-3xl bg-[#0085FF] text-xs font-semibold px-4 py-1"
-              onClick={(e) => {
-                e.stopPropagation();
-                storeAllData(Section.Projects, projectSection);
-                setActiveSection(undefined);
-              }}
+              onClick={handleSaveClick}
             >
               Save
             </button>
