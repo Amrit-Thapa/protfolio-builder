@@ -68,7 +68,7 @@ const Projects = () => {
                 initialData
                   ? setProjectSection(initialData)
                   : updateSection((sections) => {
-                      const index = sections.indexOf(Section.ContactMe);
+                      const index = sections.indexOf(Section.Projects);
 
                       return [...sections.splice(index, 1)];
                     });
@@ -91,7 +91,7 @@ const Projects = () => {
           </div>
         )}
         <input
-          className="w-full text-2xl md:text-3xl font-bold text-black bg-transparent outline-none"
+          className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
           value={projectSection.title}
           disabled={!(activeSection === Section.Projects)}
           placeholder="Click to add title"
@@ -134,7 +134,7 @@ const Projects = () => {
                   />
                   <input
                     disabled={!(activeSection === Section.Projects)}
-                    className="text-base font-medium text-black bg-transparent outline-none mt-3"
+                    className="mt-3 text-base font-medium text-black bg-transparent outline-none"
                     value={project.title}
                     placeholder="Enter site title"
                     onChange={(e) =>

@@ -60,7 +60,7 @@ const Skills = () => {
                 initialData
                   ? setSkillSection(initialData)
                   : updateSection((sections) => {
-                      const index = sections.indexOf(Section.ContactMe);
+                      const index = sections.indexOf(Section.Skills);
 
                       return [...sections.splice(index, 1)];
                     });

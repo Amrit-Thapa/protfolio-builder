@@ -74,7 +74,7 @@ const Experience = () => {
                 initialData
                   ? setExperienceSection(initialData)
                   : updateSection((sections) => {
-                      const index = sections.indexOf(Section.ContactMe);
+                      const index = sections.indexOf(Section.Experience);
 
                       return [...sections.splice(index, 1)];
                     });

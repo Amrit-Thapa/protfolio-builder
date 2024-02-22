@@ -3,6 +3,7 @@ import {useAppContext} from "../context/AppContext";
 import {Section} from "../types";
 import {resizeTextArea} from "@/utils";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import If from "@/component/If";
 
 const initialState = {
   title: "About me",
@@ -14,6 +15,7 @@ const AboutMe = () => {
   const {updates, setUpdates, storeAllData, initialData} = useLocalStorage<
     typeof initialState
   >(Section.AboutMe, initialState);
+  const isSectionActive = activeSection === Section.AboutMe;
 
   return (
     <section
@@ -26,20 +28,19 @@ const AboutMe = () => {
       <aside
         className={classNames("md:w-[852px] w-full rounded-lg md:p-10", {
           "md:border border-[#828282] relative md:min-h-[428px]":
-            activeSection === Section.AboutMe,
+            isSectionActive,
         })}
         onClick={(e) => {
           e.stopPropagation();
           setActiveSection(Section.AboutMe);
         }}
       >
-        {activeSection === Section.AboutMe && (
+        {isSectionActive && (
           <div className="absolute right-0 flex gap-4 -top-10 md:-top-14">
             <button
               className="text-xs font-semibold"
               onClick={(e) => {
                 e.stopPropagation();
-
                 initialData
                   ? setUpdates(initialData)
                   : updateSection((sections) => {
@@ -80,23 +81,29 @@ const AboutMe = () => {
             })
           }
         />
-        <textarea
-          className={classNames(
-            "bg-transparent text-black outline-none w-full font-medium text-sm md:text-base",
-            "resize-none overflow-hidden border-none p-0 mt-5",
-          )}
-          value={updates.description}
-          disabled={activeSection !== Section.AboutMe}
-          placeholder="Start writing"
-          onChange={(e) =>
-            setUpdates((prev) => {
-              return {
-                ...prev,
-                description: resizeTextArea(e),
-              };
-            })
+        <If
+          condition={
+            isSectionActive || !!(!isSectionActive && updates.description)
           }
-        />
+        >
+          <textarea
+            className={classNames(
+              "bg-transparent text-black outline-none w-full font-medium text-sm md:text-base",
+              "resize-none overflow-hidden border-none p-0 mt-5",
+            )}
+            value={updates.description}
+            disabled={activeSection !== Section.AboutMe}
+            placeholder="Start writing"
+            onChange={(e) =>
+              setUpdates((prev) => {
+                return {
+                  ...prev,
+                  description: resizeTextArea(e),
+                };
+              })
+            }
+          />
+        </If>
       </aside>
     </section>
   );
