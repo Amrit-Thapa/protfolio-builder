@@ -6,11 +6,12 @@ import {Section} from "@/types";
 import {resizeTextArea} from "@/utils";
 import classNames from "classnames";
 import React from "react";
+import If from "@/component/If";
 
 const initialState = {
   title: "",
   description: "",
-  icon: imageIcon.src,
+  icon: "",
   link: "",
 };
 
@@ -22,6 +23,8 @@ const ConnectMe = () => {
     initialData,
     storeAllData,
   } = useLocalStorage<typeof initialState>(Section.ContactMe, initialState);
+
+  const isSectionActive = activeSection === Section.ContactMe;
 
   return (
     <section
@@ -35,8 +38,7 @@ const ConnectMe = () => {
         className={classNames(
           "md:w-[852px] md:p-10 md:min-h-[295px] rounded-lg",
           {
-            "md:border border-[#828282] relative":
-              activeSection === Section.ContactMe,
+            "md:border border-[#828282] relative": isSectionActive,
           },
         )}
         onClick={(e) => {
@@ -44,7 +46,7 @@ const ConnectMe = () => {
           setActiveSection(Section.ContactMe);
         }}
       >
-        {activeSection === Section.ContactMe && (
+        {isSectionActive && (
           <div className="absolute right-0 flex gap-4 -top-10 md:-top-14">
             <button
               className="text-xs font-semibold"
@@ -74,66 +76,91 @@ const ConnectMe = () => {
             </button>
           </div>
         )}
-        <textarea
-          rows={1}
-          className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
-          value={contactMe.title}
-          disabled={activeSection !== Section.ContactMe}
-          placeholder="Click to add title"
-          onChange={(e) =>
-            setContactMe((prev) => {
-              return {
-                ...prev,
-                title: resizeTextArea(e),
-              };
-            })
-          }
-        />
-        <textarea
-          className={classNames(
-            "bg-transparent text-black outline-none w-full md:w-[511px] font-medium text-base",
-            "resize-none overflow-hidden border-none p-0 mt-3",
-          )}
-          value={contactMe.description}
-          disabled={activeSection !== Section.ContactMe}
-          placeholder="Start writing"
-          onChange={(e) =>
-            setContactMe((prev) => {
-              return {
-                ...prev,
-                description: resizeTextArea(e),
-              };
-            })
-          }
-        />
-        <div className="flex items-center gap-3 mt-5">
-          <ImagePicker
-            src={contactMe.icon}
-            height={50}
-            width={50}
-            id="ContactMe_logo"
-            onChange={(b64) =>
-              setContactMe((prev) => {
-                return {
-                  ...prev,
-                  icon: b64 as string,
-                };
-              })
-            }
-          />
-          <input
-            className="bg-transparent outline-none font-medium text-sm text-[#0085FF]"
-            value={contactMe.link}
-            placeholder="Add link"
+        <If
+          condition={isSectionActive || !!(!isSectionActive && contactMe.title)}
+        >
+          <textarea
+            rows={1}
+            className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
+            value={contactMe.title}
+            disabled={!isSectionActive}
+            placeholder="Click to add title"
             onChange={(e) =>
               setContactMe((prev) => {
                 return {
                   ...prev,
-                  link: e.target.value,
+                  title: resizeTextArea(e),
                 };
               })
             }
           />
+        </If>
+
+        <If
+          condition={
+            isSectionActive || !!(!isSectionActive && contactMe.description)
+          }
+        >
+          <textarea
+            className={classNames(
+              "bg-transparent text-black outline-none w-full md:w-[511px] font-medium text-base",
+              "resize-none overflow-hidden border-none p-0 mt-3",
+            )}
+            value={contactMe.description}
+            disabled={!isSectionActive}
+            placeholder="Start writing"
+            onChange={(e) =>
+              setContactMe((prev) => {
+                return {
+                  ...prev,
+                  description: resizeTextArea(e),
+                };
+              })
+            }
+          />
+        </If>
+
+        <div className="flex items-center gap-3 mt-5">
+          <If
+            condition={
+              isSectionActive || !!(!isSectionActive && contactMe.icon)
+            }
+          >
+            <ImagePicker
+              src={contactMe.icon || imageIcon.src}
+              height={50}
+              width={50}
+              id="ContactMe_logo"
+              onChange={(b64) =>
+                setContactMe((prev) => {
+                  return {
+                    ...prev,
+                    icon: b64 as string,
+                  };
+                })
+              }
+            />
+          </If>
+
+          <If
+            condition={
+              isSectionActive || !!(!isSectionActive && contactMe.link)
+            }
+          >
+            <input
+              className="bg-transparent outline-none font-medium text-sm text-[#0085FF]"
+              value={contactMe.link}
+              placeholder="Add link"
+              onChange={(e) =>
+                setContactMe((prev) => {
+                  return {
+                    ...prev,
+                    link: e.target.value,
+                  };
+                })
+              }
+            />
+          </If>
         </div>
       </aside>
     </section>
