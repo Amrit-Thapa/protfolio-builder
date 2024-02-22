@@ -15,7 +15,7 @@ const initialState = {
   items: [
     {
       id: "project_1",
-      logo: imageIcon.src,
+      logo: "",
       title: "",
       link: "",
       description: "",
@@ -147,7 +147,7 @@ const Projects = () => {
                     }
                   >
                     <ImagePicker
-                      src={project.logo}
+                      src={project.logo || imageIcon.src}
                       height={50}
                       width={50}
                       id={`${project.id}_logo`}

@@ -8,6 +8,7 @@ import plusIcon from "@/../public/assets/icons/plus.png";
 import {Section} from "@/types";
 import {resizeTextArea} from "@/utils";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import If from "@/component/If";
 
 const initialState = {
   title: "Experience",
@@ -15,7 +16,7 @@ const initialState = {
   items: [
     {
       id: "exp_1",
-      logo: imageIcon.src,
+      logo: "",
       designation: "",
       name: "",
       location: "",
@@ -45,6 +46,8 @@ const Experience = () => {
     });
   };
 
+  const isSectionActive = activeSection === Section.Experience;
+
   return (
     <section
       className="flex justify-end w-full mt-24"
@@ -57,8 +60,7 @@ const Experience = () => {
         className={classNames(
           "md:w-[852px] w-full md:p-10 md:min-h-[428px] rounded-lg",
           {
-            "md:border border-[#828282] relative":
-              activeSection === Section.Experience,
+            "md:border border-[#828282] relative": isSectionActive,
           },
         )}
         onClick={(e) => {
@@ -66,7 +68,7 @@ const Experience = () => {
           setActiveSection(Section.Experience);
         }}
       >
-        {activeSection === Section.Experience && (
+        {isSectionActive && (
           <div className="absolute right-0 flex gap-4 -top-14">
             <button
               className="text-xs font-semibold"
@@ -97,28 +99,45 @@ const Experience = () => {
             </button>
           </div>
         )}
-        <input
-          className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
-          value={experienceSection.title}
-          onChange={(e) =>
-            setExperienceSection((prev) => {
-              return {...prev, title: e.target.value};
-            })
+
+        <If
+          condition={
+            isSectionActive || !!(!isSectionActive && experienceSection.title)
           }
-        />
-        <textarea
-          className={classNames(
-            "bg-transparent text-black outline-none w-full font-sm md:font-medium max-w-[501px] md:text-base mt-5",
-            "resize-none overflow-hidden border-none p-0 m-0 text-sm",
-          )}
-          value={experienceSection.description}
-          placeholder="Add subtext here.."
-          onChange={(e) =>
-            setExperienceSection((prev) => {
-              return {...prev, description: resizeTextArea(e)};
-            })
+        >
+          <input
+            className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
+            placeholder="Projects"
+            value={experienceSection.title}
+            onChange={(e) =>
+              setExperienceSection((prev) => {
+                return {...prev, title: e.target.value};
+              })
+            }
+          />
+        </If>
+
+        <If
+          condition={
+            isSectionActive ||
+            !!(!isSectionActive && experienceSection.description)
           }
-        />
+        >
+          <textarea
+            className={classNames(
+              "bg-transparent text-black outline-none w-full font-sm md:font-medium max-w-[501px] md:text-base mt-5",
+              "resize-none overflow-hidden border-none p-0 m-0 text-sm",
+            )}
+            value={experienceSection.description}
+            placeholder="Add subtext here.."
+            onChange={(e) =>
+              setExperienceSection((prev) => {
+                return {...prev, description: resizeTextArea(e)};
+              })
+            }
+          />
+        </If>
+
         <div>
           {experienceSection.items.map((exp) => {
             return (
@@ -133,69 +152,112 @@ const Experience = () => {
               >
                 <div>
                   <div className="flex flex-wrap items-end gap-3">
-                    <ImagePicker
-                      src={exp.logo}
-                      onChange={(b64) =>
-                        handleChange(exp.id, "logo", b64 as string)
+                    <If
+                      condition={
+                        isSectionActive || !!(!isSectionActive && exp.logo)
                       }
-                      height={50}
-                      width={50}
-                      id={`${exp.id}_logo`}
-                      className="rounded w-[50px]"
-                    />
+                    >
+                      <ImagePicker
+                        src={exp.logo || imageIcon.src}
+                        onChange={(b64) =>
+                          handleChange(exp.id, "logo", b64 as string)
+                        }
+                        height={50}
+                        width={50}
+                        id={`${exp.id}_logo`}
+                        className="rounded w-[50px]"
+                      />
+                    </If>
+
                     <div>
-                      <input
-                        className="text-base font-semibold text-black bg-transparent outline-none"
-                        value={exp.name}
-                        placeholder="Enter company title"
-                        onChange={(e) =>
-                          handleChange(exp.id, "name", e.target.value)
+                      <If
+                        condition={
+                          isSectionActive || !!(!isSectionActive && exp.name)
                         }
-                      />
-                      <input
-                        className="text-sm font-medium text-black bg-transparent outline-none"
-                        value={exp.designation}
-                        placeholder="Enter designation"
-                        onChange={(e) =>
-                          handleChange(exp.id, "designation", e.target.value)
+                      >
+                        <input
+                          className="text-base font-semibold text-black bg-transparent outline-none"
+                          value={exp.name}
+                          placeholder="Enter company title"
+                          onChange={(e) =>
+                            handleChange(exp.id, "name", e.target.value)
+                          }
+                        />
+                      </If>
+
+                      <If
+                        condition={
+                          isSectionActive ||
+                          !!(!isSectionActive && exp.designation)
                         }
-                      />
+                      >
+                        <input
+                          className="text-sm font-medium text-black bg-transparent outline-none"
+                          value={exp.designation}
+                          placeholder="Enter designation"
+                          onChange={(e) =>
+                            handleChange(exp.id, "designation", e.target.value)
+                          }
+                        />
+                      </If>
+
                       <div className="flex">
-                        <input
-                          className="bg-transparent text-[#858585] outline-none font-medium text-xs"
-                          value={exp.location}
-                          placeholder="+Add location"
-                          onChange={(e) =>
-                            handleChange(exp.id, "location", e.target.value)
+                        <If
+                          condition={
+                            isSectionActive ||
+                            !!(!isSectionActive && exp.location)
                           }
-                        />
-                        <input
-                          className="bg-transparent text-[#858585] outline-none font-medium text-xs"
-                          value={exp.timeLine}
-                          placeholder="year"
-                          onChange={(e) =>
-                            handleChange(exp.id, "timeLine", e.target.value)
+                        >
+                          <input
+                            className="bg-transparent text-[#858585] outline-none font-medium text-xs"
+                            value={exp.location}
+                            placeholder="+Add location"
+                            onChange={(e) =>
+                              handleChange(exp.id, "location", e.target.value)
+                            }
+                          />
+                        </If>
+
+                        <If
+                          condition={
+                            isSectionActive ||
+                            !!(!isSectionActive && exp.timeLine)
                           }
-                        />
+                        >
+                          <input
+                            className="bg-transparent text-[#858585] outline-none font-medium text-xs"
+                            value={exp.timeLine}
+                            placeholder="year"
+                            onChange={(e) =>
+                              handleChange(exp.id, "timeLine", e.target.value)
+                            }
+                          />
+                        </If>
                       </div>
                     </div>
                   </div>
-                  <textarea
-                    className={classNames(
-                      "bg-transparent text-black outline-none w-full font-medium max-w-[501px] text-sm",
-                      "resize-none overflow-hidden border-none p-0 mt-10",
-                    )}
-                    value={exp.description}
-                    placeholder="Add subtext here..."
-                    onChange={(e) =>
-                      handleChange(exp.id, "description", resizeTextArea(e))
+                  <If
+                    condition={
+                      isSectionActive || !!(!isSectionActive && exp.description)
                     }
-                  />
+                  >
+                    <textarea
+                      className={classNames(
+                        "bg-transparent text-black outline-none w-full font-medium max-w-[501px] text-sm",
+                        "resize-none overflow-hidden border-none p-0 mt-10",
+                      )}
+                      value={exp.description}
+                      placeholder="Add subtext here..."
+                      onChange={(e) =>
+                        handleChange(exp.id, "description", resizeTextArea(e))
+                      }
+                    />
+                  </If>
                 </div>
               </div>
             );
           })}
-          {activeSection === Section.Experience && (
+          {isSectionActive && (
             <div className="rounded-2xl border p-3 mt-5 w-full flex items-center justify-center bg-[#EFEFEF]">
               <div
                 className="cursor-pointer"
