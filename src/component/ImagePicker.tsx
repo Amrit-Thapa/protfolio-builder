@@ -1,5 +1,4 @@
 import React, {ChangeEvent, ComponentProps} from "react";
-import imageIcon from "@/../public/assets/icons/imageIcon.png";
 import Image from "next/image";
 
 type ImgPicker = {
@@ -7,14 +6,14 @@ type ImgPicker = {
   disabled?: boolean;
 };
 
-function ImagePicker({
+const ImagePicker = ({
   src,
   id,
   height,
   width,
   onChange,
   disabled = false,
-}: ComponentProps<"img"> & ImgPicker) {
+}: ComponentProps<"img"> & ImgPicker) => {
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -30,7 +29,7 @@ function ImagePicker({
     <>
       <label htmlFor={id}>
         <Image
-          src={(src as string) || imageIcon.src}
+          src={src || ""}
           height={+height!}
           width={+width!}
           priority
@@ -48,6 +47,6 @@ function ImagePicker({
       />
     </>
   );
-}
+};
 
 export default ImagePicker;
