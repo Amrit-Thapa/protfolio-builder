@@ -8,15 +8,16 @@ import {useAppContext} from "@/context/AppContext";
 import {Section} from "@/types";
 import {resizeTextArea} from "@/utils";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import If from "@/component/If";
 
 const initialState = {
-  title: "Blogs & Resources",
+  title: "",
   description: "",
   items: [
     {
       id: "cta_1",
       title: "",
-      icon: imageIcon.src,
+      icon: "",
       description: "",
       link: "",
     },
@@ -42,6 +43,7 @@ const CTA = () => {
       };
     });
   };
+  const isSectionActive = activeSection === Section.CTA;
 
   return (
     <section
@@ -50,15 +52,14 @@ const CTA = () => {
     >
       <aside
         className={classNames("md:w-[852px] w-full md:p-10 md:min-h-[428px]", {
-          "md:border border-[#828282] rounded-lg relative":
-            activeSection === Section.CTA,
+          "md:border border-[#828282] rounded-lg relative": isSectionActive,
         })}
         onClick={(e) => {
           e.stopPropagation();
           setActiveSection(Section.CTA);
         }}
       >
-        {activeSection === Section.CTA && (
+        {isSectionActive && (
           <div className="absolute right-0 flex gap-4 -top-10 md:-top-14">
             <button
               className="text-xs font-semibold"
@@ -89,35 +90,49 @@ const CTA = () => {
             </button>
           </div>
         )}
-        <input
-          className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
-          value={ctaSection.title}
-          placeholder="Click to add title"
-          onChange={(e) =>
-            setCtaSection((prev) => {
-              return {
-                ...prev,
-                title: e.target.value,
-              };
-            })
+        <If
+          condition={
+            isSectionActive || !!(!isSectionActive && ctaSection.title)
           }
-        />
-        <textarea
-          className={classNames(
-            "bg-transparent text-black outline-none w-full font-sm md:font-medium max-w-[501px] md:text-base mt-5",
-            "resize-none overflow-hidden border-none p-0 m-0 text-sm",
-          )}
-          value={ctaSection.description}
-          placeholder="Add subtext here..."
-          onChange={(e) =>
-            setCtaSection((prev) => {
-              return {
-                ...prev,
-                description: resizeTextArea(e),
-              };
-            })
+        >
+          <input
+            className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
+            value={ctaSection.title}
+            placeholder="Blogs and resources"
+            onChange={(e) =>
+              setCtaSection((prev) => {
+                return {
+                  ...prev,
+                  title: e.target.value,
+                };
+              })
+            }
+          />
+        </If>
+
+        <If
+          condition={
+            isSectionActive || !!(!isSectionActive && ctaSection.description)
           }
-        />
+        >
+          <textarea
+            className={classNames(
+              "bg-transparent text-black outline-none w-full font-sm md:font-medium max-w-[501px] md:text-base mt-5",
+              "resize-none overflow-hidden border-none p-0 m-0 text-sm",
+            )}
+            value={ctaSection.description}
+            placeholder="Add subtext here..."
+            onChange={(e) =>
+              setCtaSection((prev) => {
+                return {
+                  ...prev,
+                  description: resizeTextArea(e),
+                };
+              })
+            }
+          />
+        </If>
+
         <div className="flex flex-wrap gap-4">
           {ctaSection.items.map((cta) => {
             return (
@@ -126,37 +141,55 @@ const CTA = () => {
                 key={cta.id}
               >
                 <div className="flex flex-col gap-2">
-                  <ImagePicker
-                    height={50}
-                    width={50}
-                    id={`${cta.id}_logo`}
-                    className="rounded"
-                    src={cta.icon}
-                    onChange={(b64) =>
-                      handleChange(cta.id, "icon", b64 as string)
+                  <If
+                    condition={
+                      isSectionActive || !!(!isSectionActive && cta.icon)
                     }
-                  />
-                  <textarea
-                    className={classNames(
-                      "text-base font-medium text-black bg-transparent outline-none",
-                      "resize-none overflow-hidden border-none p-0 m-0",
-                    )}
-                    value={cta.title}
-                    placeholder="Enter title here..."
-                    onChange={(e) =>
-                      handleChange(cta.id, "title", resizeTextArea(e))
-                    }
-                  />
-                  <div className="">
-                    <input
-                      className="bg-transparent outline-none font-medium text-sm text-[#0085FF]"
-                      value={cta.link}
-                      placeholder="Add link"
-                      onChange={(e) =>
-                        handleChange(cta.id, "link", e.target.value)
+                  >
+                    <ImagePicker
+                      height={50}
+                      width={50}
+                      id={`${cta.id}_logo`}
+                      className="rounded"
+                      src={cta.icon || imageIcon.src}
+                      onChange={(b64) =>
+                        handleChange(cta.id, "icon", b64 as string)
                       }
                     />
-                    {activeSection === Section.CTA && cta.link && (
+                  </If>
+
+                  <If
+                    condition={
+                      isSectionActive || !!(!isSectionActive && cta.title)
+                    }
+                  >
+                    <textarea
+                      rows={1}
+                      className={classNames(
+                        "text-base font-medium text-black bg-transparent outline-none",
+                        "resize-none overflow-hidden border-none p-0 mt-3",
+                      )}
+                      value={cta.title}
+                      placeholder="Enter title here..."
+                      onChange={(e) =>
+                        handleChange(cta.id, "title", resizeTextArea(e))
+                      }
+                    />
+                  </If>
+
+                  <div>
+                    <If condition={isSectionActive}>
+                      <input
+                        className="bg-transparent outline-none font-medium text-sm text-[#0085FF]"
+                        value={cta.link}
+                        placeholder="Add link"
+                        onChange={(e) =>
+                          handleChange(cta.id, "link", e.target.value)
+                        }
+                      />
+                    </If>
+
+                    <If condition={isSectionActive && !!cta.link}>
                       <a
                         href={cta.link}
                         target="_blank"
@@ -164,13 +197,13 @@ const CTA = () => {
                       >
                         <span>🔗 {cta.link}</span>
                       </a>
-                    )}
+                    </If>
                   </div>
                 </div>
               </div>
             );
           })}
-          {activeSection === Section.CTA && (
+          {isSectionActive && (
             <div className="rounded-2xl border p-3 w-[375px] min-h-[222px] flex items-center justify-center bg-[#EFEFEF]">
               <div
                 className="cursor-pointer"
