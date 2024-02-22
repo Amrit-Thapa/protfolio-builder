@@ -18,7 +18,7 @@ const initialState = {
 };
 
 const HeroSection = () => {
-  const {setActiveSection, activeSection} = useAppContext();
+  const {setActiveSection} = useAppContext();
   const {
     updates: heroSection,
     setUpdates: setHeroSection,

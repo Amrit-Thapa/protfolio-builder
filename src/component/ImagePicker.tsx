@@ -28,13 +28,14 @@ function ImagePicker({
 
   return (
     <>
-      <label htmlFor={id} style={{height, width}}>
+      <label htmlFor={id}>
         <Image
-          src={(src as string) || imageIcon}
+          src={(src as string) || imageIcon.src}
           height={+height!}
           width={+width!}
+          priority
           alt="Placeholder"
-          className="inline rounded-lg cursor-pointer object-scale-down"
+          className="inline object-cover rounded-lg cursor-pointer"
         />
       </label>
       <input

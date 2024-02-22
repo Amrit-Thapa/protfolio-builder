@@ -97,7 +97,7 @@ const Experience = () => {
           </div>
         )}
         <input
-          className="w-full text-2xl md:text-3xl font-bold text-black bg-transparent outline-none"
+          className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
           value={experienceSection.title}
           onChange={(e) =>
             setExperienceSection((prev) => {
@@ -122,6 +122,7 @@ const Experience = () => {
           {experienceSection.items.map((exp) => {
             return (
               <div
+                key={exp.id}
                 className={classNames(
                   "bg-white text-[#C6C6C6] rounded-2xl border w-full p-10 min-h-[222px] mt-5",
                   {

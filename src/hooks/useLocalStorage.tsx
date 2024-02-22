@@ -28,7 +28,7 @@ const useLocalStorage = <T,>(key: Section, initialValue: T): LocalStore<T> => {
   const storeAllData = (key: Section, value: any) => {
     try {
       if (isBrowser && storage) {
-        storage.setItem(key, JSON.stringify(value));
+        // storage.setItem(key, JSON.stringify(value));
         setData(value);
       }
     } catch (error) {
