@@ -56,8 +56,8 @@ const ConnectMe = () => {
                   ? setContactMe(initialData)
                   : updateSection((sections) => {
                       const index = sections.indexOf(Section.ContactMe);
-
-                      return [...sections.splice(index, 1)];
+                      sections.splice(index, 1);
+                      return [...sections];
                     });
                 setActiveSection(undefined);
               }}
@@ -84,7 +84,7 @@ const ConnectMe = () => {
             className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
             value={contactMe.title}
             disabled={!isSectionActive}
-            placeholder="Click to add title"
+            placeholder="Lets Connect!"
             onChange={(e) =>
               setContactMe((prev) => {
                 return {

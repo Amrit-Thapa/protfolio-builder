@@ -78,8 +78,8 @@ const Experience = () => {
                   ? setExperienceSection(initialData)
                   : updateSection((sections) => {
                       const index = sections.indexOf(Section.Experience);
-
-                      return [...sections.splice(index, 1)];
+                      sections.splice(index, 1);
+                      return [...sections];
                     });
 
                 setActiveSection(undefined);

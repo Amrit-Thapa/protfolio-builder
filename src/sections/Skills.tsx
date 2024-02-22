@@ -6,6 +6,7 @@ import {Section} from "@/types";
 import {resizeTextArea} from "@/utils";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import If from "@/component/If";
+import React, {useEffect} from "react";
 
 const initialState = [
   {
@@ -17,7 +18,8 @@ const initialState = [
 ];
 
 const Skills = () => {
-  const {setActiveSection, activeSection, updateSection} = useAppContext();
+  const {setActiveSection, activeSection, updateSection, section} =
+    useAppContext();
   const {
     updates: skillSection,
     setUpdates: setSkillSection,
@@ -34,6 +36,42 @@ const Skills = () => {
   };
 
   const isSectionActive = activeSection === Section.Skills;
+
+  const handleCancelButton = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+    if (initialData) {
+      setSkillSection(initialData);
+    } else {
+      updateSection((sections) => {
+        const index = sections.indexOf(Section.Skills);
+        sections.splice(index, 1);
+        return [...sections];
+      });
+    }
+
+    setActiveSection(undefined);
+  };
+
+  const handleSaveClick = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+
+    if (skillSection.length === 1) {
+      const updatedSkill = Object.values(skillSection[0]).filter(
+        (item) => !!item,
+      );
+      if (updatedSkill.length > 1) {
+        storeAllData(Section.Skills, skillSection);
+      } else {
+        updateSection((sections) => {
+          const index = sections.indexOf(Section.Skills);
+          sections.splice(index, 1);
+          return [...sections];
+        });
+        setSkillSection([]);
+      }
+    }
+    setActiveSection(undefined);
+  };
 
   return (
     <section
@@ -56,27 +94,13 @@ const Skills = () => {
           <div className="absolute right-0 flex gap-4 md:-top-14 -top-10">
             <button
               className="text-xs font-semibold"
-              onClick={(e) => {
-                e.stopPropagation();
-                setActiveSection(undefined);
-                initialData
-                  ? setSkillSection(initialData)
-                  : updateSection((sections) => {
-                      const index = sections.indexOf(Section.Skills);
-
-                      return [...sections.splice(index, 1)];
-                    });
-              }}
+              onClick={handleCancelButton}
             >
               Cancel
             </button>
             <button
               className="text-white rounded-3xl bg-[#0085FF] text-xs font-semibold px-4 py-1"
-              onClick={(e) => {
-                e.stopPropagation();
-                storeAllData(Section.Skills, skillSection);
-                setActiveSection(undefined);
-              }}
+              onClick={handleSaveClick}
             >
               Save
             </button>

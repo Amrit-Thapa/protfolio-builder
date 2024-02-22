@@ -6,7 +6,7 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import If from "@/component/If";
 
 const initialState = {
-  title: "About me",
+  title: "",
   description: "",
 };
 
@@ -16,6 +16,40 @@ const AboutMe = () => {
     typeof initialState
   >(Section.AboutMe, initialState);
   const isSectionActive = activeSection === Section.AboutMe;
+
+  const valueUpdated = () => {
+    return Object.values(updates).filter((item) => !!item).length;
+  };
+
+  const handleCancelButton = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+    if (initialData) {
+      setUpdates(initialData);
+    } else {
+      updateSection((sections) => {
+        const index = sections.indexOf(Section.AboutMe);
+        sections.splice(index, 1);
+        return [...sections];
+      });
+    }
+    setActiveSection(undefined);
+  };
+
+  const handleSaveClick = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+
+    if (valueUpdated()) {
+      storeAllData(Section.AboutMe, updates);
+    } else {
+      updateSection((sections) => {
+        const index = sections.indexOf(Section.AboutMe);
+        sections.splice(index, 1);
+        return [...sections];
+      });
+      setUpdates(initialState);
+    }
+    setActiveSection(undefined);
+  };
 
   return (
     <section
@@ -39,28 +73,13 @@ const AboutMe = () => {
           <div className="absolute right-0 flex gap-4 -top-10 md:-top-14">
             <button
               className="text-xs font-semibold"
-              onClick={(e) => {
-                e.stopPropagation();
-                initialData
-                  ? setUpdates(initialData)
-                  : updateSection((sections) => {
-                      const index = sections.indexOf(Section.AboutMe);
-
-                      return [...sections.splice(index, 1)];
-                    });
-
-                setActiveSection(undefined);
-              }}
+              onClick={handleCancelButton}
             >
               Cancel
             </button>
             <button
               className="text-white rounded-3xl bg-[#0085FF] text-xs font-semibold px-4 py-1"
-              onClick={(e) => {
-                e.stopPropagation();
-                storeAllData(Section.AboutMe, updates);
-                setActiveSection(undefined);
-              }}
+              onClick={handleSaveClick}
             >
               Save
             </button>
@@ -74,7 +93,7 @@ const AboutMe = () => {
             className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
             value={updates.title}
             disabled={activeSection !== Section.AboutMe}
-            placeholder="Click to add title"
+            placeholder="About Me"
             onChange={(e) =>
               setUpdates((prev) => {
                 return {

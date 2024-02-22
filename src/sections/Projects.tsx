@@ -72,8 +72,8 @@ const Projects = () => {
                   ? setProjectSection(initialData)
                   : updateSection((sections) => {
                       const index = sections.indexOf(Section.Projects);
-
-                      return [...sections.splice(index, 1)];
+                      sections.splice(index, 1);
+                      return [...sections];
                     });
 
                 setActiveSection(undefined);

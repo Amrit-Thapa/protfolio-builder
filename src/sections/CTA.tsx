@@ -69,8 +69,8 @@ const CTA = () => {
                   ? setCtaSection(initialData)
                   : updateSection((sections) => {
                       const index = sections.indexOf(Section.CTA);
-
-                      return [...sections.splice(index, 1)];
+                      sections.splice(index, 1);
+                      return [...sections];
                     });
 
                 setActiveSection(undefined);
