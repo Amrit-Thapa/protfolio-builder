@@ -7,9 +7,10 @@ import {useAppContext} from "@/context/AppContext";
 import {Section} from "@/types";
 import {resizeTextArea} from "@/utils";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import If from "@/component/If";
 
 const initialState = {
-  title: "Projects",
+  title: "",
   description: "",
   items: [
     {
@@ -42,6 +43,8 @@ const Projects = () => {
     });
   };
 
+  const isSectionActive = activeSection === Section.Projects;
+
   return (
     <section
       className="flex justify-end w-full mt-20"
@@ -51,8 +54,7 @@ const Projects = () => {
         className={classNames(
           "md:w-[852px] w-full md:p-10 md:min-h-[428px] rounded-lg",
           {
-            "md:border border-[#828282] relative":
-              activeSection === Section.Projects,
+            "md:border border-[#828282] relative": isSectionActive,
           },
         )}
         onClick={(e) => {
@@ -60,7 +62,7 @@ const Projects = () => {
           setActiveSection(Section.Projects);
         }}
       >
-        {activeSection === Section.Projects && (
+        {isSectionActive && (
           <div className="absolute right-0 flex gap-4 -top-10 md:-top-14">
             <button
               className="text-xs font-semibold"
@@ -91,31 +93,46 @@ const Projects = () => {
             </button>
           </div>
         )}
-        <input
-          className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
-          value={projectSection.title}
-          disabled={!(activeSection === Section.Projects)}
-          placeholder="Click to add title"
-          onChange={(e) =>
-            setProjectSection((prev) => {
-              return {...prev, title: e.target.value};
-            })
+
+        <If
+          condition={
+            isSectionActive || !!(!isSectionActive && projectSection.title)
           }
-        />
-        <textarea
-          className={classNames(
-            "bg-transparent text-black outline-none w-full font-sm md:font-medium max-w-[501px] md:text-base mt-5",
-            "resize-none overflow-hidden border-none p-0 m-0 text-sm",
-          )}
-          value={projectSection.description}
-          disabled={!(activeSection === Section.Projects)}
-          placeholder="Add subtext here..."
-          onChange={(e) =>
-            setProjectSection((prev) => {
-              return {...prev, description: resizeTextArea(e)};
-            })
+        >
+          <input
+            className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
+            value={projectSection.title}
+            disabled={!isSectionActive}
+            placeholder="Click to add title"
+            onChange={(e) =>
+              setProjectSection((prev) => {
+                return {...prev, title: e.target.value};
+              })
+            }
+          />
+        </If>
+
+        <If
+          condition={
+            isSectionActive || !!(!isSectionActive && projectSection.title)
           }
-        />
+        >
+          <textarea
+            className={classNames(
+              "bg-transparent text-black outline-none w-full font-sm md:font-medium max-w-[501px] md:text-base mt-5",
+              "resize-none overflow-hidden border-none p-0 m-0 text-sm",
+            )}
+            value={projectSection.description}
+            disabled={!isSectionActive}
+            placeholder="Add subtext here..."
+            onChange={(e) =>
+              setProjectSection((prev) => {
+                return {...prev, description: resizeTextArea(e)};
+              })
+            }
+          />
+        </If>
+
         <div className="flex flex-wrap gap-4 mt-5">
           {projectSection.items?.map((project) => {
             return (
@@ -124,28 +141,41 @@ const Projects = () => {
                 key={project.id}
               >
                 <div className="flex flex-col gap-2">
-                  <ImagePicker
-                    src={project.logo}
-                    height={50}
-                    width={50}
-                    id={`${project.id}_logo`}
-                    onChange={(b64) =>
-                      handleChange(project.id, "logo", b64 as string)
+                  <If
+                    condition={
+                      isSectionActive || !!(!isSectionActive && project.logo)
                     }
-                  />
-                  <input
-                    disabled={!(activeSection === Section.Projects)}
-                    className="mt-3 text-base font-medium text-black bg-transparent outline-none"
-                    value={project.title}
-                    placeholder="Enter site title"
-                    onChange={(e) =>
-                      handleChange(project.id, "title", e.target.value)
+                  >
+                    <ImagePicker
+                      src={project.logo}
+                      height={50}
+                      width={50}
+                      id={`${project.id}_logo`}
+                      onChange={(b64) =>
+                        handleChange(project.id, "logo", b64 as string)
+                      }
+                    />
+                  </If>
+
+                  <If
+                    condition={
+                      isSectionActive || !!(!isSectionActive && project.title)
                     }
-                  />
-                  <div className="">
-                    {
+                  >
+                    <input
+                      disabled={!isSectionActive}
+                      className="mt-3 text-base font-medium text-black bg-transparent outline-none"
+                      value={project.title}
+                      placeholder="Enter site title"
+                      onChange={(e) =>
+                        handleChange(project.id, "title", e.target.value)
+                      }
+                    />
+                  </If>
+
+                  <div>
+                    <If condition={isSectionActive}>
                       <input
-                        disabled={!(activeSection === Section.Projects)}
                         className="bg-transparent outline-none font-medium text-sm text-[#0085FF]"
                         placeholder="Link"
                         value={project.link}
@@ -153,8 +183,8 @@ const Projects = () => {
                           handleChange(project.id, "link", e.target.value)
                         }
                       />
-                    }
-                    {activeSection === Section.Projects && project.link && (
+                    </If>
+                    <If condition={!isSectionActive && !!project.link}>
                       <a
                         href={project.link}
                         target="_blank"
@@ -162,25 +192,35 @@ const Projects = () => {
                       >
                         <span>🔗 {project.link}</span>
                       </a>
-                    )}
+                    </If>
                   </div>
-                  <textarea
-                    className={classNames(
-                      "bg-transparent text-black outline-none w-full font-medium max-w-[501px] text-sm",
-                      "resize-none overflow-hidden border-none p-0 m-0",
-                    )}
-                    disabled={!(activeSection === Section.Projects)}
-                    value={project.description}
-                    placeholder="Add subtext here..."
-                    onChange={(e) =>
-                      handleChange(project.id, "description", resizeTextArea(e))
+                  <If
+                    condition={
+                      isSectionActive ||
+                      !!(!isSectionActive && project.description)
                     }
-                  />
+                  >
+                    <textarea
+                      className={classNames(
+                        "bg-transparent text-black outline-none w-full font-medium max-w-[501px] text-sm",
+                        "resize-none overflow-hidden border-none p-0 m-0",
+                      )}
+                      value={project.description}
+                      placeholder="Add subtext here..."
+                      onChange={(e) =>
+                        handleChange(
+                          project.id,
+                          "description",
+                          resizeTextArea(e),
+                        )
+                      }
+                    />
+                  </If>
                 </div>
               </div>
             );
           })}
-          {activeSection === Section.Projects && (
+          {isSectionActive && (
             <div className="rounded-2xl border p-3 w-[375px] min-h-[222px] flex items-center justify-center bg-[#EFEFEF]">
               <div
                 className="cursor-pointer"

@@ -144,7 +144,7 @@ const Skills = () => {
             </If>
           </div>
         ))}
-        {activeSection === Section.Skills && (
+        {isSectionActive && (
           <div className="rounded-2xl border p-3 w-[375px] min-h-[530px] flex items-center justify-center bg-[#EFEFEF]">
             <div
               className="cursor-pointer"
