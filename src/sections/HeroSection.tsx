@@ -1,4 +1,7 @@
 "use client";
+import If from "@/component/IF";
+import imageIconSm from "@/../public/assets/icons/imageIconSm.png";
+import imageIcon from "@/../public/assets/icons/imageIcon.png";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import {resizeTextArea} from "@/utils";
 import classNames from "classnames";
@@ -18,7 +21,7 @@ const initialState = {
 };
 
 const HeroSection = () => {
-  const {setActiveSection} = useAppContext();
+  const {setActiveSection, activeSection} = useAppContext();
   const {
     updates: heroSection,
     setUpdates: setHeroSection,
@@ -29,6 +32,7 @@ const HeroSection = () => {
     storeAllData(Section.HeroSection, heroSection);
   }, [heroSection]);
 
+  const isActive = activeSection === Section.HeroSection;
   return (
     <section
       className="px-5 md:px-[100px]"
@@ -36,7 +40,7 @@ const HeroSection = () => {
     >
       <div className="mt-[50px] text-[#C5C5C5] flex gap-2 ">
         <ImagePicker
-          src={heroSection.logo}
+          src={heroSection.logo || imageIconSm.src}
           height={25}
           width={25}
           id="company-icon"
@@ -66,7 +70,7 @@ const HeroSection = () => {
       <div className="mt-12 md:mt-[200px] flex flex-wrap md:flex-nowrap justify-between items-start">
         <div className="md:w-[295px] flex flex-col md:mt-0 items-end justify-center">
           <ImagePicker
-            src={heroSection.profileImage}
+            src={heroSection.profileImage || imageIcon.src}
             height={295}
             width={295}
             disabled={false}
@@ -88,6 +92,7 @@ const HeroSection = () => {
               "bg-transparent text-black w-full font-medium md:text-7xl mt-4 md:mt-0 text-4xl outline-none",
               "resize-none overflow-hidden border-none p-0 m-0",
             )}
+            rows={1}
             value={heroSection.introText}
             placeholder="Click to add title"
             onChange={(e) =>
@@ -102,8 +107,9 @@ const HeroSection = () => {
           <textarea
             className={classNames(
               "bg-transparent text-black outline-none w-full md:max-w-[340px] font-normal text-lg",
-              "resize-none overflow-hidden border-none p-0 mt-5",
+              "resize-none overflow-hidden border-none p-0 mt-3",
             )}
+            rows={1}
             value={heroSection.subText}
             placeholder="Click to add subtitle"
             onChange={(e) =>
