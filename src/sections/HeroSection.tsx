@@ -102,7 +102,7 @@ const HeroSection = () => {
           <textarea
             className={classNames(
               "bg-transparent text-black outline-none w-full md:max-w-[340px] font-normal text-lg",
-              "resize-none overflow-hidden border-none p-0 m-0",
+              "resize-none overflow-hidden border-none p-0 mt-5",
             )}
             value={heroSection.subText}
             placeholder="Click to add subtitle"

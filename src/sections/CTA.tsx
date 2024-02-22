@@ -89,7 +89,7 @@ const CTA = () => {
           </div>
         )}
         <input
-          className="w-full text-2xl md:text-3xl font-bold text-black bg-transparent outline-none"
+          className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
           value={ctaSection.title}
           placeholder="Click to add title"
           onChange={(e) =>
@@ -132,21 +132,25 @@ const CTA = () => {
                     className="rounded"
                     src={cta.icon}
                     onChange={(b64) =>
-                      handleChange(cta.id, "logo", b64 as string)
+                      handleChange(cta.id, "icon", b64 as string)
                     }
                   />
-                  <input
-                    className="text-base font-medium text-black bg-transparent outline-none"
+                  <textarea
+                    className={classNames(
+                      "text-base font-medium text-black bg-transparent outline-none",
+                      "resize-none overflow-hidden border-none p-0 m-0",
+                    )}
                     value={cta.title}
-                    placeholder="Enter site title"
+                    placeholder="Enter title here..."
                     onChange={(e) =>
-                      handleChange(cta.id, "title", e.target.value)
+                      handleChange(cta.id, "title", resizeTextArea(e))
                     }
                   />
                   <div className="">
                     <input
                       className="bg-transparent outline-none font-medium text-sm text-[#0085FF]"
                       value={cta.link}
+                      placeholder="Add link"
                       onChange={(e) =>
                         handleChange(cta.id, "link", e.target.value)
                       }
@@ -161,17 +165,6 @@ const CTA = () => {
                       </a>
                     )}
                   </div>
-                  <textarea
-                    className={classNames(
-                      "bg-transparent text-black outline-none w-full font-medium max-w-[501px] text-sm",
-                      "resize-none overflow-hidden border-none p-0 m-0",
-                    )}
-                    value={cta.description}
-                    placeholder="Add subtext here..."
-                    onChange={(e) =>
-                      handleChange(cta.id, "description", resizeTextArea(e))
-                    }
-                  />
                 </div>
               </div>
             );

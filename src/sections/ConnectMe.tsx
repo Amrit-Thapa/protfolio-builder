@@ -74,7 +74,8 @@ const ConnectMe = () => {
           </div>
         )}
         <textarea
-          className="w-full text-2xl md:text-3xl font-bold text-black bg-transparent outline-none"
+          rows={1}
+          className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
           value={contactMe.title}
           disabled={activeSection !== Section.ContactMe}
           placeholder="Click to add title"
@@ -89,8 +90,8 @@ const ConnectMe = () => {
         />
         <textarea
           className={classNames(
-            "bg-transparent text-black outline-none w-full font-medium text-base",
-            "resize-none overflow-hidden border-none p-0 m-0",
+            "bg-transparent text-black outline-none w-full md:w-[511px] font-medium text-base",
+            "resize-none overflow-hidden border-none p-0 mt-3",
           )}
           value={contactMe.description}
           disabled={activeSection !== Section.ContactMe}
@@ -104,20 +105,35 @@ const ConnectMe = () => {
             })
           }
         />
-        <ImagePicker
-          src={contactMe.icon}
-          height={50}
-          width={50}
-          id="ContactMe_logo"
-          onChange={(b64) =>
-            setContactMe((prev) => {
-              return {
-                ...prev,
-                icon: b64 as string,
-              };
-            })
-          }
-        />
+        <div className="flex items-center gap-3 mt-5">
+          <ImagePicker
+            src={contactMe.icon}
+            height={50}
+            width={50}
+            id="ContactMe_logo"
+            onChange={(b64) =>
+              setContactMe((prev) => {
+                return {
+                  ...prev,
+                  icon: b64 as string,
+                };
+              })
+            }
+          />
+          <input
+            className="bg-transparent outline-none font-medium text-sm text-[#0085FF]"
+            value={contactMe.link}
+            placeholder="Add link"
+            onChange={(e) =>
+              setContactMe((prev) => {
+                return {
+                  ...prev,
+                  link: e.target.value,
+                };
+              })
+            }
+          />
+        </div>
       </aside>
     </section>
   );
