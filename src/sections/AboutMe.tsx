@@ -67,7 +67,7 @@ const AboutMe = () => {
         )}
         <textarea
           rows={1}
-          className="w-full text-2xl md:text-3xl font-bold text-black bg-transparent outline-none"
+          className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
           value={updates.title}
           disabled={activeSection !== Section.AboutMe}
           placeholder="Click to add title"

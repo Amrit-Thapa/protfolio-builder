@@ -1,5 +1,5 @@
 "use client";
-import If from "@/component/IF";
+import If from "@/component/If";
 import imageIconSm from "@/../public/assets/icons/imageIconSm.png";
 import imageIcon from "@/../public/assets/icons/imageIcon.png";
 import useLocalStorage from "@/hooks/useLocalStorage";
