@@ -26,6 +26,40 @@ const ConnectMe = () => {
 
   const isSectionActive = activeSection === Section.ContactMe;
 
+  const valueUpdated = () => {
+    return Object.values(contactMe).filter((item) => !!item).length;
+  };
+
+  const handleCancelButton = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+    if (initialData) {
+      setContactMe(initialData);
+    } else {
+      updateSection((sections) => {
+        const index = sections.indexOf(Section.ContactMe);
+        sections.splice(index, 1);
+        return [...sections];
+      });
+    }
+    setActiveSection(undefined);
+  };
+
+  const handleSaveClick = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+
+    if (valueUpdated()) {
+      storeAllData(Section.ContactMe, contactMe);
+    } else {
+      updateSection((sections) => {
+        const index = sections.indexOf(Section.ContactMe);
+        sections.splice(index, 1);
+        return [...sections];
+      });
+      setContactMe(initialState);
+    }
+    setActiveSection(undefined);
+  };
+
   return (
     <section
       className="flex justify-end w-full mt-24"
@@ -50,27 +84,13 @@ const ConnectMe = () => {
           <div className="absolute right-0 flex gap-4 -top-10 md:-top-14">
             <button
               className="text-xs font-semibold"
-              onClick={(e) => {
-                e.stopPropagation();
-                initialData
-                  ? setContactMe(initialData)
-                  : updateSection((sections) => {
-                      const index = sections.indexOf(Section.ContactMe);
-                      sections.splice(index, 1);
-                      return [...sections];
-                    });
-                setActiveSection(undefined);
-              }}
+              onClick={handleCancelButton}
             >
               Cancel
             </button>
             <button
               className="text-white rounded-3xl bg-[#0085FF] text-xs font-semibold px-4 py-1"
-              onClick={(e) => {
-                e.stopPropagation();
-                storeAllData(Section.ContactMe, contactMe);
-                setActiveSection(undefined);
-              }}
+              onClick={handleSaveClick}
             >
               Save
             </button>
