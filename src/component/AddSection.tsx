@@ -23,6 +23,7 @@ const AddSection = () => {
     useAppContext();
 
   const [showSectionMenu, toggleSectionMenu] = useState(false);
+
   return (
     <section
       className={classNames("px-5 md:px-[100px] mt-14 min-h-[300px] w-full", {

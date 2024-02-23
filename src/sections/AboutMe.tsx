@@ -4,9 +4,11 @@ import {Section} from "../types";
 import {resizeTextArea} from "@/utils";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import If from "@/component/If";
+import {SyntheticEvent, useState} from "react";
+import ActionController from "@/component/ActionController";
 
 const initialState = {
-  title: "",
+  title: "About Me",
   description: "",
 };
 
@@ -15,6 +17,8 @@ const AboutMe = () => {
   const {updates, setUpdates, storeAllData, initialData} = useLocalStorage<
     typeof initialState
   >(Section.AboutMe, initialState);
+  const [editing, setEditing] = useState(!initialData);
+
   const isSectionActive = activeSection === Section.AboutMe;
 
   const valueUpdated = () => {
@@ -33,6 +37,7 @@ const AboutMe = () => {
       });
     }
     setActiveSection(undefined);
+    setEditing(false);
   };
 
   const handleSaveClick = (e: React.SyntheticEvent) => {
@@ -49,6 +54,19 @@ const AboutMe = () => {
       setUpdates(initialState);
     }
     setActiveSection(undefined);
+    setEditing(false);
+  };
+
+  const handleOnDelete = (e: SyntheticEvent) => {
+    e.stopPropagation();
+
+    setUpdates(initialState);
+    setActiveSection(undefined);
+    updateSection((sections) => {
+      const index = sections.indexOf(Section.AboutMe);
+      sections.splice(index, 1);
+      return [...sections];
+    });
   };
 
   return (
@@ -61,73 +79,59 @@ const AboutMe = () => {
     >
       <aside
         className={classNames("md:w-[852px] w-full rounded-lg md:p-10", {
-          "md:border border-[#828282] relative md:min-h-[428px]":
-            isSectionActive,
+          "md:border border-[#828282] md:min-h-[428px]": isSectionActive,
         })}
         onClick={(e) => {
           e.stopPropagation();
           setActiveSection(Section.AboutMe);
         }}
       >
-        {isSectionActive && (
-          <div className="absolute right-0 flex gap-4 -top-10 md:-top-14">
-            <button
-              className="text-xs font-semibold"
-              onClick={handleCancelButton}
-            >
-              Cancel
-            </button>
-            <button
-              className="text-white rounded-3xl bg-[#0085FF] text-xs font-semibold px-4 py-1"
-              onClick={handleSaveClick}
-            >
-              Save
-            </button>
-          </div>
-        )}
-        <If
-          condition={isSectionActive || !!(!isSectionActive && updates.title)}
+        <ActionController
+          isEditing={editing}
+          onEditing={setEditing}
+          onDelete={handleOnDelete}
+          onMove={() => console.log}
+          onSave={handleSaveClick}
+          onCancel={handleCancelButton}
         >
-          <textarea
-            rows={1}
-            className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
-            value={updates.title}
-            disabled={activeSection !== Section.AboutMe}
-            placeholder="About Me"
-            onChange={(e) =>
-              setUpdates((prev) => {
-                return {
-                  ...prev,
-                  title: resizeTextArea(e),
-                };
-              })
-            }
-          />
-        </If>
+          <If condition={editing || !!(!editing && updates.title)}>
+            <textarea
+              rows={1}
+              className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
+              value={updates.title}
+              disabled={!editing}
+              placeholder="About Me"
+              onChange={(e) =>
+                setUpdates((prev) => {
+                  return {
+                    ...prev,
+                    title: resizeTextArea(e),
+                  };
+                })
+              }
+            />
+          </If>
 
-        <If
-          condition={
-            isSectionActive || !!(!isSectionActive && updates.description)
-          }
-        >
-          <textarea
-            className={classNames(
-              "bg-transparent text-black outline-none w-full font-medium text-sm md:text-base",
-              "resize-none overflow-hidden border-none p-0 mt-5",
-            )}
-            value={updates.description}
-            disabled={activeSection !== Section.AboutMe}
-            placeholder="Start writing"
-            onChange={(e) =>
-              setUpdates((prev) => {
-                return {
-                  ...prev,
-                  description: resizeTextArea(e),
-                };
-              })
-            }
-          />
-        </If>
+          <If condition={editing || !!(!editing && updates.description)}>
+            <textarea
+              className={classNames(
+                "bg-transparent text-black outline-none w-full font-medium text-sm md:text-base",
+                "resize-none overflow-hidden border-none p-0 mt-5",
+              )}
+              value={updates.description}
+              disabled={!editing}
+              placeholder="Start writing"
+              onChange={(e) =>
+                setUpdates((prev) => {
+                  return {
+                    ...prev,
+                    description: resizeTextArea(e),
+                  };
+                })
+              }
+            />
+          </If>
+        </ActionController>
       </aside>
     </section>
   );
