@@ -10,7 +10,7 @@ import classNames from "classnames";
 export const SectionMenu = ({children, ...props}: ComponentProps<"div">) => {
   return (
     <div
-      className="w-[239px] h-[225px] absolute rounded-xl top-11 left-2/4 -translate-x-2/4 shadow-[0_6px_50px_0_#00000026] p-5 bg-white text-black border list-none"
+      className="w-[239px] m-h-[225px] absolute rounded-xl top-11 left-2/4 -translate-x-2/4 shadow-[0_6px_50px_0_#00000026] p-5 bg-white text-black border list-none"
       {...props}
     >
       {children}
@@ -29,7 +29,7 @@ const AddSection = () => {
         relative: showSectionMenu,
       })}
     >
-      {section.length < 7 && !activeSection && (
+      {section.length < 6 && !activeSection && (
         <div
           className="border-dashed border border-black rounded-xl flex justify-center items-center bg-[#EFEFEF] h-16 hover:cursor-pointer"
           onClick={() => toggleSectionMenu((prev) => !prev)}

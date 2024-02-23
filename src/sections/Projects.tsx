@@ -69,12 +69,18 @@ const Projects = () => {
       return values.length > 1;
     });
 
-    if (hasUpdatedDetails.length || hasUpdatedProject.length) {
+    if (hasUpdatedDetails.length && hasUpdatedProject.length) {
       storeAllData(Section.Projects, {items, ...details});
+    } else if (hasUpdatedDetails.length && !hasUpdatedProject.length) {
+      storeAllData(Section.Projects, {...details});
+    } else if (hasUpdatedProject.length && !hasUpdatedDetails.length) {
+      storeAllData(Section.Projects, {items});
     } else {
       updateSection((sections) => {
         const index = sections.indexOf(Section.Projects);
-        sections.splice(index, 1);
+        if (index !== -1) {
+          sections.splice(index, 1);
+        }
         return [...sections];
       });
       setProjectSection(initialState);
@@ -125,7 +131,7 @@ const Projects = () => {
             className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
             value={projectSection.title}
             disabled={!isSectionActive}
-            placeholder="Click to add title"
+            placeholder="Projects"
             onChange={(e) =>
               setProjectSection((prev) => {
                 return {...prev, title: e.target.value};

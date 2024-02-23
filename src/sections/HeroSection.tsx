@@ -33,10 +33,7 @@ const HeroSection = () => {
   }, [heroSection]);
 
   return (
-    <section
-      className="px-5 md:px-[100px]"
-      onClick={() => setActiveSection(Section.HeroSection)}
-    >
+    <section className="px-5 md:px-[100px]">
       <div className="mt-[50px] text-[#C5C5C5] flex gap-2 ">
         <ImagePicker
           src={heroSection.logo || imageIconSm.src}

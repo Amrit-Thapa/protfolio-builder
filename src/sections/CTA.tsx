@@ -159,7 +159,7 @@ const CTA = () => {
           />
         </If>
 
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4 mt-5">
           {ctaSection.items.map((cta) => {
             return (
               <div
@@ -215,7 +215,7 @@ const CTA = () => {
                       />
                     </If>
 
-                    <If condition={isSectionActive && !!cta.link}>
+                    <If condition={!isSectionActive && !!cta.link}>
                       <a
                         href={cta.link}
                         target="_blank"
