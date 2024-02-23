@@ -5,11 +5,12 @@ import plusIcon from "@/../public/assets/icons/plus.png";
 import {sectionConfig} from "@/utils";
 import {useAppContext} from "@/context/AppContext";
 import {Section} from "@/types";
+import classNames from "classnames";
 
 export const SectionMenu = ({children, ...props}: ComponentProps<"div">) => {
   return (
     <div
-      className="w-[239px] h-[218px] absolute rounded-xl top-11 left-2/4 -translate-x-2/4 shadow-[0_6px_50px_0_#00000026] p-5 bg-white text-black border list-none"
+      className="w-[239px] h-[225px] absolute rounded-xl top-11 left-2/4 -translate-x-2/4 shadow-[0_6px_50px_0_#00000026] p-5 bg-white text-black border list-none"
       {...props}
     >
       {children}
@@ -18,12 +19,17 @@ export const SectionMenu = ({children, ...props}: ComponentProps<"div">) => {
 };
 
 const AddSection = () => {
-  const {section, updateSection, setActiveSection} = useAppContext();
+  const {section, updateSection, setActiveSection, activeSection} =
+    useAppContext();
 
   const [showSectionMenu, toggleSectionMenu] = useState(false);
   return (
-    <section className="px-5 md:px-[100px] relative mt-14 h-[200px]">
-      {section.length < 7 && (
+    <section
+      className={classNames("px-5 md:px-[100px] mt-14 min-h-[300px] w-full", {
+        relative: showSectionMenu,
+      })}
+    >
+      {section.length < 7 && !activeSection && (
         <div
           className="border-dashed border border-black rounded-xl flex justify-center items-center bg-[#EFEFEF] h-16 hover:cursor-pointer"
           onClick={() => toggleSectionMenu((prev) => !prev)}
@@ -41,7 +47,11 @@ const AddSection = () => {
           onMouseLeave={() => toggleSectionMenu(false)}
         >
           {Object.keys(sectionConfig).map((item) => {
-            if (section?.includes(item as Section)) return;
+            if (
+              section?.includes(item as Section) ||
+              item === Section.HeroSection
+            )
+              return;
             return (
               <li
                 key={item}

@@ -29,12 +29,13 @@ const Header = () => {
             </span>
             <Image src={downArrow} className="inline-block" alt="down arrow" />
             {!!showSectionMenu ? (
-              section?.length ? (
+              section?.length > 1 ? (
                 <SectionMenu
                   onMouseEnter={(e) => e.stopPropagation()}
                   onMouseLeave={() => toggleSectionMenu(false)}
                 >
                   {section.map((item) => {
+                    if (item === Section.HeroSection) return;
                     return (
                       <li
                         key={item}

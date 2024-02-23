@@ -21,7 +21,7 @@ export const sectionConfig = {
     title: "🌐  Add Experience",
   },
   [Section.ContactMe]: {
-    title: "Connect",
+    title: "📞 Add Connect",
   },
 };
 
