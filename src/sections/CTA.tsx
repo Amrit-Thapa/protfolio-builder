@@ -45,6 +45,47 @@ const CTA = () => {
   };
   const isSectionActive = activeSection === Section.CTA;
 
+  const handleCancelButton = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+    if (initialData) {
+      setCtaSection(initialData);
+    } else {
+      updateSection((sections) => {
+        const index = sections.indexOf(Section.CTA);
+        sections.splice(index, 1);
+        return [...sections];
+      });
+    }
+    setActiveSection(undefined);
+  };
+
+  const handleSaveClick = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+
+    const {items, ...details} = ctaSection;
+    const hasUpdatedDetails = Object.values(details).filter((item) => !!item);
+    const hasUpdatedExp = ctaSection.items.filter((exp) => {
+      const values = Object.values(exp).filter((value) => value);
+      return values.length > 1;
+    });
+
+    if (hasUpdatedDetails.length && hasUpdatedExp.length) {
+      storeAllData(Section.CTA, {items, ...details});
+    } else if (hasUpdatedDetails.length && !hasUpdatedExp.length) {
+      storeAllData(Section.CTA, {...details});
+    } else if (hasUpdatedExp.length && !hasUpdatedDetails.length) {
+      storeAllData(Section.CTA, {items});
+    } else {
+      updateSection((sections) => {
+        const index = sections.indexOf(Section.CTA);
+        sections.splice(index, 1);
+        return [...sections];
+      });
+      setCtaSection(initialState);
+    }
+    setActiveSection(undefined);
+  };
+
   return (
     <section
       className="flex justify-end w-full mt-20"
@@ -63,28 +104,13 @@ const CTA = () => {
           <div className="absolute right-0 flex gap-4 -top-10 md:-top-14">
             <button
               className="text-xs font-semibold"
-              onClick={(e) => {
-                e.stopPropagation();
-                initialData
-                  ? setCtaSection(initialData)
-                  : updateSection((sections) => {
-                      const index = sections.indexOf(Section.CTA);
-                      sections.splice(index, 1);
-                      return [...sections];
-                    });
-
-                setActiveSection(undefined);
-              }}
+              onClick={handleCancelButton}
             >
               Cancel
             </button>
             <button
               className="text-white rounded-3xl bg-[#0085FF] text-xs font-semibold px-4 py-1"
-              onClick={(e) => {
-                e.stopPropagation();
-                storeAllData(Section.CTA, ctaSection);
-                setActiveSection(undefined);
-              }}
+              onClick={handleSaveClick}
             >
               Save
             </button>
