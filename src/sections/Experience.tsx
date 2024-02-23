@@ -11,7 +11,7 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import If from "@/component/If";
 
 const initialState = {
-  title: "Experience",
+  title: "",
   description: "",
   items: [
     {
@@ -48,6 +48,47 @@ const Experience = () => {
 
   const isSectionActive = activeSection === Section.Experience;
 
+  const handleCancelButton = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+    if (initialData) {
+      setExperienceSection(initialData);
+    } else {
+      updateSection((sections) => {
+        const index = sections.indexOf(Section.Experience);
+        sections.splice(index, 1);
+        return [...sections];
+      });
+    }
+    setActiveSection(undefined);
+  };
+
+  const handleSaveClick = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+
+    const {items, ...details} = experienceSection;
+    const hasUpdatedDetails = Object.values(details).filter((item) => !!item);
+    const hasUpdatedExp = experienceSection.items.filter((exp) => {
+      const values = Object.values(exp).filter((value) => value);
+      return values.length > 1;
+    });
+
+    if (hasUpdatedDetails.length && hasUpdatedExp.length) {
+      storeAllData(Section.Experience, {items, ...details});
+    } else if (hasUpdatedDetails.length && !hasUpdatedExp.length) {
+      storeAllData(Section.Experience, {...details});
+    } else if (hasUpdatedExp.length && !hasUpdatedDetails.length) {
+      storeAllData(Section.Experience, {items});
+    } else {
+      updateSection((sections) => {
+        const index = sections.indexOf(Section.Experience);
+        sections.splice(index, 1);
+        return [...sections];
+      });
+      setExperienceSection(initialState);
+    }
+    setActiveSection(undefined);
+  };
+
   return (
     <section
       className="flex justify-end w-full mt-24"
@@ -72,28 +113,13 @@ const Experience = () => {
           <div className="absolute right-0 flex gap-4 -top-14">
             <button
               className="text-xs font-semibold"
-              onClick={(e) => {
-                e.stopPropagation();
-                initialData
-                  ? setExperienceSection(initialData)
-                  : updateSection((sections) => {
-                      const index = sections.indexOf(Section.Experience);
-                      sections.splice(index, 1);
-                      return [...sections];
-                    });
-
-                setActiveSection(undefined);
-              }}
+              onClick={handleCancelButton}
             >
               Cancel
             </button>
             <button
               className="text-white rounded-3xl bg-[#0085FF] text-xs font-semibold px-4 py-1"
-              onClick={(e) => {
-                e.stopPropagation();
-                storeAllData(Section.Experience, experienceSection);
-                setActiveSection(undefined);
-              }}
+              onClick={handleSaveClick}
             >
               Save
             </button>
@@ -107,7 +133,7 @@ const Experience = () => {
         >
           <input
             className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
-            placeholder="Projects"
+            placeholder="Experience"
             value={experienceSection.title}
             onChange={(e) =>
               setExperienceSection((prev) => {
