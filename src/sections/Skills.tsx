@@ -2,11 +2,12 @@ import Image from "next/image";
 import plusIcon from "@/../public/assets/icons/plus.png";
 import {useAppContext} from "../context/AppContext";
 import classNames from "classnames";
-import {Section} from "@/types";
+// import {Section} from "@/types";
 import {resizeTextArea} from "@/utils";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import If from "@/component/If";
 import React, {useEffect} from "react";
+import {Section} from "@/context/types";
 
 const initialState = [
   {

@@ -5,10 +5,11 @@ import Image from "next/image";
 import plusIcon from "@/../public/assets/icons/plus.png";
 import ImagePicker from "../component/ImagePicker";
 import {useAppContext} from "@/context/AppContext";
-import {Section} from "@/types";
+// import {Section} from "@/types";
 import {resizeTextArea} from "@/utils";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import If from "@/component/If";
+import {Section} from "@/context/types";
 
 const initialState = {
   title: "",

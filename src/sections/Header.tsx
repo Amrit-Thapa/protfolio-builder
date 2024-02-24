@@ -5,9 +5,10 @@ import downArrow from "@/../public/assets/icons/downArrow.png";
 import exclamationMark from "@/../public/assets/icons/exclamationMark.png";
 import {useAppContext} from "../context/AppContext";
 import {useState} from "react";
-import {Section} from "../types";
+// import {Section} from "../types";
 import {sectionConfig} from "../utils";
 import {SectionMenu} from "../component/AddSection";
+import {Section} from "@/context/types";
 
 const Header = () => {
   const {section, updateSection, setActiveSection, togglePreview} =

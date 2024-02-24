@@ -4,8 +4,10 @@ import addSectionIcon from "@/../public/assets/icons/addSection.png";
 import plusIcon from "@/../public/assets/icons/plus.png";
 import {sectionConfig} from "@/utils";
 import {useAppContext} from "@/context/AppContext";
-import {Section} from "@/types";
+// import {Section} from "@/types";
 import classNames from "classnames";
+import {Section} from "@/context/types";
+import {Actions} from "@/context/reducer";
 
 export const SectionMenu = ({children, ...props}: ComponentProps<"div">) => {
   return (
@@ -19,8 +21,8 @@ export const SectionMenu = ({children, ...props}: ComponentProps<"div">) => {
 };
 
 const AddSection = () => {
-  const {section, updateSection, setActiveSection, activeSection} =
-    useAppContext();
+  const {state, dispatch} = useAppContext();
+  const {section, activeSection} = state;
 
   const [showSectionMenu, toggleSectionMenu] = useState(false);
   return (
@@ -50,15 +52,18 @@ const AddSection = () => {
             if (
               section?.includes(item as Section) ||
               item === Section.HeroSection
-            )
+            ) {
               return;
+            }
             return (
               <li
                 key={item}
                 className="cursor-pointer group hover:bg-[#EFEFEF] p-1 rounded-lg"
                 onClick={() => {
-                  setActiveSection(item as Section);
-                  updateSection((prev) => [...prev, item as Section]);
+                  dispatch({
+                    type: Actions.SET_SECTION,
+                    payload: {section: item},
+                  });
                   toggleSectionMenu(false);
                 }}
               >

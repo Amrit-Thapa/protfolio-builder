@@ -1,9 +1,10 @@
 import classNames from "classnames";
 import {useAppContext} from "../context/AppContext";
-import {Section} from "../types";
 import {resizeTextArea} from "@/utils";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import If from "@/component/If";
+import {Section} from "@/context/types";
+import {useState} from "react";
+import FocusOutWrapper from "@/component/FocusOutWrapper";
 
 const initialState = {
   title: "",
@@ -11,10 +12,9 @@ const initialState = {
 };
 
 const AboutMe = () => {
-  const {setActiveSection, activeSection, updateSection} = useAppContext();
-  const {updates, setUpdates, storeAllData, initialData} = useLocalStorage<
-    typeof initialState
-  >(Section.AboutMe, initialState);
+  const {state, dispatch} = useAppContext();
+  const {activeSection, aboutMe} = state;
+  const [updates, setUpdates] = useState(aboutMe);
   const isSectionActive = activeSection === Section.AboutMe;
 
   const valueUpdated = () => {
@@ -23,16 +23,17 @@ const AboutMe = () => {
 
   const handleCancelButton = (e: React.SyntheticEvent) => {
     e.stopPropagation();
-    if (initialData) {
-      setUpdates(initialData);
+    if (aboutMe) {
+      setUpdates(aboutMe);
     } else {
-      updateSection((sections) => {
-        const index = sections.indexOf(Section.AboutMe);
-        sections.splice(index, 1);
-        return [...sections];
-      });
+      // TODO: REMOVE SEction about me
+      // updateSection((sections) => {
+      //   const index = sections.indexOf(Section.AboutMe);
+      //   sections.splice(index, 1);
+      //   return [...sections];
+      // });
     }
-    setActiveSection(undefined);
+    // setActiveSection(undefined);
   };
 
   const handleSaveClick = (e: React.SyntheticEvent) => {
@@ -52,23 +53,13 @@ const AboutMe = () => {
   };
 
   return (
-    <section
-      className="flex justify-end w-full mt-20"
-      onClick={(e) => {
-        e.stopPropagation();
-        setActiveSection(undefined);
-      }}
+    <FocusOutWrapper
+      onFocusOut={
+        console.log
+        // dispatch({type: Actions.SET_PROFILE, payload: profileUpdate})
+      }
     >
-      <aside
-        className={classNames("md:w-[852px] w-full rounded-lg md:p-10", {
-          "md:border border-[#828282] relative md:min-h-[428px]":
-            isSectionActive,
-        })}
-        onClick={(e) => {
-          e.stopPropagation();
-          setActiveSection(Section.AboutMe);
-        }}
-      >
+      <div className="mt-10">
         {isSectionActive && (
           <div className="absolute right-0 flex gap-4 -top-10 md:-top-14">
             <button
@@ -128,8 +119,8 @@ const AboutMe = () => {
             }
           />
         </If>
-      </aside>
-    </section>
+      </div>
+    </FocusOutWrapper>
   );
 };
 

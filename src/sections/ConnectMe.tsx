@@ -2,11 +2,12 @@ import ImagePicker from "@/component/ImagePicker";
 import imageIcon from "@/../public/assets/icons/imageIcon.png";
 import {useAppContext} from "@/context/AppContext";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import {Section} from "@/types";
+// import {Section} from "@/types";
 import {resizeTextArea} from "@/utils";
 import classNames from "classnames";
 import React from "react";
 import If from "@/component/If";
+import {Section} from "@/context/types";
 
 const initialState = {
   title: "",
