@@ -5,15 +5,14 @@ import downArrow from "@/../public/assets/icons/downArrow.png";
 import exclamationMark from "@/../public/assets/icons/exclamationMark.png";
 import {useAppContext} from "../context/AppContext";
 import {useState} from "react";
-// import {Section} from "../types";
 import {sectionConfig} from "../utils";
 import {SectionMenu} from "../component/AddSection";
 import {Section} from "@/context/types";
+import {Actions} from "@/context/reducer";
 
 const Header = () => {
-  const {section, updateSection, setActiveSection, togglePreview} =
-    useAppContext();
-
+  const {state, dispatch} = useAppContext();
+  const {section} = state;
   const [showSectionMenu, toggleSectionMenu] = useState(false);
 
   return (
@@ -30,19 +29,21 @@ const Header = () => {
             </span>
             <Image src={downArrow} className="inline-block" alt="down arrow" />
             {!!showSectionMenu ? (
-              section?.length > 1 ? (
+              section?.length ? (
                 <SectionMenu
                   onMouseEnter={(e) => e.stopPropagation()}
                   onMouseLeave={() => toggleSectionMenu(false)}
                 >
                   {section.map((item) => {
-                    if (item === Section.HeroSection) return;
                     return (
                       <li
                         key={item}
                         className="cursor-pointer hover:bg-[#EFEFEF] p-1 rounded-lg"
                         onClick={() => {
-                          setActiveSection(item);
+                          dispatch({
+                            type: Actions.SET_ACTIVE_SECTION,
+                            payload: item,
+                          });
                           toggleSectionMenu(false);
                         }}
                       >
@@ -69,8 +70,10 @@ const Header = () => {
                   <div
                     className="m-auto text-center border-black border rounded-3xl py-2 w-[130px] h-[36px] text-[12px] font-semibold hover:cursor-pointer"
                     onClick={() => {
-                      updateSection([Section.HeroSection]);
-                      setActiveSection(Section.HeroSection);
+                      dispatch({
+                        type: Actions.SET_ACTIVE_SECTION,
+                        payload: "Intro",
+                      });
                       toggleSectionMenu(false);
                     }}
                   >

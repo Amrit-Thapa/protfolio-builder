@@ -1,11 +1,7 @@
 import {ChangeEvent} from "react";
 import {Section} from "./context/types";
-// import {Section} from "./types";
 
 export const sectionConfig = {
-  [Section.HeroSection]: {
-    title: "Hero Section",
-  },
   [Section.AboutMe]: {
     title: "📌  Add About you",
   },
