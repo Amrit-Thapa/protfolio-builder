@@ -17,12 +17,9 @@ const AboutMe = () => {
 
   const handleCancelButton = (e: React.SyntheticEvent) => {
     e.stopPropagation();
-    if (aboutMe) {
-      setUpdates(aboutMe);
-      dispatch({type: Actions.SET_EDITING, payload: false});
-    } else {
-      dispatch({type: Actions.REMOVE_SECTION, payload: Section.AboutMe});
-    }
+
+    setUpdates(aboutMe);
+    dispatch({type: Actions.SET_EDITING, payload: false});
   };
 
   const handleSaveClick = (e: React.SyntheticEvent) => {
@@ -31,72 +28,66 @@ const AboutMe = () => {
   };
 
   return (
-    <FocusOutWrapper
-      onFocusOut={() => {
-        return dispatch({type: Actions.SET_ACTIVE_SECTION, payload: ""});
-      }}
+    <ActionController
+      enabled={isSectionActive}
+      isEditing={editing}
+      onCancel={handleCancelButton}
+      onDelete={() =>
+        dispatch({type: Actions.REMOVE_SECTION, payload: Section.AboutMe})
+      }
+      onEditing={() => dispatch({type: Actions.SET_EDITING, payload: true})}
+      onMove={() => console.log}
+      onSave={handleSaveClick}
     >
-      <ActionController
-        enabled={isSectionActive}
-        isEditing={editing}
-        onCancel={handleCancelButton}
-        onDelete={() =>
-          dispatch({type: Actions.REMOVE_SECTION, payload: Section.AboutMe})
-        }
-        onEditing={() => dispatch({type: Actions.SET_EDITING, payload: true})}
-        onMove={() => console.log}
-        onSave={handleSaveClick}
-      >
-        <div className="mt-10">
-          <If
-            condition={
-              isSectionActive || !!(!isSectionActive && aboutMeUpdates.title)
+      <div>
+        <If
+          condition={
+            isSectionActive || !!(!isSectionActive && aboutMeUpdates.title)
+          }
+        >
+          <textarea
+            rows={1}
+            className="w-full text-2xl font-bold text-black whitespace-pre-line bg-transparent outline-none md:text-3xl"
+            value={aboutMeUpdates.title}
+            disabled={disableEditing}
+            placeholder="About Me"
+            onChange={(e) =>
+              setUpdates((prev) => {
+                return {
+                  ...prev,
+                  title: resizeTextArea(e),
+                };
+              })
             }
-          >
-            <textarea
-              rows={1}
-              className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
-              value={aboutMeUpdates.title}
-              disabled={disableEditing}
-              placeholder="About Me"
-              onChange={(e) =>
-                setUpdates((prev) => {
-                  return {
-                    ...prev,
-                    title: resizeTextArea(e),
-                  };
-                })
-              }
-            />
-          </If>
+          />
+        </If>
 
-          <If
-            condition={
-              isSectionActive ||
-              !!(!isSectionActive && aboutMeUpdates.description)
+        <If
+          condition={
+            isSectionActive ||
+            !!(!isSectionActive && aboutMeUpdates.description)
+          }
+        >
+          <textarea
+            className={classNames(
+              "bg-transparent text-black outline-none w-full font-medium text-sm md:text-base",
+              "resize-none border-none p-0 mt-5 overflow-hidden !whitespace-pre-line",
+            )}
+            value={aboutMeUpdates.description}
+            disabled={disableEditing}
+            placeholder="Start writing"
+            onChange={(e) =>
+              setUpdates((prev) => {
+                return {
+                  ...prev,
+                  description: resizeTextArea(e),
+                };
+              })
             }
-          >
-            <textarea
-              className={classNames(
-                "bg-transparent text-black outline-none w-full font-medium text-sm md:text-base",
-                "resize-none overflow-hidden border-none p-0 mt-5",
-              )}
-              value={aboutMeUpdates.description}
-              disabled={disableEditing}
-              placeholder="Start writing"
-              onChange={(e) =>
-                setUpdates((prev) => {
-                  return {
-                    ...prev,
-                    description: resizeTextArea(e),
-                  };
-                })
-              }
-            />
-          </If>
-        </div>
-      </ActionController>
-    </FocusOutWrapper>
+          />
+        </If>
+      </div>
+    </ActionController>
   );
 };
 

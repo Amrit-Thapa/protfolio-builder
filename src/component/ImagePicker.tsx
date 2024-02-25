@@ -1,5 +1,6 @@
 import React, {ChangeEvent, ComponentProps} from "react";
 import Image from "next/image";
+import classNames from "classnames";
 
 type ImgPicker = {
   onChange: (b64: string) => void;
@@ -34,7 +35,9 @@ const ImagePicker = ({
           width={+width!}
           priority
           alt="Placeholder"
-          className="inline object-cover rounded-lg cursor-pointer"
+          className={classNames("inline object-cover rounded cursor-pointer", {
+            "!rounded-2xl": +height! > 50,
+          })}
         />
       </label>
       <input

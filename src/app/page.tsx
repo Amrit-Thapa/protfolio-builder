@@ -29,7 +29,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <div className="h-[30px] mt-[50px] w-full bg-red-100 px-5 md:px-[100px]">
+      <div className="h-[30px] mt-[50px] w-full px-5 md:px-[100px]">
         <NavBar />
       </div>
 
@@ -39,27 +39,16 @@ export default function Home() {
         </div>
         <div className="md:w-[852px]  w-full md:p-10">
           <Intro />
-          <If condition={section.includes(Section.AboutMe)}>
-            <AboutMe />
-          </If>
+          {section.map((item) => {
+            return (
+              <div className="mt-10 md:mt-20" id={item} key={item}>
+                {sectionMap[item]}
+              </div>
+            );
+          })}
         </div>
       </div>
       <AddSection />
-
-      {/* <HeroSection />
-      <div className="px-5 md:px-[100px] flex flex-col items-end">
-        <div className="w-full">
-          {!!section?.length &&
-            section.map((item) => {
-              return (
-                <Fragment key={item}>
-                  {sectionMap[item as Section.AboutMe]}
-                </Fragment>
-              );
-            })}
-        </div>
-      </div>
-      <AddSection /> */}
     </>
   );
 }

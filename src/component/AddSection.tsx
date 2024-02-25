@@ -60,7 +60,7 @@ const AddSection = () => {
                 onClick={() => {
                   dispatch({
                     type: Actions.SET_SECTION,
-                    payload: {section: item},
+                    payload: item,
                   });
                   toggleSectionMenu(false);
                 }}

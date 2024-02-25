@@ -2,115 +2,60 @@ import Image from "next/image";
 import plusIcon from "@/../public/assets/icons/plus.png";
 import {useAppContext} from "../context/AppContext";
 import classNames from "classnames";
-// import {Section} from "@/types";
 import {resizeTextArea} from "@/utils";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import If from "@/component/If";
-import React, {useEffect} from "react";
+import React, {useState} from "react";
 import {Section} from "@/context/types";
-
-const initialState = [
-  {
-    id: "skill_1",
-    title: "",
-    description: "",
-    text: "",
-  },
-];
+import ActionController from "@/component/ActionController";
+import {Actions} from "@/context/reducer";
+import {removeUnUpdatedItem} from "@/utils";
 
 const Skills = () => {
-  const {setActiveSection, activeSection, updateSection, section} =
-    useAppContext();
-  const {
-    updates: skillSection,
-    setUpdates: setSkillSection,
-    storeAllData,
-    initialData,
-  } = useLocalStorage<typeof initialState>(Section.Skills, initialState);
+  const {state, dispatch} = useAppContext();
+  const {skills, editing, activeSection} = state;
+  const [skillUpdate, setUpdates] = useState(skills);
+  const isSectionActive = activeSection === Section.Skills;
+  const disableEditing = !isSectionActive || (isSectionActive && !editing);
 
   const handleChange = (id: string, key: string, value: string) => {
-    setSkillSection((prev) => {
+    setUpdates((prev) => {
       return prev.map((item) =>
         item.id === id ? {...item, [key]: value} : item,
       );
     });
   };
 
-  const isSectionActive = activeSection === Section.Skills;
-
   const handleCancelButton = (e: React.SyntheticEvent) => {
     e.stopPropagation();
-    if (initialData) {
-      setSkillSection(initialData);
-    } else {
-      updateSection((sections) => {
-        const index = sections.indexOf(Section.Skills);
-        sections.splice(index, 1);
-        return [...sections];
-      });
-    }
-
-    setActiveSection(undefined);
+    setUpdates(skills);
+    dispatch({type: Actions.SET_EDITING, payload: false});
   };
 
   const handleSaveClick = (e: React.SyntheticEvent) => {
     e.stopPropagation();
 
-    if (skillSection.length === 1) {
-      const updatedSkill = Object.values(skillSection[0]).filter(
-        (item) => !!item,
-      );
-      if (updatedSkill.length > 1) {
-        storeAllData(Section.Skills, skillSection);
-      } else {
-        updateSection((sections) => {
-          const index = sections.indexOf(Section.Skills);
-          sections.splice(index, 1);
-          return [...sections];
-        });
-        setSkillSection([]);
-      }
-    }
-    setActiveSection(undefined);
+    const skill = removeUnUpdatedItem(skillUpdate);
+    setUpdates(skill);
+    dispatch({type: Actions.SET_SKILL, payload: {skill}});
   };
 
   return (
-    <section
-      className="flex justify-end w-full mt-10"
-      onClick={() => setActiveSection(undefined)}
+    <ActionController
+      enabled={isSectionActive}
+      isEditing={editing}
+      onCancel={handleCancelButton}
+      onDelete={() =>
+        dispatch({type: Actions.REMOVE_SECTION, payload: Section.Skills})
+      }
+      onEditing={() => dispatch({type: Actions.SET_EDITING, payload: true})}
+      onMove={() => console.log}
+      onSave={handleSaveClick}
     >
-      <aside
-        className={classNames(
-          "w-full md:w-[852px] rounded-lg md:p-10 flex flex-wrap gap-4",
-          {
-            "md:border border-[#828282] relative": isSectionActive,
-          },
-        )}
-        onClick={(e) => {
-          e.stopPropagation();
-          setActiveSection(Section.Skills);
-        }}
-      >
-        {activeSection === Section.Skills && (
-          <div className="absolute right-0 flex gap-4 md:-top-14 -top-10">
-            <button
-              className="text-xs font-semibold"
-              onClick={handleCancelButton}
-            >
-              Cancel
-            </button>
-            <button
-              className="text-white rounded-3xl bg-[#0085FF] text-xs font-semibold px-4 py-1"
-              onClick={handleSaveClick}
-            >
-              Save
-            </button>
-          </div>
-        )}
-        {skillSection.map((skill) => (
+      <div className="flex flex-wrap gap-4">
+        {skillUpdate.map((skill) => (
           <div
             className={classNames(
-              "bg-white text-[#C6C6C6] rounded-2xl border max-w-[375px] p-10 h-fit",
+              "bg-white text-[#C6C6C6] rounded-2xl border max-w-[355px] p-10 h-fit",
               {"h-full": isSectionActive},
             )}
             key={skill.id}
@@ -124,7 +69,7 @@ const Skills = () => {
                   "resize-none overflow-hidden border-none p-0 m-0",
                 )}
                 value={skill.title}
-                disabled={!(activeSection === Section.Skills)}
+                disabled={disableEditing}
                 placeholder="Untitled"
                 onChange={(e) =>
                   handleChange(skill.id, "title", resizeTextArea(e))
@@ -143,7 +88,7 @@ const Skills = () => {
                   "resize-none overflow-hidden border-none p-0 m-0",
                 )}
                 value={skill.description}
-                disabled={!(activeSection === Section.Skills)}
+                disabled={disableEditing}
                 placeholder="Write description here..."
                 onChange={(e) =>
                   handleChange(skill.id, "description", resizeTextArea(e))
@@ -157,10 +102,10 @@ const Skills = () => {
               <textarea
                 className={classNames(
                   "bg-transparent text-black outline-none w-full font-medium text-base",
-                  "resize-none overflow-hidden border-none p-0 m-0",
+                  "resize-none overflow-hidden border-none p-0 m-0 mt-5 leading-10",
                 )}
                 value={skill.text}
-                disabled={!(activeSection === Section.Skills)}
+                disabled={disableEditing}
                 placeholder="Start writing"
                 onChange={(e) =>
                   handleChange(skill.id, "text", resizeTextArea(e))
@@ -169,12 +114,12 @@ const Skills = () => {
             </If>
           </div>
         ))}
-        {isSectionActive && (
-          <div className="rounded-2xl border p-3 w-[375px] min-h-[530px] flex items-center justify-center bg-[#EFEFEF]">
+        {isSectionActive && editing && (
+          <div className="rounded-2xl border p-3 w-[355px] min-h-[530px] flex items-center justify-center bg-[#EFEFEF]">
             <div
               className="cursor-pointer"
               onClick={() =>
-                setSkillSection((prev) => [
+                setUpdates((prev) => [
                   ...prev,
                   {
                     id: `skill_${prev.length + 1}`,
@@ -190,8 +135,8 @@ const Skills = () => {
             </div>
           </div>
         )}
-      </aside>
-    </section>
+      </div>
+    </ActionController>
   );
 };
 

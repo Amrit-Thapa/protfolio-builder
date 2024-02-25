@@ -1,6 +1,7 @@
 "use client";
 import React, {createContext, useContext, useReducer, Reducer} from "react";
 import {initialState, reducer, StateActions} from "./reducer";
+import {a} from "./types";
 
 type appContext = {
   state: typeof initialState;
@@ -13,7 +14,7 @@ export const useAppContext = () => useContext(AppContext);
 export const AppContextProvider = ({children}: {children: React.ReactNode}) => {
   const [state, dispatch] = useReducer<
     Reducer<typeof initialState, StateActions>
-  >(reducer, initialState);
+  >(reducer, a as typeof initialState);
 
   return (
     <AppContext.Provider

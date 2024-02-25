@@ -10,7 +10,6 @@ type ActionButtonsProps = {
   onDelete: (e: SyntheticEvent) => void;
   onEditing: (value: boolean) => void;
   isEditing: boolean;
-  enabled: boolean;
 };
 
 const ActionButtons = ({
@@ -58,9 +57,7 @@ const Buttons = ({children, ...props}: ComponentProps<"button">) => {
   );
 };
 
-const ActionController: React.FC<
-  ActionButtonsProps & ComponentProps<"div">
-> = ({
+const ActionController = ({
   children,
   isEditing,
   onCancel,
@@ -69,23 +66,27 @@ const ActionController: React.FC<
   onDelete,
   onEditing,
   enabled,
-}) => {
-  return enabled ? (
-    <div className="relative p-5 border border-black">
-      <div className="absolute right-0 flex gap-4 -top-10 md:-top-14">
-        <ActionButtons
-          onCancel={onCancel}
-          onSave={onSave}
-          onMove={onMove}
-          onDelete={onDelete}
-          onEditing={onEditing}
-          isEditing={isEditing}
-        />
-      </div>
-      {children}
-    </div>
-  ) : (
-    children
+}: ActionButtonsProps & ComponentProps<"div"> & {enabled: boolean}) => {
+  return (
+    <>
+      {enabled ? (
+        <div className="relative p-5 mt-20 border-black md:border md:rounded-xl">
+          <div className="absolute right-0 flex gap-4 -top-10 md:-top-14">
+            <ActionButtons
+              onCancel={onCancel}
+              onSave={onSave}
+              onMove={onMove}
+              onDelete={onDelete}
+              onEditing={onEditing}
+              isEditing={isEditing}
+            />
+          </div>
+          {children}
+        </div>
+      ) : (
+        children
+      )}
+    </>
   );
 };
 

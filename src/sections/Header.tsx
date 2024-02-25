@@ -7,7 +7,6 @@ import {useAppContext} from "../context/AppContext";
 import {useState} from "react";
 import {sectionConfig} from "../utils";
 import {SectionMenu} from "../component/AddSection";
-import {Section} from "@/context/types";
 import {Actions} from "@/context/reducer";
 
 const Header = () => {
