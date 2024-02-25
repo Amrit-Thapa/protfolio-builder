@@ -28,7 +28,7 @@ const Intro = () => {
             "bg-transparent text-black outline-none",
             "font-medium md:text-7xl mt-4 md:mt-0 text-4xl",
             "placeholder:font-normal placeholder:text-[#C6C6C6] placeholder:text-[70px]",
-            "resize-none overflow-hidden w-full border-none p-0 m-0 whitespace-pre-line !md:leading-[84px]",
+            "resize-none overflow-hidden w-full border-none p-0 m-0 whitespace-pre-line md:!leading-[84px]",
           )}
           value={introUpdate.title}
           placeholder="Click to add title"

@@ -5,7 +5,7 @@ import downArrow from "@/../public/assets/icons/downArrow.png";
 import exclamationMark from "@/../public/assets/icons/exclamationMark.png";
 import {useAppContext} from "../context/AppContext";
 import {useState} from "react";
-import {sectionConfig} from "../utils";
+import {scrollToSection, sectionConfig} from "../utils";
 import {SectionMenu} from "../component/AddSection";
 import {Actions} from "@/context/reducer";
 
@@ -20,12 +20,12 @@ const Header = () => {
         <div className="flex gap-16">
           <Image src={logo} alt="logo" />
           <div className="relative">
-            <span
+            <button
               onClick={() => toggleSectionMenu((prev) => !prev)}
               className="mr-1"
             >
-              Section
-            </span>
+              Sections
+            </button>
             <Image src={downArrow} className="inline-block" alt="down arrow" />
             {!!showSectionMenu ? (
               section?.length ? (
@@ -39,6 +39,7 @@ const Header = () => {
                         key={item}
                         className="cursor-pointer hover:bg-[#EFEFEF] p-1 rounded-lg"
                         onClick={() => {
+                          scrollToSection(item, 300);
                           dispatch({
                             type: Actions.SET_ACTIVE_SECTION,
                             payload: item,

@@ -105,10 +105,10 @@ export const removeUnUpdatedItem = (items: any[]) => {
   return hasUpdatedSkills;
 };
 
-export const scrollToSection = (sectionId: Section) => {
+export const scrollToSection = (sectionId: Section, top?: number) => {
   const element = document.getElementById(sectionId);
   if (element) {
-    const offset = 200;
+    const offset = top || 200;
     const elementPosition =
       element.getBoundingClientRect().top + window.pageYOffset;
     window.scrollTo({
