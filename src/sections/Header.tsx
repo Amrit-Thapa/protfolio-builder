@@ -88,9 +88,7 @@ const Header = () => {
           </div>
         </div>
         <div className="flex gap-16">
-          <button onClick={() => togglePreview((prev) => !prev)}>
-            Preview
-          </button>
+          <button onClick={() => console.log}>Preview</button>
           <div className="font-bold bg-[#0085FF] w-[87px] h-[30px] text-center rounded-[50px] p-1">
             Publish
           </div>

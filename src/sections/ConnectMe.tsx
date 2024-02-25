@@ -1,8 +1,6 @@
 import ImagePicker from "@/component/ImagePicker";
 import imageIcon from "@/../public/assets/icons/imageIcon.png";
 import {useAppContext} from "@/context/AppContext";
-import useLocalStorage from "@/hooks/useLocalStorage";
-// import {Section} from "@/types";
 import {resizeTextArea} from "@/utils";
 import classNames from "classnames";
 import React, {useState} from "react";
@@ -10,13 +8,6 @@ import If from "@/component/If";
 import {Section} from "@/context/types";
 import {Actions} from "@/context/reducer";
 import ActionController from "@/component/ActionController";
-
-const initialState = {
-  title: "",
-  description: "",
-  icon: "",
-  link: "",
-};
 
 const ConnectMe = () => {
   const {state, dispatch} = useAppContext();
