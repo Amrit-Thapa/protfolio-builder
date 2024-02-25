@@ -1,10 +1,7 @@
 import {ChangeEvent} from "react";
-import {Section} from "./types";
+import {Section} from "./context/types";
 
 export const sectionConfig = {
-  [Section.HeroSection]: {
-    title: "Hero Section",
-  },
   [Section.AboutMe]: {
     title: "📌  Add About you",
   },
@@ -21,12 +18,12 @@ export const sectionConfig = {
     title: "🌐  Add Experience",
   },
   [Section.ContactMe]: {
-    title: "📞 Add Connect",
+    title: "📞  Add Connect",
   },
 };
 
 export const configJson = {
-  [Section.HeroSection]: {
+  HeroSection: {
     title: "",
     logo: "",
     name: "",
@@ -98,4 +95,25 @@ export const resizeTextArea = (event: ChangeEvent<HTMLTextAreaElement>) => {
   event.target.style.height = "auto";
   event.target.style.height = `${event.target.scrollHeight}px`;
   return event.target.value;
+};
+
+export const removeUnUpdatedItem = (items: any[]) => {
+  const hasUpdatedSkills = items.filter((item: any) => {
+    const values = Object.values(item).filter((value) => value);
+    return values.length > 1;
+  });
+  return hasUpdatedSkills;
+};
+
+export const scrollToSection = (sectionId: Section) => {
+  const element = document.getElementById(sectionId);
+  if (element) {
+    const offset = 200;
+    const elementPosition =
+      element.getBoundingClientRect().top + window.pageYOffset;
+    window.scrollTo({
+      top: elementPosition - offset,
+      behavior: "smooth",
+    });
+  }
 };

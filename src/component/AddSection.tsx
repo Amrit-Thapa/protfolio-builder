@@ -4,13 +4,18 @@ import addSectionIcon from "@/../public/assets/icons/addSection.png";
 import plusIcon from "@/../public/assets/icons/plus.png";
 import {sectionConfig} from "@/utils";
 import {useAppContext} from "@/context/AppContext";
-import {Section} from "@/types";
+// import {Section} from "@/types";
 import classNames from "classnames";
+import {Section} from "@/context/types";
+import {Actions} from "@/context/reducer";
 
 export const SectionMenu = ({children, ...props}: ComponentProps<"div">) => {
   return (
     <div
-      className="w-[239px] m-h-[225px] absolute rounded-xl top-11 left-2/4 -translate-x-2/4 shadow-[0_6px_50px_0_#00000026] p-5 bg-white text-black border list-none"
+      className={classNames(
+        "w-[239px] m-h-[225px] absolute rounded-xl top-11 left-2/4 -translate-x-2/4",
+        "shadow-[0_6px_50px_0_#00000026] p-5 bg-white text-black border list-none z-10",
+      )}
       {...props}
     >
       {children}
@@ -19,8 +24,8 @@ export const SectionMenu = ({children, ...props}: ComponentProps<"div">) => {
 };
 
 const AddSection = () => {
-  const {section, updateSection, setActiveSection, activeSection} =
-    useAppContext();
+  const {state, dispatch} = useAppContext();
+  const {section, editing} = state;
 
   const [showSectionMenu, toggleSectionMenu] = useState(false);
   return (
@@ -29,7 +34,7 @@ const AddSection = () => {
         relative: showSectionMenu,
       })}
     >
-      {section.length < 6 && !activeSection && (
+      {section.length < 6 && !editing && (
         <div
           className="border-dashed border border-black rounded-xl flex justify-center items-center bg-[#EFEFEF] h-16 hover:cursor-pointer"
           onClick={() => toggleSectionMenu((prev) => !prev)}
@@ -47,18 +52,16 @@ const AddSection = () => {
           onMouseLeave={() => toggleSectionMenu(false)}
         >
           {Object.keys(sectionConfig).map((item) => {
-            if (
-              section?.includes(item as Section) ||
-              item === Section.HeroSection
-            )
-              return;
+            if (section.includes(item as Section)) return;
             return (
               <li
                 key={item}
                 className="cursor-pointer group hover:bg-[#EFEFEF] p-1 rounded-lg"
                 onClick={() => {
-                  setActiveSection(item as Section);
-                  updateSection((prev) => [...prev, item as Section]);
+                  dispatch({
+                    type: Actions.SET_SECTION,
+                    payload: item,
+                  });
                   toggleSectionMenu(false);
                 }}
               >

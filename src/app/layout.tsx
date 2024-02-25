@@ -18,7 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AppContextProvider>
-        <body className={inter.className} suppressHydrationWarning={true}>
+        <body
+          className={inter.className + " h-screen"}
+          suppressHydrationWarning={true}
+        >
           {children}
         </body>
       </AppContextProvider>
