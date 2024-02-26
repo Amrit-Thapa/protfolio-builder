@@ -20,7 +20,7 @@ const Skills = () => {
   const {state, dispatch} = useAppContext();
   const {skills, editing, activeSection} = state;
   const [skillUpdate, setUpdates] =
-    useState<{id: string; value: Descendant[]}[]>(skills);
+    useState<{id: string; value: string}[]>(skills);
   const [skillEditing, setSkillEditing] = useState("");
   const isSectionActive = activeSection === Section.Skills;
   const disableEditing = !isSectionActive || (isSectionActive && !editing);
@@ -92,9 +92,11 @@ const Skills = () => {
           >
             <TextEditor
               id={skill.id}
-              initialText={skill?.value}
+              initialText={JSON.parse(skill?.value)}
               disabled={skillEditing !== skill.id}
-              onChange={(value) => handleChange(skill.id, "value", value)}
+              onChange={(value) => {
+                handleChange(skill.id, "value", value.text);
+              }}
               className={classNames(
                 "bg-white rounded-2xl border w-full p-10 h-fit",
                 {"h-full": isSectionActive},
@@ -111,28 +113,8 @@ const Skills = () => {
                   ...prev,
                   {
                     id: `skill_${prev.length + 1}`,
-                    value: [
-                      {
-                        type: "heading-three" as BlockType,
-                        children: [{text: "Untitled \n"}],
-                      },
-                      {
-                        type: "paraText-two" as BlockType,
-                        children: [
-                          {
-                            text: "subText... \n",
-                          },
-                        ],
-                      },
-                      {
-                        type: "paraText-two" as BlockType,
-                        children: [
-                          {
-                            text: "Start writing...",
-                          },
-                        ],
-                      },
-                    ],
+                    value:
+                      '[{"type":"heading-three","children":[{"text":"Untitled\\n"}]},{"type":"paraText-two","children":[{"text":"Write a description here...\\n"}]},{"type":"paraText-two","children":[{"text":"Start writing..."}]}]',
                   },
                 ])
               }

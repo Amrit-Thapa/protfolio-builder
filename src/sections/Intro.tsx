@@ -1,4 +1,4 @@
-import TextEditor, {BlockType} from "@/component/Editor";
+import TextEditor from "@/component/Editor";
 import If from "@/component/If";
 import {useAppContext} from "@/context/AppContext";
 import {Actions} from "@/context/reducer";
@@ -15,19 +15,6 @@ const Intro = () => {
   const [introUpdate, setIntroUpdate] = useState(intro);
   const isSectionActive = activeSection === "Intro";
 
-  const introText = [
-    {
-      type: "heading-one" as BlockType,
-      children: [{text: introUpdate.title}],
-    },
-    {
-      type: "paraText-one" as BlockType,
-      children: [
-        {text: introUpdate.description, something: "w-full md:max-w-[340px]"},
-      ],
-    },
-  ];
-
   return (
     <div
       className="md:mt-20 md:min-h-[330px] flex flex-col justify-center"
@@ -36,9 +23,11 @@ const Intro = () => {
       }
     >
       <TextEditor
-        initialText={introText}
+        initialText={JSON.parse(introUpdate)}
         disabled={!isSectionActive}
-        onChange={(value) => console.log(value)}
+        onChange={(value) =>
+          dispatch({type: Actions.SET_INTRO, payload: value.text})
+        }
       />
       <If condition={device === "phone"}>
         <div className="mt-5">

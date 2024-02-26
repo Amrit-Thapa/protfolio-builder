@@ -15,9 +15,7 @@ import {Descendant} from "slate";
 const AboutMe = () => {
   const {state, dispatch} = useAppContext();
   const {activeSection, aboutMe, editing} = state;
-  const [aboutMeUpdates, setUpdates] = useState<Descendant[]>(
-    aboutMe as Descendant[],
-  );
+  const [aboutMeUpdates, setUpdates] = useState(aboutMe);
   const isSectionActive = activeSection === Section.AboutMe;
   const disableEditing = !isSectionActive || (isSectionActive && !editing);
 
@@ -78,9 +76,9 @@ const AboutMe = () => {
           }}
         >
           <TextEditor
-            initialText={aboutMeUpdates as Descendant[]}
+            initialText={JSON.parse(aboutMeUpdates) as Descendant[]}
             disabled={disableEditing}
-            onChange={(value) => setUpdates(value)}
+            onChange={(value) => setUpdates(value.text)}
           />
         </div>
       </ActionController>

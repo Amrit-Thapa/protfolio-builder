@@ -104,13 +104,13 @@ const Experience = () => {
         }}
       >
         <TextEditor
-          initialText={experienceUpdate.head as Descendant[]}
+          initialText={JSON.parse(experienceUpdate.head)}
           disabled={disableEditing || editingSec !== "head"}
-          onChange={(value) =>
+          onChange={(value) => {
             setUpdates((prev) => {
-              return {...prev, head: value};
-            })
-          }
+              return {...prev, head: value.text};
+            });
+          }}
         />
       </div>
 
@@ -120,7 +120,7 @@ const Experience = () => {
             <div
               key={exp.id}
               className={classNames(
-                "bg-white rounded-2xl border w-full p-10 min-h-[200px] mt-5",
+                "bg-white rounded-2xl border w-full p-10 min-h-[200px] mt-10",
                 {
                   "shadow-xl": exp.id.includes("1"),
                 },
@@ -158,11 +158,11 @@ const Experience = () => {
                     }}
                   >
                     <TextEditor
-                      initialText={exp.workInfo as Descendant[]}
+                      initialText={JSON.parse(exp.workInfo)}
                       disabled={disableEditing || editingSec !== exp.id}
-                      onChange={(value) =>
-                        handleChange(exp.id, "workInfo", value)
-                      }
+                      onChange={(value) => {
+                        handleChange(exp.id, "workInfo", value.text);
+                      }}
                     />
                   </div>
                 </div>
@@ -184,11 +184,11 @@ const Experience = () => {
                     className="mt-5 text-black"
                   >
                     <TextEditor
-                      initialText={exp.description as Descendant[]}
+                      initialText={JSON.parse(exp.description)}
                       disabled={disableEditing || editingSec !== exp.id + "des"}
-                      onChange={(value) =>
-                        handleChange(exp.id, "description", value)
-                      }
+                      onChange={(value) => {
+                        handleChange(exp.id, "description", value.text);
+                      }}
                     />
                   </div>
                 </If>
@@ -209,39 +209,10 @@ const Experience = () => {
                       {
                         id: `exp_${prev.items.length + 1}`,
                         logo: "",
-                        workInfo: [
-                          {
-                            type: "",
-                            children: [
-                              {
-                                text: "Enter Company Name .",
-                                semiBold: true,
-                              },
-                              {
-                                text: "Designation . ",
-                                small: true,
-                              },
-                              {
-                                text: "Location . ",
-                                smallGray: true,
-                              },
-                              {
-                                text: "timeLine",
-                                smallGray: true,
-                              },
-                            ],
-                          },
-                        ],
-                        description: [
-                          {
-                            type: "",
-                            children: [
-                              {
-                                text: "",
-                              },
-                            ],
-                          },
-                        ],
+                        workInfo:
+                          '[{"type":"","children":[{"text":"Enter Company Name .","semiBold":true},{"text":"Designation . ","small":true},{"text":"Location . timeLine","smallGray":true}]}]',
+                        description:
+                          '[{"type":"","children":[{"text":"Add description..."}]}]',
                       },
                     ],
                   };

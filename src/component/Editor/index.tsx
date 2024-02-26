@@ -70,7 +70,7 @@ const TextEditor = ({
 }: {
   initialText: Descendant[];
   id?: string;
-  onChange: ((value: Descendant[]) => void) | undefined;
+  onChange: ((value: string) => void) | undefined;
   className?: string;
   disabled: boolean;
 }) => {
@@ -94,8 +94,7 @@ const TextEditor = ({
           (op: any) => "set_selection" !== op.type,
         );
         if (isAstChange) {
-          onChange?.(value);
-          const content = JSON.stringify(value);
+          onChange?.({value, text: JSON.stringify(value)});
         }
       }}
       key={id}
@@ -163,15 +162,6 @@ const TextEditor = ({
         )}
       </div>
       <Editable
-        renderPlaceholder={({children, attributes}) => (
-          <div {...attributes}>
-            <p>{children}</p>
-            <pre>
-              Use the renderPlaceholder prop to customize rendering of the
-              placeholder
-            </pre>
-          </div>
-        )}
         readOnly={disabled}
         renderElement={renderElement}
         renderLeaf={renderLeaf}

@@ -96,13 +96,13 @@ const Projects = () => {
         }}
       >
         <TextEditor
-          initialText={projectUpdates.head as Descendant[]}
+          initialText={JSON.parse(projectUpdates.head)}
           disabled={disableEditing || editingSec !== "head"}
-          onChange={(value) =>
+          onChange={(value) => {
             setUpdates((prev) => {
-              return {...prev, head: value};
-            })
-          }
+              return {...prev, head: value.text};
+            });
+          }}
         />
       </div>
 
@@ -164,7 +164,7 @@ const Projects = () => {
                       target="_blank"
                       className="text-sm text-[#0085FF]"
                     >
-                      <span>🔗 {project.link}</span>
+                      <span>{project.link}</span>
                     </a>
                   </If>
                 </div>
@@ -184,16 +184,16 @@ const Projects = () => {
                         setEditSec(project.id + "des");
                       }
                     }}
-                    className="mt-5 text-black"
+                    className="mt-3 text-black"
                   >
                     <TextEditor
-                      initialText={project.description as Descendant[]}
+                      initialText={JSON.parse(project.description)}
                       disabled={
                         disableEditing || editingSec !== project.id + "des"
                       }
-                      onChange={(value) =>
-                        handleChange(project.id, "description", value)
-                      }
+                      onChange={(value) => {
+                        handleChange(project.id, "description", value.text);
+                      }}
                     />
                   </div>
                 </If>
@@ -213,10 +213,11 @@ const Projects = () => {
                       ...prev.items,
                       {
                         id: `project_${prev.items.length + 1}`,
-                        description: "",
-                        link: "",
                         logo: "",
-                        title: "",
+                        title: "Enter Project title",
+                        link: "🔗 Add link",
+                        description:
+                          '[{"type":"","children":[{"text":"Add description"}]}]',
                       },
                     ],
                   };

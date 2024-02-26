@@ -86,11 +86,11 @@ const CTA = () => {
         }}
       >
         <TextEditor
-          initialText={ctaUpdates.head as Descendant[]}
+          initialText={JSON.parse(ctaUpdates.head)}
           disabled={disableEditing || editingSec !== "head"}
           onChange={(value) =>
             setUpdates((prev) => {
-              return {...prev, head: value};
+              return {...prev, head: value.text};
             })
           }
         />
@@ -139,10 +139,10 @@ const CTA = () => {
                     className="mt-5 text-black"
                   >
                     <TextEditor
-                      initialText={cta.description as Descendant[]}
+                      initialText={JSON.parse(cta.description)}
                       disabled={disableEditing || editingSec !== cta.id + "des"}
                       onChange={(value) =>
-                        handleChange(cta.id, "description", value)
+                        handleChange(cta.id, "description", value.text)
                       }
                     />
                   </div>
@@ -190,16 +190,8 @@ const CTA = () => {
                         title: "",
                         icon: "",
                         link: "",
-                        description: [
-                          {
-                            type: "",
-                            children: [
-                              {
-                                text: "something here....",
-                              },
-                            ],
-                          },
-                        ],
+                        description:
+                          '[{"type":"","children":[{"text":"Add description..."}]}]',
                       },
                     ],
                   };

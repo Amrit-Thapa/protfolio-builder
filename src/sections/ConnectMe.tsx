@@ -56,11 +56,11 @@ const ConnectMe = () => {
         }}
       >
         <TextEditor
-          initialText={contactUpdates.head as Descendant[]}
+          initialText={JSON.parse(contactUpdates.head)}
           disabled={disableEditing}
           onChange={(value) =>
             setUpdates((prev) => {
-              return {...prev, head: value};
+              return {...prev, head: value.text};
             })
           }
         />

@@ -8,7 +8,7 @@ import {scrollToSection} from "@/utils";
 
 const NavBar = () => {
   const device = useDeviceType();
-  const {state, dispatch} = useAppContext();
+  const {state} = useAppContext();
   const [pageIcon, setPageIcon] = useState(state.pageIcon);
   const [pageTitle, setPageTitle] = useState(state.pageTitle);
 
@@ -26,7 +26,7 @@ const NavBar = () => {
         />
         <input
           className="text-base font-medium bg-transparent outline-none"
-          placeholder="PageTitle"
+          placeholder="Enter site title"
           value={pageTitle}
           onChange={(e) => setPageTitle(e.target.value)}
         />
