@@ -35,9 +35,12 @@ const ImagePicker = ({
           width={+width!}
           priority
           alt="Placeholder"
-          className={classNames("inline object-cover rounded cursor-pointer", {
-            "!rounded-2xl": +height! > 50,
-          })}
+          className={classNames(
+            "inline object-cover rounded cursor-pointer max-h-[295px] max-w-[295px]",
+            {
+              "!rounded-2xl": +height! > 50,
+            },
+          )}
         />
       </label>
       <input
