@@ -5,26 +5,18 @@ import Image from "next/image";
 import plusIcon from "@/../public/assets/icons/plus.png";
 import ImagePicker from "../component/ImagePicker";
 import {useAppContext} from "@/context/AppContext";
-// import {Section} from "@/types";
 import {removeUnUpdatedItem, resizeTextArea} from "@/utils";
 import If from "@/component/If";
 import {Section} from "@/context/types";
-import ActionController from "@/component/ActionController";
+import ActionController, {
+  ActionGroup,
+  DeleteButton,
+  EditButton,
+  SaveButton,
+} from "@/component/ActionController";
 import {Actions} from "@/context/reducer";
-
-const initialState = {
-  title: "",
-  description: "",
-  items: [
-    {
-      id: "cta_1",
-      title: "",
-      icon: "",
-      description: "",
-      link: "",
-    },
-  ],
-};
+import TextEditor from "@/component/Editor";
+import {Descendant} from "slate";
 
 const CTA = () => {
   const {state, dispatch} = useAppContext();
@@ -32,6 +24,8 @@ const CTA = () => {
   const [ctaUpdates, setUpdates] = useState(cta);
   const isSectionActive = activeSection === Section.CTA;
   const disableEditing = !isSectionActive || (isSectionActive && !editing);
+
+  const [editingSec, setEditSec] = useState("");
 
   const handleChange = (id: string, key: string, value: string) => {
     setUpdates((prev) => {
@@ -44,90 +38,65 @@ const CTA = () => {
     });
   };
 
-  const handleCancelButton = (e: React.SyntheticEvent) => {
-    e.stopPropagation();
-    setUpdates(cta);
-    dispatch({type: Actions.SET_EDITING, payload: false});
-  };
-
   const handleSaveClick = (e: React.SyntheticEvent) => {
     e.stopPropagation();
-
-    const {items, title, description} = ctaUpdates;
-    const hasUpdatedCta = removeUnUpdatedItem(items);
-
-    setUpdates({
-      title,
-      description,
-      items: hasUpdatedCta,
-    });
 
     dispatch({
       type: Actions.SET_CTA,
       payload: {
-        cta: {
-          title,
-          description,
-          items: hasUpdatedCta,
-        },
+        cta: ctaUpdates,
       },
     });
   };
 
-  return (
-    <ActionController
-      enabled={isSectionActive}
-      isEditing={editing}
-      onCancel={handleCancelButton}
-      onDelete={() =>
-        dispatch({type: Actions.REMOVE_SECTION, payload: Section.CTA})
-      }
-      onEditing={() => dispatch({type: Actions.SET_EDITING, payload: true})}
-      onMove={() => console.log}
-      onSave={handleSaveClick}
-    >
-      <If
-        condition={isSectionActive || !!(!isSectionActive && ctaUpdates.title)}
-      >
-        <input
-          className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
-          value={ctaUpdates.title}
-          disabled={disableEditing}
-          placeholder="Blogs and resources"
-          onChange={(e) =>
-            setUpdates((prev) => {
-              return {
-                ...prev,
-                title: e.target.value,
-              };
-            })
-          }
-        />
-      </If>
+  const onDeleteClick = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch({type: Actions.REMOVE_SECTION, payload: Section.CTA});
+  };
 
-      <If
-        condition={
-          isSectionActive || !!(!isSectionActive && ctaUpdates.description)
-        }
+  const onEditClick = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch({type: Actions.SET_EDITING, payload: true});
+  };
+
+  return (
+    <ActionController active={isSectionActive}>
+      <ActionGroup>
+        {editing ? (
+          <>
+            <SaveButton onClick={handleSaveClick} />
+          </>
+        ) : (
+          <>
+            <DeleteButton onClick={onDeleteClick} />
+            <EditButton onClick={onEditClick} />
+          </>
+        )}
+      </ActionGroup>
+
+      <div
+        onClick={(e) => {
+          if (isSectionActive) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          if (!disableEditing) {
+            setEditSec("head");
+          }
+        }}
       >
-        <textarea
-          className={classNames(
-            "bg-transparent text-black outline-none w-full font-sm md:font-medium max-w-[501px] md:text-base mt-5",
-            "resize-none overflow-hidden border-none p-0 m-0 text-sm",
-          )}
-          value={ctaUpdates.description}
-          disabled={disableEditing}
-          placeholder="Add subtext here..."
-          onChange={(e) =>
+        <TextEditor
+          initialText={ctaUpdates.head as Descendant[]}
+          disabled={disableEditing || editingSec !== "head"}
+          onChange={(value) =>
             setUpdates((prev) => {
-              return {
-                ...prev,
-                description: resizeTextArea(e),
-              };
+              return {...prev, head: value};
             })
           }
         />
-      </If>
+      </div>
 
       <div className="flex flex-wrap gap-4 mt-5">
         {ctaUpdates.items.map((cta) => {
@@ -159,19 +128,26 @@ const CTA = () => {
                     isSectionActive || !!(!isSectionActive && cta.title)
                   }
                 >
-                  <textarea
-                    rows={1}
-                    disabled={disableEditing}
-                    className={classNames(
-                      "text-base font-medium text-black bg-transparent outline-none",
-                      "resize-none overflow-hidden border-none p-0 mt-3",
-                    )}
-                    value={cta.title}
-                    placeholder="Enter title here..."
-                    onChange={(e) =>
-                      handleChange(cta.id, "title", resizeTextArea(e))
-                    }
-                  />
+                  <div
+                    onClick={(e) => {
+                      if (isSectionActive) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }
+                      if (!disableEditing) {
+                        setEditSec(cta.id + "des");
+                      }
+                    }}
+                    className="mt-5 text-black"
+                  >
+                    <TextEditor
+                      initialText={cta.description as Descendant[]}
+                      disabled={disableEditing || editingSec !== cta.id + "des"}
+                      onChange={(value) =>
+                        handleChange(cta.id, "description", value)
+                      }
+                    />
+                  </div>
                 </If>
 
                 <div>
@@ -213,10 +189,19 @@ const CTA = () => {
                       ...prev.items,
                       {
                         id: `cta_${prev.items.length + 1}`,
-                        description: "",
+                        title: "",
                         icon: "",
                         link: "",
-                        title: "",
+                        description: [
+                          {
+                            type: "",
+                            children: [
+                              {
+                                text: "something here....",
+                              },
+                            ],
+                          },
+                        ],
                       },
                     ],
                   };
