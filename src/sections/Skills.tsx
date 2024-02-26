@@ -77,7 +77,7 @@ const Skills = () => {
       <div className="flex flex-wrap gap-4">
         {skillUpdate.map((skill) => (
           <div
-            className="w-full"
+            className="w-full md:fit"
             onClick={(e) => {
               if (isSectionActive) {
                 e.preventDefault();
@@ -96,7 +96,7 @@ const Skills = () => {
               disabled={skillEditing !== skill.id}
               onChange={(value) => handleChange(skill.id, "value", value)}
               className={classNames(
-                "bg-white rounded-2xl border md:w-[335px] w-full p-10 h-fit",
+                "bg-white rounded-2xl border md:w-[325px] w-full p-10 h-fit",
                 {"h-full": isSectionActive},
               )}
             />

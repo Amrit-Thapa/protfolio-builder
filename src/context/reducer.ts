@@ -111,7 +111,7 @@ export const reducer = (
   const RemoveSection = (item: Section) => {
     const {section} = state;
     const index = section.indexOf(item);
-    section.splice(index, 1);
+    if (index >= 0) section.splice(index, 1);
     return section;
   };
 
