@@ -23,45 +23,61 @@ const AboutMe = () => {
   const disableEditing = !isSectionActive || (isSectionActive && !editing);
 
   const onCancelClick = (e: SyntheticEvent) => {
+    e.preventDefault();
     e.stopPropagation();
+
     setUpdates(aboutMe);
     dispatch({type: Actions.SET_EDITING, payload: false});
   };
   const onSaveClick = (e: SyntheticEvent) => {
+    e.preventDefault();
     e.stopPropagation();
+
     dispatch({type: Actions.SET_ABOUT_ME, payload: aboutMeUpdates});
   };
   const onDeleteClick = (e: SyntheticEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     // setUpdates(aboutMe);
     // dispatch({type: Actions.SET_EDITING, payload: false});
   };
   const onEditClick = (e: SyntheticEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     dispatch({type: Actions.SET_EDITING, payload: true});
   };
 
   return (
-    <ActionController active={isSectionActive}>
-      <ActionGroup>
-        {editing ? (
-          <>
-            <CancelButton onClick={onCancelClick} />
-            <SaveButton onClick={onSaveClick} />
-          </>
-        ) : (
-          <>
-            <DeleteButton onClick={onDeleteClick} />
-            <EditButton onClick={onEditClick} />
-          </>
-        )}
-      </ActionGroup>
-      <TextEditor
-        initialText={aboutMeUpdates as Descendant[]}
-        disabled={disableEditing}
-        onChange={(value) => setUpdates(value)}
-      />
-    </ActionController>
+    <div
+      onClick={(e) => {
+        if (isSectionActive) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }}
+    >
+      <ActionController active={isSectionActive}>
+        <ActionGroup>
+          {editing ? (
+            <>
+              <CancelButton onClick={onCancelClick} />
+              <SaveButton onClick={onSaveClick} />
+            </>
+          ) : (
+            <>
+              <DeleteButton onClick={onDeleteClick} />
+              <EditButton onClick={onEditClick} />
+            </>
+          )}
+        </ActionGroup>
+
+        <TextEditor
+          initialText={aboutMeUpdates as Descendant[]}
+          disabled={disableEditing}
+          onChange={(value) => setUpdates(value)}
+        />
+      </ActionController>
+    </div>
   );
 };
 

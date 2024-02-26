@@ -106,6 +106,8 @@ export const reducer = (
 ): typeof initialState => {
   const {type, payload} = action;
 
+  console.log(action);
+
   const RemoveSection = (item: Section) => {
     const {section} = state;
     const index = section.indexOf(item);
