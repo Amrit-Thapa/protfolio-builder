@@ -65,7 +65,6 @@ const Skills = () => {
       <ActionGroup>
         {editing ? (
           <>
-            <CancelButton onClick={onCancelClick} />
             <SaveButton onClick={onSaveClick} />
           </>
         ) : (

@@ -69,11 +69,20 @@ const AboutMe = () => {
           )}
         </ActionGroup>
 
-        <TextEditor
-          initialText={aboutMeUpdates as Descendant[]}
-          disabled={disableEditing}
-          onChange={(value) => setUpdates(value)}
-        />
+        <div
+          onClick={(e) => {
+            if (!disableEditing) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }}
+        >
+          <TextEditor
+            initialText={aboutMeUpdates as Descendant[]}
+            disabled={disableEditing}
+            onChange={(value) => setUpdates(value)}
+          />
+        </div>
       </ActionController>
     </div>
   );

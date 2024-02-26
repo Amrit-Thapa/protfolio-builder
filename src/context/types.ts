@@ -288,13 +288,20 @@ export const a = {
     ],
   },
   connect: {
-    title: "Lets Connect!",
-    description: [
+    head: [
+      {
+        type: "heading-two",
+        children: [
+          {
+            text: "Lets Connect \n ",
+          },
+        ],
+      },
       {
         type: "",
         children: [
           {
-            text: "Nothing’s better than a 1:1 chat. Lets connect and build some epic products together :)",
+            text: "SubText...",
           },
         ],
       },

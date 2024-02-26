@@ -59,7 +59,7 @@ const Projects = () => {
   const onDeleteClick = (e: React.SyntheticEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch({type: Actions.REMOVE_SECTION, payload: Section.Experience});
+    dispatch({type: Actions.REMOVE_SECTION, payload: Section.Projects});
   };
 
   const onEditClick = (e: React.SyntheticEvent) => {

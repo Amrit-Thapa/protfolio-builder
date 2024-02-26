@@ -1,11 +1,8 @@
 import TextEditor, {BlockType} from "@/component/Editor";
-import FocusOutWrapper from "@/component/FocusOutWrapper";
 import If from "@/component/If";
 import {useAppContext} from "@/context/AppContext";
 import {Actions} from "@/context/reducer";
 import useDeviceType from "@/hooks/useDeviceType";
-import {resizeTextArea} from "@/utils";
-import classNames from "classnames";
 import React, {useState} from "react";
 import CurrentCompany from "./CurrentCompany";
 import NameAndEmail from "./NameAndEmail";
@@ -32,33 +29,27 @@ const Intro = () => {
   ];
 
   return (
-    <FocusOutWrapper
-      onFocusOut={() => {
-        return dispatch({type: Actions.SET_INTRO, payload: introUpdate});
-      }}
+    <div
+      className="md:mt-20 md:min-h-[330px] flex flex-col justify-center"
+      onClick={() =>
+        dispatch({type: Actions.SET_ACTIVE_SECTION, payload: "Intro"})
+      }
     >
-      <div
-        className="md:mt-20 md:min-h-[330px] flex flex-col justify-center"
-        onClick={() =>
-          dispatch({type: Actions.SET_ACTIVE_SECTION, payload: "Intro"})
-        }
-      >
-        <TextEditor
-          initialText={introText}
-          disabled={!isSectionActive}
-          onChange={(value) => console.log(value)}
-        />
-        <If condition={device === "phone"}>
-          <div className="mt-5">
-            <NameAndEmail />
-          </div>
-          <div className="mt-5">
-            <CurrentCompany />
-          </div>
-        </If>
-        <PreviousCompany />
-      </div>
-    </FocusOutWrapper>
+      <TextEditor
+        initialText={introText}
+        disabled={!isSectionActive}
+        onChange={(value) => console.log(value)}
+      />
+      <If condition={device === "phone"}>
+        <div className="mt-5">
+          <NameAndEmail />
+        </div>
+        <div className="mt-5">
+          <CurrentCompany />
+        </div>
+      </If>
+      <PreviousCompany />
+    </div>
   );
 };
 
