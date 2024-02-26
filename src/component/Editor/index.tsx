@@ -1,13 +1,4 @@
-import React, {
-  Component,
-  ComponentProps,
-  ComponentType,
-  SyntheticEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, {ComponentProps, useCallback, useState} from "react";
 import {
   Bold,
   Italic,
@@ -17,8 +8,6 @@ import {
   Heading1,
   Heading2,
 } from "lucide-react";
-import unOrderedList from "@/../public/assets/icons/unOrderedList.png";
-import orderedList from "@/../public/assets/icons/orderedList.png";
 import {
   BaseEditor,
   Editor,
