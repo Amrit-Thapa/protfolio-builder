@@ -36,21 +36,28 @@ const Skills = () => {
   const onCancelClick = (e: SyntheticEvent) => {
     e.stopPropagation();
     setUpdates(skills);
+    setSkillEditing("");
     dispatch({type: Actions.SET_EDITING, payload: false});
   };
+
   const onSaveClick = (e: SyntheticEvent) => {
     e.stopPropagation();
 
     const skill = removeUnUpdatedItem(skillUpdate);
     setUpdates(skill);
+    setSkillEditing("");
     dispatch({type: Actions.SET_SKILL, payload: {skill}});
   };
+
   const onDeleteClick = (e: SyntheticEvent) => {
     e.stopPropagation();
+    setSkillEditing("");
     dispatch({type: Actions.REMOVE_SECTION, payload: Section.Skills});
   };
+
   const onEditClick = (e: SyntheticEvent) => {
     e.stopPropagation();
+    setSkillEditing("");
     dispatch({type: Actions.SET_EDITING, payload: true});
   };
 
@@ -72,7 +79,12 @@ const Skills = () => {
       <div className="flex flex-wrap gap-4">
         {skillUpdate.map((skill) => (
           <div
-            onClick={() => {
+            onClick={(e) => {
+              if (isSectionActive) {
+                e.preventDefault();
+                e.stopPropagation();
+              }
+
               if (editing) {
                 setSkillEditing(skill.id);
               }
