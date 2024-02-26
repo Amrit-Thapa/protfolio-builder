@@ -10,6 +10,8 @@ import If from "@/component/If";
 import {Section} from "@/context/types";
 import ActionController from "@/component/ActionController";
 import {Actions} from "@/context/reducer";
+import TextEditor from "@/component/Editor";
+import {Descendant} from "slate";
 
 const Experience = () => {
   const {state, dispatch} = useAppContext();
@@ -72,45 +74,11 @@ const Experience = () => {
       onMove={() => console.log}
       onSave={handleSaveClick}
     >
-      <If
-        condition={
-          isSectionActive || !!(!isSectionActive && experienceUpdate.title)
-        }
-      >
-        <input
-          className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
-          placeholder="Experience"
-          value={experienceUpdate.title}
-          disabled={disableEditing}
-          onChange={(e) =>
-            setUpdates((prev) => {
-              return {...prev, title: e.target.value};
-            })
-          }
-        />
-      </If>
-
-      <If
-        condition={
-          isSectionActive ||
-          !!(!isSectionActive && experienceUpdate.description)
-        }
-      >
-        <textarea
-          className={classNames(
-            "bg-transparent text-black outline-none w-full font-sm md:font-medium max-w-[501px] md:text-base mt-5",
-            "resize-none overflow-hidden border-none p-0 m-0 text-sm",
-          )}
-          disabled={disableEditing}
-          value={experienceUpdate.description}
-          placeholder="Add subtext here.."
-          onChange={(e) =>
-            setUpdates((prev) => {
-              return {...prev, description: resizeTextArea(e)};
-            })
-          }
-        />
-      </If>
+      <TextEditor
+        initialText={experienceUpdate.head as Descendant[]}
+        disabled={disableEditing}
+        onChange={(value) => console.log}
+      />
 
       <div>
         {experienceUpdate.items.map((exp) => {

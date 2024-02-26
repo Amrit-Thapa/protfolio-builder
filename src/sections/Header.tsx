@@ -41,7 +41,7 @@ const Header = () => {
                         onClick={() => {
                           scrollToSection(item, 300);
                           dispatch({
-                            type: Actions.SET_ACTIVE_SECTION,
+                            type: Actions.SET_ACTIVE_SECTION_WITH_EDITING,
                             payload: item,
                           });
                           toggleSectionMenu(false);
@@ -71,7 +71,7 @@ const Header = () => {
                     className="m-auto text-center border-black border rounded-3xl py-2 w-[130px] h-[36px] text-[12px] font-semibold hover:cursor-pointer"
                     onClick={() => {
                       dispatch({
-                        type: Actions.SET_ACTIVE_SECTION,
+                        type: Actions.SET_ACTIVE_SECTION_WITH_EDITING,
                         payload: "Intro",
                       });
                       toggleSectionMenu(false);

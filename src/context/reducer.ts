@@ -14,6 +14,7 @@ export enum Actions {
   SET_EXPERIENCE = "SET_EXPERIENCE",
   SET_CTA = "SET_CTA",
   SET_CONNECT_ME = "SET_CONNECT_ME",
+  SET_ACTIVE_SECTION_WITH_EDITING = "SET_ACTIVE_SECTION_WITH_EDITING",
 }
 
 export type StateActions = {
@@ -122,6 +123,12 @@ export const reducer = (
       };
 
     case Actions.SET_ACTIVE_SECTION:
+      return {
+        ...state,
+        activeSection: payload,
+        editing: false,
+      };
+    case Actions.SET_ACTIVE_SECTION_WITH_EDITING:
       return {
         ...state,
         activeSection: payload,

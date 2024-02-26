@@ -1,3 +1,5 @@
+import {BlockType} from "@/component/Editor";
+
 export enum Section {
   AboutMe = "AboutMe",
   Skills = "Skills",
@@ -25,24 +27,49 @@ export const a = {
     description:
       "Ready to bring your dream product to life in the virtual world.",
   },
-  aboutMe: {
-    title: "About Me",
-    description:
-      "I'm your go-to Full Stack Developer, ready to bring your dream product to life in the virtual  world. From crafting sleek websites for small and medium-sized businesses to empowering you by building your dream tech product, I've got the skills and expertise to make it happen.\n\nWith a mastery of JavaScript, React.js, Node.js, express.js, CSS and Next.js, I can help ensure your online presence stands out from the crowd. I am skilled in creating user-friendly interfaces, building RESTful APIs, and seamlessly integrating external services. Besides, I am a technical lead/project manager, who prefers to meticulously oversee every aspect of a project, from conception to completion, leaving no room for mediocrity.\n\nYour dream + my expertise = scalable, performant, reliable, and intuitive products. Let's build something extraordinary!\n\nBeyond the code, I step into the shoes of a technical lead and project manager, where I bring a meticulous approach to overseeing every stage of a project. My commitment to excellence leaves no room for mediocrity, ensuring that each endeavor I embark upon is a success.\n\nIn the collaborative realm, I thrive. Whether it's solving intricate technical challenges or leading a team towards a shared goal, I believe that extraordinary results are born out of effective collaboration.",
-  },
+  aboutMe: [
+    {
+      type: "heading-two",
+      children: [
+        {
+          text: "About Me \n",
+        },
+      ],
+    },
+    {
+      type: "",
+      children: [
+        {
+          text: "I'm your go-to Full Stack Developer, ready to bring your dream product to life in the virtual  world. From crafting sleek websites for small and medium-sized businesses to empowering you by building your dream tech product, I've got the skills and expertise to make it happen.\n\nWith a mastery of JavaScript, React.js, Node.js, express.js, CSS and Next.js, I can help ensure your online presence stands out from the crowd. I am skilled in creating user-friendly interfaces, building RESTful APIs, and seamlessly integrating external services. Besides, I am a technical lead/project manager, who prefers to meticulously oversee every aspect of a project, from conception to completion, leaving no room for mediocrity.\n\nYour dream + my expertise = scalable, performant, reliable, and intuitive products. Let's build something extraordinary!\n\nBeyond the code, I step into the shoes of a technical lead and project manager, where I bring a meticulous approach to overseeing every stage of a project. My commitment to excellence leaves no room for mediocrity, ensuring that each endeavor I embark upon is a success.\n\nIn the collaborative realm, I thrive. Whether it's solving intricate technical challenges or leading a team towards a shared goal, I believe that extraordinary results are born out of effective collaboration.",
+        },
+      ],
+    },
+  ],
   skills: [
     {
       id: "skill_1",
-      title: "Skills",
-      description:
-        "I find my joy in the art and science of Full Stack Development, specializing in technologies such as",
-      text: "aj;fjafdjaf\nfadkjfa\nkfajsdf\nadkfjajf\nasdfklajf\nafadfdajflj",
-    },
-    {
-      id: "skill_2",
-      description: "adsfnkajfkljaklsjf\najfladjfjalkfj\naefjlajfdjas",
-      text: "ajdfkjalkjflaj\nafkadjsfjlajfda\naeklflkasjfklas\naflkasfja\nasefaesjfla",
-      title: "afkdjadfj",
+      value: [
+        {
+          type: "heading-three" as BlockType,
+          children: [{text: "Skill set \n"}],
+        },
+        {
+          type: "paraText-two" as BlockType,
+          children: [
+            {
+              text: "subText.... \n",
+            },
+          ],
+        },
+        {
+          type: "paraText-two" as BlockType,
+          children: [
+            {
+              text: "Start writing",
+            },
+          ],
+        },
+      ],
     },
   ],
   projects: {
@@ -81,13 +108,29 @@ export const a = {
     ],
   },
   experience: {
-    title: "Experience",
-    description:
-      "My total years of experience compounds to 5+ years with significant amount of expertise in fintech & edtech industries.",
+    head: [
+      {
+        type: "heading-two",
+        children: [
+          {
+            text: "Experince \n ",
+          },
+        ],
+      },
+      {
+        type: "",
+        children: [
+          {
+            text: "SubText...",
+          },
+        ],
+      },
+    ],
     items: [
       {
         id: "exp_1",
         logo: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAgCAYAAADqgqNBAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAI0SURBVHgBxVcxlqJAEP3uJpupN8AbGG4mm21oaKY3EDMzvIHcAG+gqREzJ8AbQGiGqRFTv6d7nuOAdDP45r/3oXwU/q7qqm66B3eMNQeaF2GuecIT4AtjYSEsH7DQfj46gC9MGgTrmOE9Q85gOrctRe8ZwgGeMO1I2DDVATVGnHUsbD2A5EnChnGdcPhkYcPgXthDcxt1Reqo9P/W4qzsv6jAdDrFbDaD7/uKl8sF5/O5yhWDwQDr9Rp5niu/GvwRXoUvv/QopnWep9MJy+VS/TG53+/VvQrb7VbdKd6AJS+M/L9wUefFCK7XK/r9PlarFUajESaTCY7H4ye/MAwxHA4RBAEswOhfacSwmKskSUpJeylRl1mWKds8k8yUaZqqZ4D13EcUT2ycPc/7EKAwB0B7PB4rm88dhMkDxa2rXFJaxnGs7M1mo2wOqIUwmcH1JaZ/Pp8rm8IcUAth03JuLzFKk2ZjO871J3HnxUXaTWXATAV/t0k7+zyHA9hSBFuQbRVFkep7yxa7Rc5LZDtatpRJs2m52/Q7Fp5qtYWNc1VLydKris7YZios6VOca+XDeTc9XhWZpL2UZVXZu93Otvqz2/xv0FDdjKzquUk/+57CRVHYpJ966Glx8wXzZcfgrsaCkqhQB5kS5WfAzehwONS558J/uCv0APbz9R0u6kaVPFk4xgP86Ack4eGHPp1vYb34NDBCS7CEs5aiCTo8s+3Q8UGxB3fw8OdpmiMy+QLHTeoNcwYDEiOS6y0AAAAASUVORK5CYII=",
+        company: [],
         designation: "Sr. Developer",
         name: "Twitter",
         location: "Bengaluru",

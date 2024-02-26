@@ -1,92 +1,77 @@
-import Drag from "@/../public/assets/icons/drag.png";
 import editIcon from "@/../public/assets/icons/editIcon.png";
 import bin from "@/../public/assets/icons/bin.png";
-import {ComponentProps, SyntheticEvent} from "react";
+import {ComponentProps} from "react";
+import classNames from "classnames";
 
-type ActionButtonsProps = {
-  onCancel: (e: SyntheticEvent) => void;
-  onSave: (e: SyntheticEvent) => void;
-  onMove: (e: SyntheticEvent) => void;
-  onDelete: (e: SyntheticEvent) => void;
-  onEditing: (value: boolean) => void;
-  isEditing: boolean;
-};
-
-const ActionButtons = ({
-  isEditing,
-  onCancel,
-  onSave,
-  onMove,
-  onDelete,
-  onEditing,
-}: ActionButtonsProps) => {
-  return isEditing ? (
-    <>
-      <button className="text-xs font-semibold" onClick={onCancel}>
-        Cancel
-      </button>
-      <button
-        className="text-white rounded-3xl bg-[#0085FF] text-xs font-semibold px-4 py-1"
-        onClick={onSave}
-      >
-        Save
-      </button>
-    </>
-  ) : (
-    <>
-      <Buttons onClick={onMove}>
-        <img src={Drag.src} />
-      </Buttons>
-      <div>
-        <Buttons onClick={onDelete}>
-          <img src={bin.src} />
-        </Buttons>
-        <Buttons onClick={() => onEditing?.(!isEditing)}>
-          <img src={editIcon.src} />
-        </Buttons>
-      </div>
-    </>
+export const DeleteButton = ({...props}: ComponentProps<"button">) => {
+  return (
+    <button className="p-2 rounded hover:bg-gray-200" {...props}>
+      <img src={bin.src} />
+    </button>
   );
 };
 
-const Buttons = ({children, ...props}: ComponentProps<"button">) => {
+export const EditButton = ({...props}: ComponentProps<"button">) => {
+  return (
+    <button className="p-2 rounded hover:bg-gray-200" {...props}>
+      <img src={editIcon.src} />
+    </button>
+  );
+};
+
+export const SaveButton = ({...props}: ComponentProps<"button">) => {
+  return (
+    <button
+      className="text-white rounded-3xl bg-[#0085FF] text-xs font-semibold px-4 py-1 p-2"
+      {...props}
+    >
+      Save
+    </button>
+  );
+};
+export const CancelButton = ({...props}: ComponentProps<"button">) => {
+  return (
+    <button className="text-xs font-semibold" {...props}>
+      Cancel
+    </button>
+  );
+};
+
+const Button = ({children, ...props}: ComponentProps<"button">) => {
   return (
     <button className="p-2 rounded hover:bg-gray-200" {...props}>
       {children}
     </button>
   );
 };
-
+export const ActionGroup = ({
+  children,
+  isChildren,
+  ...props
+}: ComponentProps<"div"> & {isChildren?: boolean}) => {
+  return (
+    <div
+      className={classNames("absolute right-0 flex gap-4 -top-10 md:-top-14", {
+        "md:-top-10": !!isChildren,
+      })}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
 const ActionController = ({
   children,
-  isEditing,
-  onCancel,
-  onSave,
-  onMove,
-  onDelete,
-  onEditing,
-  enabled,
-}: ActionButtonsProps & ComponentProps<"div"> & {enabled: boolean}) => {
+  active,
+}: ComponentProps<"div"> & {active?: boolean}) => {
   return (
-    <>
-      {enabled ? (
-        <div className="relative p-5 mt-20 border-black md:border md:rounded-xl">
-          <div className="absolute right-0 flex gap-4 -top-10 md:-top-14">
-            <ActionButtons
-              onCancel={onCancel}
-              onSave={onSave}
-              onMove={onMove}
-              onDelete={onDelete}
-              onEditing={onEditing}
-              isEditing={isEditing}
-            />
-          </div>
-          {children}
-        </div>
-      ) : (
-        children
-      )}
-    </>
+    <div
+      className={classNames({
+        "relative p-5 mt-20 border-black md:border md:rounded-xl": active,
+      })}
+    >
+      {children}
+    </div>
   );
 };
 

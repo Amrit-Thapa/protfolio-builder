@@ -1,50 +1,330 @@
-"use client";
-import {$getRoot, $getSelection} from "lexical";
-import React, {useState} from "react";
-import {LexicalComposer} from "@lexical/react/LexicalComposer";
-import {OnChangePlugin} from "@lexical/react/LexicalOnChangePlugin";
-import {RichTextPlugin} from "@lexical/react/LexicalRichTextPlugin";
-import {ContentEditable} from "@lexical/react/LexicalContentEditable";
-import {HistoryPlugin} from "@lexical/react/LexicalHistoryPlugin";
-import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
-import ToolbarPlugin from "./plugin/ToolbarPlugin";
-import {lexicalEditorConfig} from "./config";
+import React, {
+  Component,
+  ComponentProps,
+  ComponentType,
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import {
+  Bold,
+  Italic,
+  Underline,
+  ListOrdered,
+  List,
+  Heading1,
+  Heading2,
+} from "lucide-react";
+import unOrderedList from "@/../public/assets/icons/unOrderedList.png";
+import orderedList from "@/../public/assets/icons/orderedList.png";
+import {
+  BaseEditor,
+  Editor,
+  Descendant,
+  createEditor,
+  Transforms,
+  Element as SlateElement,
+  EditorInterface,
+} from "slate";
+import {
+  ReactEditor,
+  Slate,
+  Editable,
+  withReact,
+  RenderElementProps,
+  useSlate,
+} from "slate-react";
+import classNames from "classnames";
 
-const Editor = ({
-  placeholder,
-  editable,
-}: {
-  placeholder?: React.ReactNode;
-  editable: boolean;
-}) => {
-  const [editorState, setEditorState] = useState<string>();
-  const [isEditing, setEditing] = useState(false);
+export type BlockType =
+  | "paragraph"
+  | "heading-one"
+  | "heading-two"
+  | "heading-three"
+  | "numbered-list"
+  | "bulleted-list"
+  | "paraText-one"
+  | "paraText-two"
+  | "paraText-three";
 
-  function onChange(editorState: any) {
-    editorState.read(() => {
-      const root = $getRoot();
-      const selection = $getSelection();
-      console.log(root, selection);
-    });
+export type LeafType = "bold" | "italic" | "underline" | "hashtag";
+
+type CustomElement = {type: BlockType; children: CustomText[]};
+type CustomText = {text: string};
+
+declare module "slate" {
+  interface CustomTypes {
+    Editor: BaseEditor & ReactEditor & EditorInterface;
+    Element: CustomElement;
+    Text: CustomText;
   }
-  console.log(editable);
+}
+
+const TextEditor = ({
+  initialText,
+  id,
+  onChange,
+  disabled,
+  className,
+}: {
+  initialText: Descendant[];
+  id?: string;
+  onChange: ((value: Descendant[]) => void) | undefined;
+  className?: string;
+  disabled: boolean;
+}) => {
+  const [editor] = useState(() => withReact(createEditor()));
+
+  const renderElement = useCallback(
+    (props: RenderElementProps) => <Element {...props} />,
+    [],
+  );
+  const renderLeaf = useCallback(
+    (props: RenderElementProps): JSX.Element => (
+      <Leaf
+        {...(props as RenderElementProps & {
+          leaf: {[key in LeafType]: boolean};
+        })}
+      />
+    ),
+    [],
+  );
+
   return (
-    <LexicalComposer initialConfig={{...lexicalEditorConfig, editable}}>
-      {isEditing && <ToolbarPlugin />}
-      {/* <ToolbarPlugin /> */}
-      <div className="bg-white relative rounded">
-        <RichTextPlugin
-          contentEditable={
-            <ContentEditable className="relative p-1 rounded-lg outline-none" />
-          }
-          placeholder={placeholder as JSX.Element}
-          ErrorBoundary={LexicalErrorBoundary}
-        />
-        <OnChangePlugin onChange={onChange} />
-        <HistoryPlugin />
+    <Slate
+      editor={editor as ReactEditor}
+      initialValue={initialText}
+      onChange={(value) => {
+        const isAstChange = editor.operations.some(
+          (op: any) => "set_selection" !== op.type,
+        );
+        if (isAstChange) {
+          onChange?.(value);
+          const content = JSON.stringify(value);
+        }
+      }}
+      key={id}
+    >
+      <div className="relative">
+        {!disabled && (
+          <div className="absolute flex justify-center gap-2 p-1 bg-white rounded outline-1 left-2/4 -translate-x-2/4 outline -top-20">
+            <MarkButton
+              onMouseDown={(event) => {
+                event.preventDefault();
+                toggleMark(editor, "bold");
+              }}
+            >
+              <Bold size={14} />
+            </MarkButton>
+            <MarkButton
+              onMouseDown={(event) => {
+                event.preventDefault();
+                toggleMark(editor, "italic");
+              }}
+            >
+              <Italic size={14} />
+            </MarkButton>
+            <MarkButton
+              onMouseDown={(event) => {
+                event.preventDefault();
+                toggleMark(editor, "underline");
+              }}
+            >
+              <Underline size={14} />
+            </MarkButton>
+            <MarkButton
+              onMouseDown={(event) => {
+                event.preventDefault();
+                toggleBlock(editor, "heading-one");
+              }}
+            >
+              <Heading1 size={14} />
+            </MarkButton>
+            <MarkButton
+              onMouseDown={(event) => {
+                event.preventDefault();
+                toggleBlock(editor, "heading-two");
+              }}
+            >
+              <Heading2 size={14} />
+            </MarkButton>
+            <MarkButton
+              onMouseDown={(event) => {
+                event.preventDefault();
+                toggleBlock(editor, "numbered-list");
+              }}
+            >
+              <ListOrdered size={14} />
+            </MarkButton>
+            <MarkButton
+              onMouseDown={(event) => {
+                event.preventDefault();
+                toggleBlock(editor, "bulleted-list");
+              }}
+            >
+              <List size={14} />
+            </MarkButton>
+          </div>
+        )}
       </div>
-    </LexicalComposer>
+      <Editable
+        renderPlaceholder={({children, attributes}) => (
+          <div {...attributes}>
+            <p>{children}</p>
+            <pre>
+              Use the renderPlaceholder prop to customize rendering of the
+              placeholder
+            </pre>
+          </div>
+        )}
+        readOnly={disabled}
+        renderElement={renderElement}
+        renderLeaf={renderLeaf}
+        contentEditable={false}
+        // onKeyDown={(event) => {
+        //   console.log(event);
+        // }}
+        className={className || "outline-none rounded"}
+        placeholder="Enter some rich text…"
+      />
+    </Slate>
   );
 };
 
-export default Editor;
+export default TextEditor;
+
+const Element = ({attributes, children, element}: RenderElementProps) => {
+  switch (element.type) {
+    case "bulleted-list":
+      return (
+        <ul className="list-disc" {...attributes}>
+          <li>{children}</li>
+        </ul>
+      );
+    case "heading-one":
+      return (
+        <h1
+          className="font-medium text-black md:text-7xl mt-4 md:mt-0 text-4xl md:!leading-[84px]"
+          {...attributes}
+        >
+          {children}
+        </h1>
+      );
+    case "heading-two":
+      return (
+        <h2
+          className="text-2xl font-bold text-black md:text-3xl"
+          {...attributes}
+        >
+          {children}
+        </h2>
+      );
+
+    case "heading-three":
+      return (
+        <h2 className="text-xl font-bold text-black" {...attributes}>
+          {children}
+        </h2>
+      );
+
+    case "paraText-one":
+      return (
+        <h2
+          className={classNames(
+            "text-lg font-normal text-black",
+            "w-full md:max-w-[340px]",
+          )}
+          {...attributes}
+        >
+          {children}
+        </h2>
+      );
+    case "paraText-two":
+      return (
+        <h2
+          className={classNames("font-medium text-base text-black")}
+          {...attributes}
+        >
+          {children}
+        </h2>
+      );
+    case "numbered-list":
+      return (
+        <ol className="list-decimal" {...attributes}>
+          {children}
+        </ol>
+      );
+    default:
+      return (
+        <p className="text-sm font-medium md:text-base" {...attributes}>
+          {children}
+        </p>
+      );
+  }
+};
+
+const Leaf = ({
+  attributes,
+  children,
+  leaf,
+}: RenderElementProps & {leaf: {[key in LeafType]: boolean}}): JSX.Element => {
+  if (leaf.bold) {
+    children = <strong>{children}</strong>;
+  }
+
+  if (leaf.italic) {
+    children = <em>{children}</em>;
+  }
+
+  if (leaf.underline) {
+    children = <u>{children}</u>;
+  }
+  if (leaf.hashtag) {
+    children = <span className="text-[#0094ff]">{children}</span>;
+  }
+
+  return <span {...attributes}>{children}</span>;
+};
+
+const MarkButton = ({children, onMouseDown}: ComponentProps<"button">) => {
+  return (
+    <button onMouseDown={onMouseDown} className="p-2 rounded hover:bg-gray-200">
+      {children}
+    </button>
+  );
+};
+
+const isMarkActive = (editor: ReactEditor, format: string) => {
+  const marks = Editor.marks(editor);
+  return marks ? marks[format] === true : false;
+};
+
+const toggleMark = (editor: ReactEditor, format: string) => {
+  const isActive = isMarkActive(editor, format);
+
+  if (isActive) {
+    Editor.removeMark(editor, format);
+  } else {
+    Editor.addMark(editor, format, true);
+  }
+};
+
+const isBlockActive = (editor: ReactEditor, format: BlockType) => {
+  const [match] = Editor.nodes(editor, {
+    match: (n) => n.type === format,
+  });
+
+  return !!match;
+};
+
+const toggleBlock = (editor: ReactEditor, format: BlockType) => {
+  const isActive = isBlockActive(editor, format);
+
+  Transforms.setNodes(
+    editor,
+    {type: isActive ? null : format},
+    {match: (n) => SlateElement.isElement(n) && Editor.isBlock(editor, n)},
+  );
+};

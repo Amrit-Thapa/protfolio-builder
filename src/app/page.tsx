@@ -13,6 +13,8 @@ import Intro from "../sections/Intro";
 import NavBar from "@/sections/NavBar";
 import {Section} from "@/context/types";
 import If from "@/component/If";
+import TextEditor from "@/component/Editor";
+import {Actions} from "@/context/reducer";
 
 const sectionMap = {
   [Section.AboutMe]: <AboutMe />,
@@ -41,7 +43,14 @@ export default function Home() {
           <Intro />
           {section.map((item) => {
             return (
-              <div className="mt-10 md:mt-20" id={item} key={item}>
+              <div
+                className="mt-10 md:mt-20"
+                id={item}
+                key={item}
+                onClick={() =>
+                  dispatch({type: Actions.SET_ACTIVE_SECTION, payload: item})
+                }
+              >
                 {sectionMap[item]}
               </div>
             );
