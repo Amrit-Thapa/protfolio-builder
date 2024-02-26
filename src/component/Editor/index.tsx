@@ -94,7 +94,7 @@ const TextEditor = ({
           (op: any) => "set_selection" !== op.type,
         );
         if (isAstChange) {
-          onChange?.({value, text: JSON.stringify(value)});
+          onChange?.(JSON.stringify(value));
         }
       }}
       key={id}
@@ -300,6 +300,7 @@ const toggleMark = (editor: Editor, format: LeafType) => {
 };
 
 const isBlockActive = (editor: Editor, format: BlockType) => {
+  // Destructuring directly captures the first element (match)
   const [match] = Editor.nodes(editor, {
     match: (n: any) => n.type === format,
   });

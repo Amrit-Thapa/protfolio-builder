@@ -13,7 +13,7 @@ const CurrentCompany = () => {
             {<img src={experience.items[0].logo} height={35} />}
             {
               <div className="text-base font-semibold">
-                {experience.items[0].designation}, {experience.items[0].name}
+                {/* {experience.items[0]}, {experience.items[0]} */}
               </div>
             }
           </div>

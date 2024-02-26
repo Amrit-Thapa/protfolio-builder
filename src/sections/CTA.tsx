@@ -90,7 +90,7 @@ const CTA = () => {
           disabled={disableEditing || editingSec !== "head"}
           onChange={(value) =>
             setUpdates((prev) => {
-              return {...prev, head: value.text};
+              return {...prev, head: value};
             })
           }
         />
@@ -142,7 +142,7 @@ const CTA = () => {
                       initialText={JSON.parse(cta.description)}
                       disabled={disableEditing || editingSec !== cta.id + "des"}
                       onChange={(value) =>
-                        handleChange(cta.id, "description", value.text)
+                        handleChange(cta.id, "description", value)
                       }
                     />
                   </div>

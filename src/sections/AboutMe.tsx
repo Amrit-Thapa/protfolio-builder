@@ -78,7 +78,7 @@ const AboutMe = () => {
           <TextEditor
             initialText={JSON.parse(aboutMeUpdates) as Descendant[]}
             disabled={disableEditing}
-            onChange={(value) => setUpdates(value.text)}
+            onChange={(value) => setUpdates(value)}
           />
         </div>
       </ActionController>

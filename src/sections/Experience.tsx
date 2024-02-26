@@ -108,7 +108,7 @@ const Experience = () => {
           disabled={disableEditing || editingSec !== "head"}
           onChange={(value) => {
             setUpdates((prev) => {
-              return {...prev, head: value.text};
+              return {...prev, head: value};
             });
           }}
         />
@@ -161,7 +161,7 @@ const Experience = () => {
                       initialText={JSON.parse(exp.workInfo)}
                       disabled={disableEditing || editingSec !== exp.id}
                       onChange={(value) => {
-                        handleChange(exp.id, "workInfo", value.text);
+                        handleChange(exp.id, "workInfo", value);
                       }}
                     />
                   </div>
@@ -187,7 +187,7 @@ const Experience = () => {
                       initialText={JSON.parse(exp.description)}
                       disabled={disableEditing || editingSec !== exp.id + "des"}
                       onChange={(value) => {
-                        handleChange(exp.id, "description", value.text);
+                        handleChange(exp.id, "description", value);
                       }}
                     />
                   </div>

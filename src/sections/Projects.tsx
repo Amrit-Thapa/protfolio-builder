@@ -25,11 +25,7 @@ const Projects = () => {
   const disableEditing = !isSectionActive || (isSectionActive && !editing);
   const [editingSec, setEditSec] = useState("");
 
-  const handleChange = (
-    id: string,
-    key: string,
-    value: string | Descendant[],
-  ) => {
+  const handleChange = (id: string, key: string, value: string) => {
     setUpdates((prev) => {
       return {
         ...prev,
@@ -100,7 +96,7 @@ const Projects = () => {
           disabled={disableEditing || editingSec !== "head"}
           onChange={(value) => {
             setUpdates((prev) => {
-              return {...prev, head: value.text};
+              return {...prev, head: value};
             });
           }}
         />
@@ -192,7 +188,7 @@ const Projects = () => {
                         disableEditing || editingSec !== project.id + "des"
                       }
                       onChange={(value) => {
-                        handleChange(project.id, "description", value.text);
+                        handleChange(project.id, "description", value);
                       }}
                     />
                   </div>

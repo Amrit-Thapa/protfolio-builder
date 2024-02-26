@@ -60,7 +60,7 @@ const ConnectMe = () => {
           disabled={disableEditing}
           onChange={(value) =>
             setUpdates((prev) => {
-              return {...prev, head: value.text};
+              return {...prev, head: value};
             })
           }
         />

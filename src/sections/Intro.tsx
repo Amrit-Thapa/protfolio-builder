@@ -26,7 +26,7 @@ const Intro = () => {
         initialText={JSON.parse(introUpdate)}
         disabled={!isSectionActive}
         onChange={(value) =>
-          dispatch({type: Actions.SET_INTRO, payload: value.text})
+          dispatch({type: Actions.SET_INTRO, payload: value})
         }
       />
       <If condition={device === "phone"}>

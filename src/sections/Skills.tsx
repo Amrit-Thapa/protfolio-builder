@@ -6,7 +6,6 @@ import React, {SyntheticEvent, useState} from "react";
 import {Section} from "@/context/types";
 import ActionController, {
   ActionGroup,
-  CancelButton,
   DeleteButton,
   EditButton,
   SaveButton,
@@ -14,7 +13,6 @@ import ActionController, {
 import {Actions} from "@/context/reducer";
 import {removeUnUpdatedItem} from "@/utils";
 import TextEditor, {BlockType} from "@/component/Editor";
-import {Descendant} from "slate";
 
 const Skills = () => {
   const {state, dispatch} = useAppContext();
@@ -25,7 +23,7 @@ const Skills = () => {
   const isSectionActive = activeSection === Section.Skills;
   const disableEditing = !isSectionActive || (isSectionActive && !editing);
 
-  const handleChange = (id: string, key: string, value: Descendant[]) => {
+  const handleChange = (id: string, key: string, value: string) => {
     setUpdates((prev) => {
       return prev.map((item) =>
         item.id === id ? {...item, [key]: value} : item,
@@ -95,7 +93,7 @@ const Skills = () => {
               initialText={JSON.parse(skill?.value)}
               disabled={skillEditing !== skill.id}
               onChange={(value) => {
-                handleChange(skill.id, "value", value.text);
+                handleChange(skill.id, "value", value);
               }}
               className={classNames(
                 "bg-white rounded-2xl border w-full p-10 h-fit",
