@@ -23,8 +23,8 @@ import {
   Editable,
   withReact,
   RenderElementProps,
-  useSlate,
 } from "slate-react";
+import {withHistory, HistoryEditor} from "slate-history";
 import classNames from "classnames";
 
 export type BlockType =
@@ -48,11 +48,14 @@ export type LeafType =
   | "smallGray";
 
 type CustomElement = {type: BlockType; children: CustomText[]};
-type CustomText = {text: string};
+
+type CustomText = {
+  text: string;
+} & {[K in LeafType]: boolean};
 
 declare module "slate" {
   interface CustomTypes {
-    Editor: BaseEditor & ReactEditor & EditorInterface;
+    Editor: BaseEditor & ReactEditor & HistoryEditor;
     Element: CustomElement;
     Text: CustomText;
   }
@@ -71,7 +74,7 @@ const TextEditor = ({
   className?: string;
   disabled: boolean;
 }) => {
-  const [editor] = useState(() => withReact(createEditor()));
+  const [editor] = useState(() => withReact(withHistory(createEditor())));
 
   const renderElement = useCallback(
     (props: RenderElementProps) => <Element {...props} />,
@@ -179,9 +182,6 @@ const TextEditor = ({
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         contentEditable={false}
-        // onKeyDown={(event) => {
-        //   console.log(event);
-        // }}
         className={className || "outline-none rounded"}
         placeholder="Enter some rich text…"
       />
@@ -300,12 +300,12 @@ const MarkButton = ({children, onMouseDown}: ComponentProps<"button">) => {
   );
 };
 
-const isMarkActive = (editor: ReactEditor, format: string) => {
+const isMarkActive = (editor: Editor, format: LeafType) => {
   const marks = Editor.marks(editor);
   return marks ? marks[format] === true : false;
 };
 
-const toggleMark = (editor: ReactEditor, format: string) => {
+const toggleMark = (editor: Editor, format: LeafType) => {
   const isActive = isMarkActive(editor, format);
 
   if (isActive) {
@@ -315,20 +315,20 @@ const toggleMark = (editor: ReactEditor, format: string) => {
   }
 };
 
-const isBlockActive = (editor: ReactEditor, format: BlockType) => {
+const isBlockActive = (editor: Editor, format: BlockType) => {
   const [match] = Editor.nodes(editor, {
-    match: (n) => n.type === format,
+    match: (n: any) => n.type === format,
   });
 
   return !!match;
 };
 
-const toggleBlock = (editor: ReactEditor, format: BlockType) => {
+const toggleBlock = (editor: Editor, format: BlockType) => {
   const isActive = isBlockActive(editor, format);
 
   Transforms.setNodes(
     editor,
-    {type: isActive ? null : format},
+    {type: isActive ? undefined : format},
     {match: (n) => SlateElement.isElement(n) && Editor.isBlock(editor, n)},
   );
 };
