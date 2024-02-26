@@ -36,7 +36,7 @@ export const initialState = {
     profileImage: "",
   },
   intro:
-    '[{"type":"heading-one","children":[{"text":""}]},{"type":"paraText-one","children":[{"text":""}]}]',
+    '[{"type":"heading-one","children":[{"text":"Click to add title"}]},{"type":"paraText-one","children":[{"text":"Click to add subtitle"}]}]',
   aboutMe:
     '[{"type":"heading-two","children":[{"text":"About Me \\n"}]},{"type":"","children":[{"text":"Start writing..."}]}]',
   skills: [
@@ -47,7 +47,7 @@ export const initialState = {
     },
   ],
   projects: {
-    head: '[{"type":"heading-two","children":[{"text":"Projects\\n"}]},{"type":"","children":[{"text":"Add subText here..."}]}]',
+    head: '[{"type":"heading-two","children":[{"text":"Projects\\n"}]},{"type":"","children":[{"text":"Add subText here...\\n"}]}]',
     items: [
       {
         id: "project_1",
@@ -94,8 +94,6 @@ export const reducer = (
   action: StateActions,
 ): typeof initialState => {
   const {type, payload} = action;
-
-  console.log(action);
 
   const RemoveSection = (item: Section) => {
     const {section} = state;
