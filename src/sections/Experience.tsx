@@ -5,7 +5,7 @@ import {useAppContext} from "../context/AppContext";
 import Image from "next/image";
 import ImagePicker from "../component/ImagePicker";
 import plusIcon from "@/../public/assets/icons/plus.png";
-import {removeUnUpdatedItem, resizeTextArea} from "@/utils";
+import {removeUnUpdatedItem} from "@/utils";
 import If from "@/component/If";
 import {Section} from "@/context/types";
 import ActionController, {
@@ -134,7 +134,7 @@ const Experience = () => {
             <div
               key={exp.id}
               className={classNames(
-                "bg-white rounded-2xl border w-full p-10 min-h-[222px] mt-5",
+                "bg-white rounded-2xl border w-full p-10 min-h-[200px] mt-5",
                 {
                   "shadow-xl": exp.id.includes("1"),
                 },

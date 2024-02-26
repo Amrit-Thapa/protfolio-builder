@@ -1,5 +1,4 @@
 import {useAppContext} from "../context/AppContext";
-import {resizeTextArea} from "@/utils";
 import {Section} from "@/context/types";
 import {SyntheticEvent, useState} from "react";
 import ActionController, {
@@ -38,8 +37,7 @@ const AboutMe = () => {
   const onDeleteClick = (e: SyntheticEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    // setUpdates(aboutMe);
-    // dispatch({type: Actions.SET_EDITING, payload: false});
+    dispatch({type: Actions.REMOVE_SECTION, payload: Section.AboutMe});
   };
   const onEditClick = (e: SyntheticEvent) => {
     e.preventDefault();
