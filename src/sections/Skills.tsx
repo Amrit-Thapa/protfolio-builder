@@ -78,6 +78,7 @@ const Skills = () => {
       <div className="flex flex-wrap gap-4">
         {skillUpdate.map((skill) => (
           <div
+            className="w-full"
             onClick={(e) => {
               if (isSectionActive) {
                 e.preventDefault();
