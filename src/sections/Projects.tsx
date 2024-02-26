@@ -1,15 +1,21 @@
-import classNames from "classnames";
 import imageIcon from "@/../public/assets/icons/imageIcon.png";
 import ImagePicker from "../component/ImagePicker";
 import Image from "next/image";
 import plusIcon from "@/../public/assets/icons/plus.png";
 import {useAppContext} from "@/context/AppContext";
-import {removeUnUpdatedItem, resizeTextArea} from "@/utils";
 import If from "@/component/If";
 import {Section} from "@/context/types";
 import {useState} from "react";
-import ActionController from "@/component/ActionController";
+import ActionController, {
+  ActionGroup,
+  CancelButton,
+  DeleteButton,
+  EditButton,
+  SaveButton,
+} from "@/component/ActionController";
 import {Actions} from "@/context/reducer";
+import TextEditor from "@/component/Editor";
+import {Descendant} from "slate";
 
 const Projects = () => {
   const {state, dispatch} = useAppContext();
@@ -17,8 +23,13 @@ const Projects = () => {
   const [projectUpdates, setUpdates] = useState(projects);
   const isSectionActive = activeSection === Section.Projects;
   const disableEditing = !isSectionActive || (isSectionActive && !editing);
+  const [editingSec, setEditSec] = useState("");
 
-  const handleChange = (id: string, key: string, value: string) => {
+  const handleChange = (
+    id: string,
+    key: string,
+    value: string | Descendant[],
+  ) => {
     setUpdates((prev) => {
       return {
         ...prev,
@@ -37,77 +48,63 @@ const Projects = () => {
 
   const handleSaveClick = (e: React.SyntheticEvent) => {
     e.stopPropagation();
-
-    const {items, title, description} = projectUpdates;
-    const hasUpdatedProject = removeUnUpdatedItem(items);
-
-    setUpdates({
-      title,
-      description,
-      items: hasUpdatedProject,
-    });
     dispatch({
       type: Actions.SET_PROJECT,
       payload: {
-        project: {
-          title,
-          description,
-          items: hasUpdatedProject,
-        },
+        project: projectUpdates,
       },
     });
   };
 
-  return (
-    <ActionController
-      enabled={isSectionActive}
-      isEditing={editing}
-      onCancel={handleCancelButton}
-      onDelete={() =>
-        dispatch({type: Actions.REMOVE_SECTION, payload: Section.Projects})
-      }
-      onEditing={() => dispatch({type: Actions.SET_EDITING, payload: true})}
-      onMove={() => console.log}
-      onSave={handleSaveClick}
-    >
-      <If
-        condition={
-          isSectionActive || !!(!isSectionActive && projectUpdates.title)
-        }
-      >
-        <input
-          className="w-full text-2xl font-bold text-black bg-transparent outline-none md:text-3xl"
-          value={projectUpdates.title}
-          disabled={disableEditing}
-          placeholder="Projects"
-          onChange={(e) =>
-            setUpdates((prev) => {
-              return {...prev, title: e.target.value};
-            })
-          }
-        />
-      </If>
+  const onDeleteClick = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch({type: Actions.REMOVE_SECTION, payload: Section.Experience});
+  };
 
-      <If
-        condition={
-          isSectionActive || !!(!isSectionActive && projectUpdates.description)
-        }
+  const onEditClick = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch({type: Actions.SET_EDITING, payload: true});
+  };
+
+  return (
+    <ActionController active={isSectionActive}>
+      <ActionGroup>
+        {editing ? (
+          <>
+            <CancelButton onClick={handleCancelButton} />
+            <SaveButton onClick={handleSaveClick} />
+          </>
+        ) : (
+          <>
+            <DeleteButton onClick={onDeleteClick} />
+            <EditButton onClick={onEditClick} />
+          </>
+        )}
+      </ActionGroup>
+
+      <div
+        onClick={(e) => {
+          if (isSectionActive) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          if (!disableEditing) {
+            setEditSec("head");
+          }
+        }}
       >
-        <textarea
-          className={classNames(
-            "bg-transparent text-black outline-none w-full font-sm md:font-medium max-w-[501px] md:text-base mt-5",
-            "resize-none overflow-hidden border-none p-0 m-0 text-sm",
-          )}
-          value={projectUpdates.description}
-          disabled={disableEditing}
-          placeholder="Add subtext here..."
-          onChange={(e) =>
+        <TextEditor
+          initialText={projectUpdates.head as Descendant[]}
+          disabled={disableEditing || editingSec !== "head"}
+          onChange={(value) =>
             setUpdates((prev) => {
-              return {...prev, description: resizeTextArea(e)};
+              return {...prev, head: value};
             })
           }
         />
-      </If>
+      </div>
 
       <div className="flex flex-wrap gap-4 mt-5">
         {projectUpdates.items?.map((project) => {
@@ -177,18 +174,28 @@ const Projects = () => {
                     !!(!isSectionActive && project.description)
                   }
                 >
-                  <textarea
-                    className={classNames(
-                      "bg-transparent text-black outline-none w-full font-medium max-w-[501px] text-sm",
-                      "resize-none overflow-hidden border-none p-0 m-0",
-                    )}
-                    value={project.description}
-                    disabled={disableEditing}
-                    placeholder="Add subtext here..."
-                    onChange={(e) =>
-                      handleChange(project.id, "description", resizeTextArea(e))
-                    }
-                  />
+                  <div
+                    onClick={(e) => {
+                      if (isSectionActive) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }
+                      if (!disableEditing) {
+                        setEditSec(project.id + "des");
+                      }
+                    }}
+                    className="mt-5 text-black"
+                  >
+                    <TextEditor
+                      initialText={project.description as Descendant[]}
+                      disabled={
+                        disableEditing || editingSec !== project.id + "des"
+                      }
+                      onChange={(value) =>
+                        handleChange(project.id, "description", value)
+                      }
+                    />
+                  </div>
                 </If>
               </div>
             </div>

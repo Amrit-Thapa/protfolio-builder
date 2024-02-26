@@ -56,24 +56,11 @@ const Experience = () => {
     e.stopPropagation();
     e.preventDefault();
 
-    const {items, title, description} = experienceUpdate;
-    const hasUpdatedExperience = removeUnUpdatedItem(items);
-
-    setUpdates({
-      title,
-      description,
-      items: hasUpdatedExperience,
-    });
     setEditSec("");
-
     dispatch({
       type: Actions.SET_EXPERIENCE,
       payload: {
-        experience: {
-          title,
-          description,
-          items: hasUpdatedExperience,
-        },
+        experience: experienceUpdate,
       },
     });
   };
@@ -90,7 +77,6 @@ const Experience = () => {
     dispatch({type: Actions.SET_EDITING, payload: true});
   };
 
-  console.log({isSectionActive, editing, experienceEdit: editingSec});
   return (
     <ActionController active={isSectionActive}>
       <ActionGroup>
@@ -195,7 +181,7 @@ const Experience = () => {
                         setEditSec(exp.id + "des");
                       }
                     }}
-                    className="mt-5"
+                    className="mt-5 text-black"
                   >
                     <TextEditor
                       initialText={exp.description as Descendant[]}
