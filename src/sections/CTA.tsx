@@ -1,11 +1,9 @@
-import classNames from "classnames";
 import React, {useState} from "react";
 import imageIcon from "@/../public/assets/icons/imageIcon.png";
 import Image from "next/image";
 import plusIcon from "@/../public/assets/icons/plus.png";
 import ImagePicker from "../component/ImagePicker";
 import {useAppContext} from "@/context/AppContext";
-import {removeUnUpdatedItem, resizeTextArea} from "@/utils";
 import If from "@/component/If";
 import {Section} from "@/context/types";
 import ActionController, {
