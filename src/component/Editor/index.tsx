@@ -15,7 +15,6 @@ import {
   createEditor,
   Transforms,
   Element as SlateElement,
-  EditorInterface,
 } from "slate";
 import {
   ReactEditor,
@@ -23,6 +22,7 @@ import {
   Editable,
   withReact,
   RenderElementProps,
+  RenderLeafProps,
 } from "slate-react";
 import {withHistory, HistoryEditor} from "slate-history";
 import classNames from "classnames";
@@ -81,13 +81,7 @@ const TextEditor = ({
     [],
   );
   const renderLeaf = useCallback(
-    (props: RenderElementProps): JSX.Element => (
-      <Leaf
-        {...(props as RenderElementProps & {
-          leaf: {[key in LeafType]: boolean};
-        })}
-      />
-    ),
+    (props: RenderLeafProps): JSX.Element => <Leaf {...props} />,
     [],
   );
 
@@ -258,11 +252,7 @@ const Element = ({attributes, children, element}: RenderElementProps) => {
   }
 };
 
-const Leaf = ({
-  attributes,
-  children,
-  leaf,
-}: RenderElementProps & {leaf: {[key in LeafType]: boolean}}): JSX.Element => {
+const Leaf = ({attributes, children, leaf}: RenderLeafProps): JSX.Element => {
   if (leaf.bold) {
     children = <strong>{children}</strong>;
   }
@@ -274,15 +264,19 @@ const Leaf = ({
   if (leaf.underline) {
     children = <u>{children}</u>;
   }
+
   if (leaf.hashtag) {
     children = <span className="text-[#0094ff]">{children}</span>;
   }
+
   if (leaf.semiBold) {
     children = <span className="text-base font-semibold">{children}</span>;
   }
+
   if (leaf.small) {
     children = <span className="text-sm font-medium">{children}</span>;
   }
+
   if (leaf.smallGray) {
     children = (
       <span className="text-sm font-medium text-[#858585]">{children}</span>
