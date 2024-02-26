@@ -129,24 +129,40 @@ export const a = {
     items: [
       {
         id: "exp_1",
-        logo: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAgCAYAAADqgqNBAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAI0SURBVHgBxVcxlqJAEP3uJpupN8AbGG4mm21oaKY3EDMzvIHcAG+gqREzJ8AbQGiGqRFTv6d7nuOAdDP45r/3oXwU/q7qqm66B3eMNQeaF2GuecIT4AtjYSEsH7DQfj46gC9MGgTrmOE9Q85gOrctRe8ZwgGeMO1I2DDVATVGnHUsbD2A5EnChnGdcPhkYcPgXthDcxt1Reqo9P/W4qzsv6jAdDrFbDaD7/uKl8sF5/O5yhWDwQDr9Rp5niu/GvwRXoUvv/QopnWep9MJy+VS/TG53+/VvQrb7VbdKd6AJS+M/L9wUefFCK7XK/r9PlarFUajESaTCY7H4ye/MAwxHA4RBAEswOhfacSwmKskSUpJeylRl1mWKds8k8yUaZqqZ4D13EcUT2ycPc/7EKAwB0B7PB4rm88dhMkDxa2rXFJaxnGs7M1mo2wOqIUwmcH1JaZ/Pp8rm8IcUAth03JuLzFKk2ZjO871J3HnxUXaTWXATAV/t0k7+zyHA9hSBFuQbRVFkep7yxa7Rc5LZDtatpRJs2m52/Q7Fp5qtYWNc1VLydKris7YZios6VOca+XDeTc9XhWZpL2UZVXZu93Otvqz2/xv0FDdjKzquUk/+57CRVHYpJ966Glx8wXzZcfgrsaCkqhQB5kS5WfAzehwONS558J/uCv0APbz9R0u6kaVPFk4xgP86Ack4eGHPp1vYb34NDBCS7CEs5aiCTo8s+3Q8UGxB3fw8OdpmiMy+QLHTeoNcwYDEiOS6y0AAAAASUVORK5CYII=",
-        company: [],
-        designation: "Sr. Developer",
-        name: "Twitter",
-        location: "Bengaluru",
-        timeLine: "present",
-        description:
-          "I step into the shoes of a technical lead and project manager, where I bring a meticulous approach to overseeing every stage of a project. My commitment to excellence leaves no room for mediocrity, ensuring that each endeavor I embark upon is a success.",
-      },
-      {
-        id: "exp_2",
-        description:
-          "I step into the shoes of a technical lead and project manager, where I bring a meticulous approach to overseeing every stage of a project. My commitment to excellence leaves no room for mediocrity, ensuring that each endeavor I embark upon is a success.",
-        designation: "Software Engineer",
-        location: "Bengaluru",
-        logo: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAHHSURBVHgBxZffdYIwFMY/ah/6yAbNCLgBTiAbtGwgE8AGdQN1AtkAnEA2gL75VjaguZhQjpUEaVJ+53xHiYn3Ty7k4mAanpArVHNVQgUs4XNlXF9cjUIl107MN2q4mSBaxzARSu1uouFbxXgQhmsqG4M6iqBmMS51HuPA2ZJxqQ+V8diycangnnGmWuS6buN5nikH6Fb+VQ+7oQWMsaYsy4bYbDamnEhGR0+RS9I0NZkFLIQDAQb2hbhcLnAcB3VdI4qi9tMAL1wnR1wcVQ7w/W9FkHHS7VgbRRCAbxeKogDPFEYQyS/KW8/3/W4Lsixrx5Ik6cbiOO5qRELXVLhQb0P6JBzw8Ae4M23kfeiaF6xu6esTDEBbsFqtsFwuked5N75er3VL3WcY4HA4dIbDMARP//XfXf2j30gGqOgkVVXhAWrpQIV5+JQOnDAPhXTAWh+nIZcO7HFtLP+TihxwegN7rreh2f37nArt3tNxaO4AobD5sw5mDpkxKqXRRc8BCoEy4sM+dAYM1p3tlmwLDQwzN6W2nMgwsi2X0OS9IePatKt4x/RsUNQ+DEEdE3VOupdT+n071rCDaVADw4Tk6zkpx4MH2zev+gyHwWcqBwAAAABJRU5ErkJggg==",
-        name: "LinkedIn",
-        timeLine: "2022",
+        logo: "",
+        workInfo: [
+          {
+            type: "",
+            children: [
+              {
+                text: "Enter Company Name .",
+                semiBold: true,
+              },
+              {
+                text: "Designation . ",
+                small: true,
+              },
+              {
+                text: "Location . ",
+                smallGray: true,
+              },
+              {
+                text: "timeLine",
+                smallGray: true,
+              },
+            ],
+          },
+        ],
+        description: [
+          {
+            type: "",
+            children: [
+              {
+                text: "something here....",
+              },
+            ],
+          },
+        ],
       },
     ],
   },

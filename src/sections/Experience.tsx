@@ -8,7 +8,13 @@ import plusIcon from "@/../public/assets/icons/plus.png";
 import {removeUnUpdatedItem, resizeTextArea} from "@/utils";
 import If from "@/component/If";
 import {Section} from "@/context/types";
-import ActionController from "@/component/ActionController";
+import ActionController, {
+  ActionGroup,
+  CancelButton,
+  DeleteButton,
+  EditButton,
+  SaveButton,
+} from "@/component/ActionController";
 import {Actions} from "@/context/reducer";
 import TextEditor from "@/component/Editor";
 import {Descendant} from "slate";
@@ -20,7 +26,13 @@ const Experience = () => {
   const isSectionActive = activeSection === Section.Experience;
   const disableEditing = !isSectionActive || (isSectionActive && !editing);
 
-  const handleChange = (id: string, key: string, value: string) => {
+  const [editingSec, setEditSec] = useState("");
+
+  const handleChange = (
+    id: string,
+    key: string,
+    value: string | Descendant[],
+  ) => {
     setUpdates((prev) => {
       return {
         ...prev,
@@ -33,13 +45,16 @@ const Experience = () => {
 
   const handleCancelButton = (e: React.SyntheticEvent) => {
     e.stopPropagation();
+    e.preventDefault();
 
     setUpdates(experience);
+    setEditSec("");
     dispatch({type: Actions.SET_EDITING, payload: false});
   };
 
   const handleSaveClick = (e: React.SyntheticEvent) => {
     e.stopPropagation();
+    e.preventDefault();
 
     const {items, title, description} = experienceUpdate;
     const hasUpdatedExperience = removeUnUpdatedItem(items);
@@ -49,6 +64,7 @@ const Experience = () => {
       description,
       items: hasUpdatedExperience,
     });
+    setEditSec("");
 
     dispatch({
       type: Actions.SET_EXPERIENCE,
@@ -62,23 +78,55 @@ const Experience = () => {
     });
   };
 
+  const onDeleteClick = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch({type: Actions.REMOVE_SECTION, payload: Section.Experience});
+  };
+
+  const onEditClick = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch({type: Actions.SET_EDITING, payload: true});
+  };
+
+  console.log({isSectionActive, editing, experienceEdit: editingSec});
   return (
-    <ActionController
-      enabled={isSectionActive}
-      isEditing={editing}
-      onCancel={handleCancelButton}
-      onDelete={() =>
-        dispatch({type: Actions.REMOVE_SECTION, payload: Section.Experience})
-      }
-      onEditing={() => dispatch({type: Actions.SET_EDITING, payload: true})}
-      onMove={() => console.log}
-      onSave={handleSaveClick}
-    >
-      <TextEditor
-        initialText={experienceUpdate.head as Descendant[]}
-        disabled={disableEditing}
-        onChange={(value) => console.log}
-      />
+    <ActionController active={isSectionActive}>
+      <ActionGroup>
+        {editing ? (
+          <>
+            <CancelButton onClick={handleCancelButton} />
+            <SaveButton onClick={handleSaveClick} />
+          </>
+        ) : (
+          <>
+            <DeleteButton onClick={onDeleteClick} />
+            <EditButton onClick={onEditClick} />
+          </>
+        )}
+      </ActionGroup>
+      <div
+        onClick={(e) => {
+          if (isSectionActive) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          if (!disableEditing) {
+            setEditSec("head");
+          }
+        }}
+      >
+        <TextEditor
+          initialText={experienceUpdate.head as Descendant[]}
+          disabled={disableEditing || editingSec !== "head"}
+          onChange={(value) =>
+            setUpdates((prev) => {
+              return {...prev, head: value};
+            })
+          }
+        />
+      </div>
 
       <div>
         {experienceUpdate.items.map((exp) => {
@@ -86,14 +134,14 @@ const Experience = () => {
             <div
               key={exp.id}
               className={classNames(
-                "bg-white text-[#C6C6C6] rounded-2xl border w-full p-10 min-h-[222px] mt-5",
+                "bg-white rounded-2xl border w-full p-10 min-h-[222px] mt-5",
                 {
                   "shadow-xl": exp.id.includes("1"),
                 },
               )}
             >
               <div>
-                <div className="flex flex-wrap items-end gap-3">
+                <div className="flex items-center gap-3">
                   <If
                     condition={
                       isSectionActive || !!(!isSectionActive && exp.logo)
@@ -111,75 +159,25 @@ const Experience = () => {
                     />
                   </If>
 
-                  <div>
-                    <If
-                      condition={
-                        isSectionActive || !!(!isSectionActive && exp.name)
+                  <div
+                    className="w-full"
+                    onClick={(e) => {
+                      if (isSectionActive) {
+                        e.preventDefault();
+                        e.stopPropagation();
                       }
-                    >
-                      <input
-                        className="text-base font-semibold text-black bg-transparent outline-none"
-                        value={exp.name}
-                        disabled={disableEditing}
-                        placeholder="Enter company title"
-                        onChange={(e) =>
-                          handleChange(exp.id, "name", e.target.value)
-                        }
-                      />
-                    </If>
-
-                    <If
-                      condition={
-                        isSectionActive ||
-                        !!(!isSectionActive && exp.designation)
+                      if (!disableEditing) {
+                        setEditSec(exp.id);
                       }
-                    >
-                      <input
-                        className="text-sm font-medium text-black bg-transparent outline-none"
-                        value={exp.designation}
-                        disabled={disableEditing}
-                        placeholder="Enter designation"
-                        onChange={(e) =>
-                          handleChange(exp.id, "designation", e.target.value)
-                        }
-                      />
-                    </If>
-
-                    <div className="flex">
-                      <If
-                        condition={
-                          isSectionActive ||
-                          !!(!isSectionActive && exp.location)
-                        }
-                      >
-                        <input
-                          className="bg-transparent text-[#858585] outline-none font-medium text-xs"
-                          value={exp.location}
-                          disabled={disableEditing}
-                          placeholder="+Add location"
-                          onChange={(e) =>
-                            handleChange(exp.id, "location", e.target.value)
-                          }
-                        />
-                      </If>
-
-                      <If
-                        condition={
-                          isSectionActive ||
-                          !!(!isSectionActive && exp.timeLine)
-                        }
-                      >
-                        <input
-                          className="bg-transparent text-[#858585] outline-none font-medium text-xs"
-                          value={exp.timeLine}
-                          disabled={disableEditing}
-                          placeholder="year"
-                          onChange={(e) =>
-                            handleChange(exp.id, "timeLine", e.target.value)
-                          }
-                        />
-                      </If>
-                    </div>
+                    }}
+                  >
+                    <TextEditor
+                      initialText={exp.workInfo as Descendant[]}
+                      disabled={disableEditing || editingSec !== exp.id}
+                      onChange={(value) =>
+                        handleChange(exp.id, "workInfo", value)
+                      }
+                    />
                   </div>
                 </div>
                 <If
@@ -187,18 +185,26 @@ const Experience = () => {
                     isSectionActive || !!(!isSectionActive && exp.description)
                   }
                 >
-                  <textarea
-                    className={classNames(
-                      "bg-transparent text-black outline-none w-full font-medium max-w-[501px] text-sm",
-                      "resize-none overflow-hidden border-none p-0 mt-10",
-                    )}
-                    value={exp.description}
-                    disabled={disableEditing}
-                    placeholder="Add subtext here..."
-                    onChange={(e) =>
-                      handleChange(exp.id, "description", resizeTextArea(e))
-                    }
-                  />
+                  <div
+                    onClick={(e) => {
+                      if (isSectionActive) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }
+                      if (!disableEditing) {
+                        setEditSec(exp.id + "des");
+                      }
+                    }}
+                    className="mt-5"
+                  >
+                    <TextEditor
+                      initialText={exp.description as Descendant[]}
+                      disabled={disableEditing || editingSec !== exp.id + "des"}
+                      onChange={(value) =>
+                        handleChange(exp.id, "description", value)
+                      }
+                    />
+                  </div>
                 </If>
               </div>
             </div>
@@ -216,12 +222,40 @@ const Experience = () => {
                       ...prev.items,
                       {
                         id: `exp_${prev.items.length + 1}`,
-                        description: "",
-                        designation: "",
-                        location: "",
                         logo: "",
-                        name: "",
-                        timeLine: "",
+                        workInfo: [
+                          {
+                            type: "",
+                            children: [
+                              {
+                                text: "Enter Company Name .",
+                                semiBold: true,
+                              },
+                              {
+                                text: "Designation . ",
+                                small: true,
+                              },
+                              {
+                                text: "Location . ",
+                                smallGray: true,
+                              },
+                              {
+                                text: "timeLine",
+                                smallGray: true,
+                              },
+                            ],
+                          },
+                        ],
+                        description: [
+                          {
+                            type: "",
+                            children: [
+                              {
+                                text: "",
+                              },
+                            ],
+                          },
+                        ],
                       },
                     ],
                   };

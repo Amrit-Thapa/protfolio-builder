@@ -38,7 +38,14 @@ export type BlockType =
   | "paraText-two"
   | "paraText-three";
 
-export type LeafType = "bold" | "italic" | "underline" | "hashtag";
+export type LeafType =
+  | "bold"
+  | "italic"
+  | "underline"
+  | "hashtag"
+  | "semiBold"
+  | "small"
+  | "smallGray";
 
 type CustomElement = {type: BlockType; children: CustomText[]};
 type CustomText = {text: string};
@@ -195,7 +202,7 @@ const Element = ({attributes, children, element}: RenderElementProps) => {
     case "heading-one":
       return (
         <h1
-          className="font-medium text-black md:text-7xl mt-4 md:mt-0 text-4xl md:!leading-[84px]"
+          className="font-medium  md:text-7xl mt-4 md:mt-0 text-4xl md:!leading-[84px]"
           {...attributes}
         >
           {children}
@@ -203,17 +210,14 @@ const Element = ({attributes, children, element}: RenderElementProps) => {
       );
     case "heading-two":
       return (
-        <h2
-          className="text-2xl font-bold text-black md:text-3xl"
-          {...attributes}
-        >
+        <h2 className="text-2xl font-bold md:text-3xl" {...attributes}>
           {children}
         </h2>
       );
 
     case "heading-three":
       return (
-        <h2 className="text-xl font-bold text-black" {...attributes}>
+        <h2 className="text-xl font-bold" {...attributes}>
           {children}
         </h2>
       );
@@ -272,6 +276,17 @@ const Leaf = ({
   }
   if (leaf.hashtag) {
     children = <span className="text-[#0094ff]">{children}</span>;
+  }
+  if (leaf.semiBold) {
+    children = <span className="text-base font-semibold">{children}</span>;
+  }
+  if (leaf.small) {
+    children = <span className="text-sm font-medium">{children}</span>;
+  }
+  if (leaf.smallGray) {
+    children = (
+      <span className="text-sm font-medium text-[#858585]">{children}</span>
+    );
   }
 
   return <span {...attributes}>{children}</span>;

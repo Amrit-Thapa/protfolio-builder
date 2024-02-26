@@ -51,7 +51,6 @@ const Skills = () => {
 
   const onDeleteClick = (e: SyntheticEvent) => {
     e.stopPropagation();
-    setSkillEditing("");
     dispatch({type: Actions.REMOVE_SECTION, payload: Section.Skills});
   };
 
