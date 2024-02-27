@@ -15,6 +15,9 @@ export enum Actions {
   SET_CTA = "SET_CTA",
   SET_CONNECT_ME = "SET_CONNECT_ME",
   SET_ACTIVE_SECTION_WITH_EDITING = "SET_ACTIVE_SECTION_WITH_EDITING",
+  SET_PREVIEW = "SET_PREVIEW",
+  ACTIVE_PUBLISH = "ACTIVE_PUBLISH",
+  RESET_PREVIEW = "RESET_PREVIEW",
 }
 
 export type StateActions = {
@@ -35,8 +38,10 @@ export const initialState = {
     email: "",
     profileImage: "",
   },
-  intro:
-    '[{"type":"heading-one","children":[{"text":"Click to add title"}]},{"type":"paraText-one","children":[{"text":"Click to add subtitle"}]}]',
+  intro: {
+    head: '[{"type":"heading-one","children":[{"text":""}]}]',
+    desc: '[{"type":"paraText-one","children":[{"text":""}]}]',
+  },
   aboutMe:
     '[{"type":"heading-two","children":[{"text":"About Me \\n"}]},{"type":"","children":[{"text":"Start writing..."}]}]',
   skills: [
@@ -101,6 +106,7 @@ export const reducer = (
     if (index >= 0) section.splice(index, 1);
     return section;
   };
+  console.log(action, payload);
 
   switch (type) {
     case Actions.SET_SECTION:
@@ -109,6 +115,23 @@ export const reducer = (
         section: [...state.section, payload],
         activeSection: payload,
         editing: true,
+      };
+
+    case Actions.ACTIVE_PUBLISH:
+      return {
+        ...state,
+        preview: payload,
+        publish: true,
+        activeSection: "",
+        editing: false,
+      };
+
+    case Actions.SET_PREVIEW:
+      return {
+        ...state,
+        preview: payload,
+        activeSection: "",
+        editing: false,
       };
 
     case Actions.SET_ACTIVE_SECTION:

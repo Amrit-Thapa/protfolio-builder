@@ -12,7 +12,7 @@ import {Actions} from "@/context/reducer";
 
 const Header = () => {
   const {state, dispatch} = useAppContext();
-  const {section} = state;
+  const {section, preview} = state;
   const [showSectionMenu, toggleSectionMenu] = useState(false);
 
   return (
@@ -90,7 +90,13 @@ const Header = () => {
           </div>
         </div>
         <div className="flex gap-16">
-          <button onClick={() => console.log}>Preview</button>
+          <button
+            onClick={() =>
+              dispatch({type: Actions.SET_PREVIEW, payload: !preview})
+            }
+          >
+            Preview
+          </button>
           <div className="font-bold bg-[#0085FF] w-[87px] h-[30px] text-center rounded-[50px] p-1">
             <Link href="/publish">Publish</Link>
           </div>

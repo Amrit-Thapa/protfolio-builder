@@ -66,12 +66,14 @@ const TextEditor = ({
   id,
   onChange,
   disabled,
+  placeholder,
   className,
 }: {
   initialText: Descendant[];
   id?: string;
   onChange: ((value: string) => void) | undefined;
   className?: string;
+  placeholder?: any;
   disabled: boolean;
 }) => {
   const [editor] = useState(() => withReact(withHistory(createEditor())));
@@ -164,6 +166,7 @@ const TextEditor = ({
       <Editable
         readOnly={disabled}
         renderElement={renderElement}
+        renderPlaceholder={placeholder}
         renderLeaf={renderLeaf}
         contentEditable={false}
         className={className || "outline-none rounded"}

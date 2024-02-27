@@ -1,6 +1,6 @@
 "use client";
-import AddSection from "@/component/AddSection";
 import {useAppContext} from "@/context/AppContext";
+import {Actions} from "@/context/reducer";
 import {Section} from "@/context/types";
 import AboutMe from "@/sections/AboutMe";
 import ConnectMe from "@/sections/ConnectMe";
@@ -11,7 +11,7 @@ import NavBar from "@/sections/NavBar";
 import Profile from "@/sections/Profile";
 import Projects from "@/sections/Projects";
 import Skills from "@/sections/Skills";
-import React from "react";
+import React, {useEffect} from "react";
 
 const sectionMap = {
   [Section.AboutMe]: <AboutMe />,
@@ -25,8 +25,20 @@ const sectionMap = {
 const Publish = () => {
   const {state, dispatch} = useAppContext();
   const {section} = state;
+
+  useEffect(() => {
+    dispatch({type: Actions.ACTIVE_PUBLISH, payload: true});
+  }, []);
+
   return (
     <>
+      <div
+        className="fixed inset-0 z-[50]"
+        onClick={(e) => {
+          e.stopPropagation;
+          e.preventDefault();
+        }}
+      ></div>
       <div className="h-[30px] mt-[50px] w-full px-5 md:px-[100px]">
         <NavBar />
       </div>

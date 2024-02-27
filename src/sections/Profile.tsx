@@ -11,28 +11,37 @@ import CurrentCompany from "./CurrentCompany";
 const Profile = () => {
   const device = useDeviceType();
   const {state, dispatch} = useAppContext();
-  const {profile} = state;
+  const {profile, preview, publish, activeSection} = state;
   const [profileUpdate, setProfileUpdate] = useState(profile);
+  const disabled = preview || publish || activeSection !== "Intro";
 
   return (
     <div className="mt-10 md:mt-28">
-      <ImagePicker
-        src={profileUpdate.profileImage || imageIcon.src}
-        height={295}
-        width={295}
-        disabled={false}
-        onChange={(b64) => {
-          setProfileUpdate((prev) => {
-            return {
-              ...prev,
-              profileImage: b64 as string,
-            };
-          });
-          dispatch({type: Actions.SET_PROFILE, payload: profileUpdate});
+      <div
+        onClick={(e) => {
+          if (disabled) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
         }}
-        id="profile-icon"
-      />
-
+      >
+        <ImagePicker
+          src={profileUpdate.profileImage || imageIcon.src}
+          height={295}
+          width={295}
+          disabled={false}
+          onChange={(b64) => {
+            setProfileUpdate((prev) => {
+              return {
+                ...prev,
+                profileImage: b64 as string,
+              };
+            });
+            dispatch({type: Actions.SET_PROFILE, payload: profileUpdate});
+          }}
+          id="profile-icon"
+        />
+      </div>
       <If condition={device === "web"}>
         <div className="mt-5">
           <NameAndEmail />

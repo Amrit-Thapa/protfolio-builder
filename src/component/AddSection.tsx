@@ -25,7 +25,7 @@ export const SectionMenu = ({children, ...props}: ComponentProps<"div">) => {
 
 const AddSection = () => {
   const {state, dispatch} = useAppContext();
-  const {section, editing} = state;
+  const {section, editing, preview, publish} = state;
 
   const [showSectionMenu, toggleSectionMenu] = useState(false);
   return (
@@ -34,7 +34,7 @@ const AddSection = () => {
         relative: showSectionMenu,
       })}
     >
-      {section.length < 6 && !editing && (
+      {section.length < 6 && !editing && !preview && (
         <div
           className="border-dashed border border-black rounded-xl flex justify-center items-center bg-[#EFEFEF] h-16 hover:cursor-pointer"
           onClick={() => toggleSectionMenu((prev) => !prev)}
