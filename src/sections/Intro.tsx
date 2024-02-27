@@ -12,12 +12,19 @@ import {RenderElementProps} from "slate-react";
 const Intro = () => {
   const device = useDeviceType();
   const {state, dispatch} = useAppContext();
-  const {intro, activeSection} = state;
+  const {intro, activeSection, preview} = state;
   const [editingSec, setEditingSec] = useState("");
   const isSectionActive = activeSection === "Intro";
 
   return (
-    <div className="md:mt-20 md:min-h-[330px] flex flex-col justify-center">
+    <div
+      className="md:mt-20 md:min-h-[330px] flex flex-col justify-center"
+      onClick={() => {
+        if (!preview) {
+          dispatch({type: Actions.SET_ACTIVE_SECTION, payload: "Intro"});
+        }
+      }}
+    >
       <div
         onClick={() => setEditingSec("intro")}
         onBlur={() => {

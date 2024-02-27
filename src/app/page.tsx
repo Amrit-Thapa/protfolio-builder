@@ -12,9 +12,11 @@ import Skills from "../sections/Skills";
 import Intro from "../sections/Intro";
 import NavBar from "@/sections/NavBar";
 import {Section} from "@/context/types";
-import If from "@/component/If";
-import TextEditor from "@/component/Editor";
-import {Actions} from "@/context/reducer";
+import MainContainer, {
+  RightContainer,
+  SectionContainer,
+  StickyLeftContainer,
+} from "@/component/Container";
 
 const sectionMap = {
   [Section.AboutMe]: <AboutMe />,
@@ -26,38 +28,27 @@ const sectionMap = {
 };
 
 export default function Home() {
-  const {state, dispatch} = useAppContext();
-  const {section, preview, publish} = state;
+  const {state} = useAppContext();
+  const {section} = state;
   return (
     <>
       <Header />
-      <div className="h-[30px] mt-[50px] w-full px-5 md:px-[100px]">
-        <NavBar />
-      </div>
-
-      <div className="flex flex-wrap items-start justify-between px-5 md:flex-nowrap md:px-[100px]">
-        <div className="md:sticky md:top-20 w-[295px]">
+      <NavBar />
+      <MainContainer>
+        <StickyLeftContainer>
           <Profile />
-        </div>
-        <div className="md:w-[852px]  w-full md:p-10">
-          <div
-            onClick={() => {
-              if (!preview || !publish) {
-                dispatch({type: Actions.SET_ACTIVE_SECTION, payload: "Intro"});
-              }
-            }}
-          >
-            <Intro />
-          </div>
+        </StickyLeftContainer>
+        <RightContainer>
+          <Intro />
           {section.map((item) => {
             return (
-              <div className="mt-10 md:mt-20" id={item} key={item}>
+              <SectionContainer id={item} key={item}>
                 {sectionMap[item]}
-              </div>
+              </SectionContainer>
             );
           })}
-        </div>
-      </div>
+        </RightContainer>
+      </MainContainer>
       <AddSection />
     </>
   );
