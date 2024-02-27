@@ -6,22 +6,23 @@ import React, {SyntheticEvent, useState} from "react";
 import {Section} from "@/context/types";
 import ActionController, {
   ActionGroup,
+  CancelButton,
   DeleteButton,
   EditButton,
   SaveButton,
 } from "@/component/ActionController";
 import {Actions} from "@/context/reducer";
-import {removeUnUpdatedItem} from "@/utils";
 import TextEditor from "@/component/Editor";
+import {RenderElementProps} from "slate-react";
+import {extractTextFromJSON} from "@/utils";
 
 const Skills = () => {
   const {state, dispatch} = useAppContext();
   const {skills, editing, activeSection} = state;
   const [skillUpdate, setUpdates] =
     useState<{id: string; value: string}[]>(skills);
-  const [skillEditing, setSkillEditing] = useState("");
   const isSectionActive = activeSection === Section.Skills;
-  const disableEditing = !isSectionActive || (isSectionActive && !editing);
+  const enableEditing = isSectionActive && editing;
 
   const handleChange = (id: string, key: string, value: string) => {
     setUpdates((prev) => {
@@ -34,17 +35,29 @@ const Skills = () => {
   const onCancelClick = (e: SyntheticEvent) => {
     e.stopPropagation();
     setUpdates(skills);
-    setSkillEditing("");
     dispatch({type: Actions.SET_EDITING, payload: false});
   };
 
   const onSaveClick = (e: SyntheticEvent) => {
     e.stopPropagation();
 
-    const skill = removeUnUpdatedItem(skillUpdate);
-    setUpdates(skill);
-    setSkillEditing("");
-    dispatch({type: Actions.SET_SKILL, payload: {skill}});
+    const values = skillUpdate
+      .map((item) => item.value)
+      .filter((value) => value);
+    let val: number[] = [];
+    values.forEach((element) => {
+      val.push(extractTextFromJSON(element).length);
+    });
+
+    const updatedSkill = [...skillUpdate];
+
+    for (let i = val.length - 1; i >= 0; i--) {
+      if (val[i] === 0) {
+        updatedSkill.splice(i, 1);
+      }
+    }
+    setUpdates(updatedSkill);
+    dispatch({type: Actions.SET_SKILL, payload: updatedSkill});
   };
 
   const onDeleteClick = (e: SyntheticEvent) => {
@@ -54,7 +67,6 @@ const Skills = () => {
 
   const onEditClick = (e: SyntheticEvent) => {
     e.stopPropagation();
-    setSkillEditing("");
     dispatch({type: Actions.SET_EDITING, payload: true});
   };
 
@@ -63,6 +75,7 @@ const Skills = () => {
       <ActionGroup>
         {editing ? (
           <>
+            <CancelButton onClick={onCancelClick} />
             <SaveButton onClick={onSaveClick} />
           </>
         ) : (
@@ -75,30 +88,20 @@ const Skills = () => {
       <div className="flex flex-wrap gap-4">
         {skillUpdate.map((skill) => (
           <div
-            className="w-full md:max-w-[335px]"
-            onClick={(e) => {
-              if (isSectionActive) {
-                e.preventDefault();
-                e.stopPropagation();
-              }
-
-              if (editing) {
-                setSkillEditing(skill.id);
-              }
-            }}
+            className={classNames(
+              "md:max-w-[355px] bg-white rounded-2xl border w-full p-10 h-fit",
+              {"h-full": isSectionActive},
+            )}
             key={skill.id}
           >
             <TextEditor
               id={skill.id}
               initialText={JSON.parse(skill?.value)}
-              disabled={skillEditing !== skill.id}
+              disabled={!enableEditing}
               onChange={(value) => {
                 handleChange(skill.id, "value", value);
               }}
-              className={classNames(
-                "bg-white rounded-2xl border w-full p-10 h-fit",
-                {"h-full": isSectionActive},
-              )}
+              placeholder={SkillsPlaceHolder}
             />
           </div>
         ))}
@@ -128,3 +131,13 @@ const Skills = () => {
 };
 
 export default Skills;
+
+const SkillsPlaceHolder = ({attributes}: RenderElementProps) => (
+  <div {...attributes} className="!p-0 !m-0">
+    <div className="text-2xl font-bold md:text-3xl ">Untitled</div>
+    <br />
+    <div className="text-sm font-normal">Write description here...</div>
+    <br />
+    <div className="text-base font-medium">Start writing...</div>
+  </div>
+);

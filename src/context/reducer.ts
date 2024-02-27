@@ -182,15 +182,16 @@ export const reducer = (
       };
 
     case Actions.SET_SKILL:
-      const {skill} = payload;
       return {
         ...state,
-        ...(skill.length
-          ? {}
+        ...(payload.length
+          ? {
+              skills: payload,
+            }
           : {
-              section: RemoveSection(Section.ContactMe),
+              section: RemoveSection(Section.Skills),
+              skills: initialState.skills,
             }),
-        skills: skill,
         editing: false,
       };
 
