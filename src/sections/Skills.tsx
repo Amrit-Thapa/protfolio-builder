@@ -12,7 +12,7 @@ import ActionController, {
 } from "@/component/ActionController";
 import {Actions} from "@/context/reducer";
 import {removeUnUpdatedItem} from "@/utils";
-import TextEditor, {BlockType} from "@/component/Editor";
+import TextEditor from "@/component/Editor";
 
 const Skills = () => {
   const {state, dispatch} = useAppContext();

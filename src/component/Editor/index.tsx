@@ -1,4 +1,4 @@
-import React, {ComponentProps, useCallback, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {
   Bold,
   Italic,
@@ -23,31 +23,14 @@ import {
   withReact,
   RenderElementProps,
   RenderLeafProps,
+  useFocused,
 } from "slate-react";
 import {withHistory, HistoryEditor} from "slate-history";
-import classNames from "classnames";
+import Element, {ElementType} from "./Element";
+import Leaf, {LeafType} from "./Leaf";
+import {Button, Menu} from "./Helper";
 
-export type BlockType =
-  | "paragraph"
-  | "heading-one"
-  | "heading-two"
-  | "heading-three"
-  | "numbered-list"
-  | "bulleted-list"
-  | "paraText-one"
-  | "paraText-two"
-  | "paraText-three";
-
-export type LeafType =
-  | "bold"
-  | "italic"
-  | "underline"
-  | "hashtag"
-  | "semiBold"
-  | "small"
-  | "smallGray";
-
-type CustomElement = {type: BlockType; children: CustomText[]};
+type CustomElement = {type: ElementType; children: CustomText[]};
 
 type CustomText = {
   text: string;
@@ -83,7 +66,7 @@ const TextEditor = ({
     [],
   );
   const renderLeaf = useCallback(
-    (props: RenderLeafProps): JSX.Element => <Leaf {...props} />,
+    (props: RenderLeafProps) => <Leaf {...props} />,
     [],
   );
 
@@ -101,68 +84,7 @@ const TextEditor = ({
       }}
       key={id}
     >
-      <div className="relative">
-        {!disabled && (
-          <div className="absolute flex justify-center gap-2 p-1 bg-white rounded outline-1 left-2/4 -translate-x-2/4 outline -top-20">
-            <MarkButton
-              onMouseDown={(event) => {
-                event.preventDefault();
-                toggleMark(editor, "bold");
-              }}
-            >
-              <Bold size={14} />
-            </MarkButton>
-            <MarkButton
-              onMouseDown={(event) => {
-                event.preventDefault();
-                toggleMark(editor, "italic");
-              }}
-            >
-              <Italic size={14} />
-            </MarkButton>
-            <MarkButton
-              onMouseDown={(event) => {
-                event.preventDefault();
-                toggleMark(editor, "underline");
-              }}
-            >
-              <Underline size={14} />
-            </MarkButton>
-            <MarkButton
-              onMouseDown={(event) => {
-                event.preventDefault();
-                toggleBlock(editor, "heading-one");
-              }}
-            >
-              <Heading1 size={14} />
-            </MarkButton>
-            <MarkButton
-              onMouseDown={(event) => {
-                event.preventDefault();
-                toggleBlock(editor, "heading-two");
-              }}
-            >
-              <Heading2 size={14} />
-            </MarkButton>
-            <MarkButton
-              onMouseDown={(event) => {
-                event.preventDefault();
-                toggleBlock(editor, "numbered-list");
-              }}
-            >
-              <ListOrdered size={14} />
-            </MarkButton>
-            <MarkButton
-              onMouseDown={(event) => {
-                event.preventDefault();
-                toggleBlock(editor, "bulleted-list");
-              }}
-            >
-              <List size={14} />
-            </MarkButton>
-          </div>
-        )}
-      </div>
+      <HoverToolBar editor={editor} />
       <Editable
         readOnly={disabled}
         renderElement={renderElement}
@@ -170,122 +92,13 @@ const TextEditor = ({
         renderLeaf={renderLeaf}
         contentEditable={false}
         className={className || "outline-none rounded"}
-        placeholder="Enter some rich text…"
+        placeholder="Click here to edit"
       />
     </Slate>
   );
 };
 
 export default TextEditor;
-
-const Element = ({attributes, children, element}: RenderElementProps) => {
-  switch (element.type) {
-    case "bulleted-list":
-      return (
-        <ul className="list-disc" {...attributes}>
-          <li>{children}</li>
-        </ul>
-      );
-    case "heading-one":
-      return (
-        <h1
-          className="font-medium  md:text-7xl mt-4 md:mt-0 text-4xl md:!leading-[84px]"
-          {...attributes}
-        >
-          {children}
-        </h1>
-      );
-    case "heading-two":
-      return (
-        <h2 className="text-2xl font-bold md:text-3xl" {...attributes}>
-          {children}
-        </h2>
-      );
-
-    case "heading-three":
-      return (
-        <h2 className="text-xl font-bold" {...attributes}>
-          {children}
-        </h2>
-      );
-
-    case "paraText-one":
-      return (
-        <h2
-          className={classNames(
-            "text-lg font-normal text-black",
-            "w-full md:max-w-[340px]",
-          )}
-          {...attributes}
-        >
-          {children}
-        </h2>
-      );
-    case "paraText-two":
-      return (
-        <h2
-          className={classNames("font-medium text-base text-black")}
-          {...attributes}
-        >
-          {children}
-        </h2>
-      );
-    case "numbered-list":
-      return (
-        <ol className="list-decimal" {...attributes}>
-          {children}
-        </ol>
-      );
-    default:
-      return (
-        <p className="text-sm font-medium md:text-base" {...attributes}>
-          {children}
-        </p>
-      );
-  }
-};
-
-const Leaf = ({attributes, children, leaf}: RenderLeafProps): JSX.Element => {
-  if (leaf.bold) {
-    children = <strong>{children}</strong>;
-  }
-
-  if (leaf.italic) {
-    children = <em>{children}</em>;
-  }
-
-  if (leaf.underline) {
-    children = <u>{children}</u>;
-  }
-
-  if (leaf.hashtag) {
-    children = <span className="text-[#0094ff]">{children}</span>;
-  }
-
-  if (leaf.semiBold) {
-    children = <span className="text-base font-semibold">{children}</span>;
-  }
-
-  if (leaf.small) {
-    children = <span className="text-sm font-medium">{children}</span>;
-  }
-
-  if (leaf.smallGray) {
-    children = (
-      <span className="text-sm font-medium text-[#858585]">{children}</span>
-    );
-  }
-
-  return <span {...attributes}>{children}</span>;
-};
-
-const MarkButton = ({children, onMouseDown}: ComponentProps<"button">) => {
-  return (
-    <button onMouseDown={onMouseDown} className="p-2 rounded hover:bg-gray-200">
-      {children}
-    </button>
-  );
-};
 
 const isMarkActive = (editor: Editor, format: LeafType) => {
   const marks = Editor.marks(editor);
@@ -302,8 +115,7 @@ const toggleMark = (editor: Editor, format: LeafType) => {
   }
 };
 
-const isBlockActive = (editor: Editor, format: BlockType) => {
-  // Destructuring directly captures the first element (match)
+const isBlockActive = (editor: Editor, format: ElementType) => {
   const [match] = Editor.nodes(editor, {
     match: (n: any) => n.type === format,
   });
@@ -311,12 +123,97 @@ const isBlockActive = (editor: Editor, format: BlockType) => {
   return !!match;
 };
 
-const toggleBlock = (editor: Editor, format: BlockType) => {
+const toggleBlock = (editor: Editor, format: ElementType) => {
   const isActive = isBlockActive(editor, format);
 
   Transforms.setNodes(
     editor,
     {type: isActive ? undefined : format},
     {match: (n) => SlateElement.isElement(n) && Editor.isBlock(editor, n)},
+  );
+};
+
+const HoverToolBar = ({editor}: {editor: Editor}) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const inFocus = useFocused();
+
+  useEffect(() => {
+    const element = ref.current;
+    const {selection} = editor;
+
+    if (element) {
+      if (!selection || !inFocus || Editor.string(editor, selection) === "") {
+        element.removeAttribute("style");
+        return;
+      }
+
+      element.style.display = "block";
+    }
+  });
+
+  return (
+    <div className="relative">
+      <Menu
+        ref={ref}
+        className="p-1 w-fit absolute -top-14 left-0 hidden mb-2 bg-white border border-black rounded"
+      >
+        <Button
+          onMouseDown={(event) => {
+            event.preventDefault();
+            toggleMark(editor, "bold");
+          }}
+        >
+          <Bold size={14} />
+        </Button>
+        <Button
+          onMouseDown={(event) => {
+            event.preventDefault();
+            toggleMark(editor, "italic");
+          }}
+        >
+          <Italic size={14} />
+        </Button>
+        <Button
+          onMouseDown={(event) => {
+            event.preventDefault();
+            toggleMark(editor, "underline");
+          }}
+        >
+          <Underline size={14} />
+        </Button>
+        <Button
+          onMouseDown={(event) => {
+            event.preventDefault();
+            toggleBlock(editor, "heading-one");
+          }}
+        >
+          <Heading1 size={14} />
+        </Button>
+        <Button
+          onMouseDown={(event) => {
+            event.preventDefault();
+            toggleBlock(editor, "heading-two");
+          }}
+        >
+          <Heading2 size={14} />
+        </Button>
+        <Button
+          onMouseDown={(event) => {
+            event.preventDefault();
+            toggleBlock(editor, "numbered-list");
+          }}
+        >
+          <ListOrdered size={14} />
+        </Button>
+        <Button
+          onMouseDown={(event) => {
+            event.preventDefault();
+            toggleBlock(editor, "bulleted-list");
+          }}
+        >
+          <List size={14} />
+        </Button>
+      </Menu>
+    </div>
   );
 };
