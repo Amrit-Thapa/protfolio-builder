@@ -114,6 +114,7 @@ const CTA = () => {
                     width={50}
                     id={`${cta.id}_logo`}
                     className="rounded"
+                    disabled={false}
                     src={cta.icon || imageIcon.src}
                     onChange={(b64) =>
                       handleChange(cta.id, "icon", b64 as string)
@@ -121,32 +122,26 @@ const CTA = () => {
                   />
                 </If>
 
-                <If
-                  condition={
-                    isSectionActive || !!(!isSectionActive && cta.title)
-                  }
+                <div
+                  onClick={(e) => {
+                    if (isSectionActive) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }
+                    if (!disableEditing) {
+                      setEditSec(cta.id + "des");
+                    }
+                  }}
+                  className="mt-5 text-black"
                 >
-                  <div
-                    onClick={(e) => {
-                      if (isSectionActive) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                      }
-                      if (!disableEditing) {
-                        setEditSec(cta.id + "des");
-                      }
-                    }}
-                    className="mt-5 text-black"
-                  >
-                    <TextEditor
-                      initialText={JSON.parse(cta.description)}
-                      disabled={disableEditing || editingSec !== cta.id + "des"}
-                      onChange={(value) =>
-                        handleChange(cta.id, "description", value)
-                      }
-                    />
-                  </div>
-                </If>
+                  <TextEditor
+                    initialText={JSON.parse(cta.description)}
+                    disabled={disableEditing || editingSec !== cta.id + "des"}
+                    onChange={(value) =>
+                      handleChange(cta.id, "description", value)
+                    }
+                  />
+                </div>
 
                 <div>
                   <If condition={isSectionActive}>
@@ -155,6 +150,12 @@ const CTA = () => {
                       className="bg-transparent outline-none font-medium text-sm text-[#0085FF]"
                       value={cta.link}
                       placeholder="Add link"
+                      onClick={(e) => {
+                        if (isSectionActive) {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }
+                      }}
                       onChange={(e) =>
                         handleChange(cta.id, "link", e.target.value)
                       }

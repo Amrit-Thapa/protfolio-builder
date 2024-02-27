@@ -7,6 +7,7 @@ import {useAppContext} from "../context/AppContext";
 import {useState} from "react";
 import {scrollToSection, sectionConfig} from "../utils";
 import {SectionMenu} from "../component/AddSection";
+import Link from "next/link";
 import {Actions} from "@/context/reducer";
 
 const Header = () => {
@@ -91,7 +92,7 @@ const Header = () => {
         <div className="flex gap-16">
           <button onClick={() => console.log}>Preview</button>
           <div className="font-bold bg-[#0085FF] w-[87px] h-[30px] text-center rounded-[50px] p-1">
-            Publish
+            <Link href="/publish">Publish</Link>
           </div>
         </div>
       </nav>

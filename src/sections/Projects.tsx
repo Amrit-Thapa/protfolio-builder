@@ -135,7 +135,13 @@ const Projects = () => {
                     disabled={disableEditing}
                     className="mt-3 text-base font-medium text-black bg-transparent outline-none"
                     value={project.title}
-                    placeholder="Enter site title"
+                    placeholder="Enter project title"
+                    onClick={(e) => {
+                      if (isSectionActive) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }
+                    }}
                     onChange={(e) =>
                       handleChange(project.id, "title", e.target.value)
                     }
