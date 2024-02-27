@@ -11,6 +11,9 @@ import ActionController, {
 import {Actions} from "@/context/reducer";
 import TextEditor from "@/component/Editor";
 import {Descendant} from "slate";
+import {RenderElementProps} from "slate-react";
+import If from "@/component/If";
+import {extractTextFromJSON} from "@/utils";
 
 const AboutMe = () => {
   const {state, dispatch} = useAppContext();
@@ -29,7 +32,6 @@ const AboutMe = () => {
   const onSaveClick = (e: SyntheticEvent) => {
     e.preventDefault();
     e.stopPropagation();
-
     dispatch({type: Actions.SET_ABOUT_ME, payload: aboutMeUpdates});
   };
   const onDeleteClick = (e: SyntheticEvent) => {
@@ -44,46 +46,43 @@ const AboutMe = () => {
   };
 
   return (
-    <div
-      onClick={(e) => {
-        if (isSectionActive) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
-      }}
-    >
-      <ActionController active={isSectionActive}>
-        <ActionGroup>
-          {editing ? (
-            <>
-              <CancelButton onClick={onCancelClick} />
-              <SaveButton onClick={onSaveClick} />
-            </>
-          ) : (
-            <>
-              <DeleteButton onClick={onDeleteClick} />
-              <EditButton onClick={onEditClick} />
-            </>
-          )}
-        </ActionGroup>
+    <ActionController active={isSectionActive}>
+      <ActionGroup>
+        {editing ? (
+          <>
+            <CancelButton onClick={onCancelClick} />
+            <SaveButton onClick={onSaveClick} />
+          </>
+        ) : (
+          <>
+            <DeleteButton onClick={onDeleteClick} />
+            <EditButton onClick={onEditClick} />
+          </>
+        )}
+      </ActionGroup>
 
-        <div
-          onClick={(e) => {
-            if (!disableEditing) {
-              e.preventDefault();
-              e.stopPropagation();
-            }
-          }}
-        >
-          <TextEditor
-            initialText={JSON.parse(aboutMeUpdates) as Descendant[]}
-            disabled={disableEditing}
-            onChange={(value) => setUpdates(value)}
-          />
-        </div>
-      </ActionController>
-    </div>
+      <If
+        condition={
+          !disableEditing || !!extractTextFromJSON(aboutMeUpdates).length
+        }
+      >
+        <TextEditor
+          initialText={JSON.parse(aboutMeUpdates) as Descendant[]}
+          disabled={disableEditing}
+          placeholder={AboutMePlaceHolder}
+          onChange={(value) => setUpdates(value)}
+        />
+      </If>
+    </ActionController>
   );
 };
 
 export default AboutMe;
+
+const AboutMePlaceHolder = ({attributes}: RenderElementProps) => (
+  <div {...attributes}>
+    <div className="text-2xl font-bold md:text-3xl">About me</div>
+    <br></br>
+    <div className="text-lg font-normal">Start writing</div>
+  </div>
+);

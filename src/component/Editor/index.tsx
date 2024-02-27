@@ -24,6 +24,7 @@ import {
   RenderElementProps,
   RenderLeafProps,
   useFocused,
+  useSlate,
 } from "slate-react";
 import {withHistory, HistoryEditor} from "slate-history";
 import Element, {ElementType} from "./Element";
@@ -136,17 +137,16 @@ const toggleBlock = (editor: Editor, format: ElementType) => {
 const HoverToolBar = ({editor}: {editor: Editor}) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const inFocus = useFocused();
+  const {selection} = useSlate();
 
   useEffect(() => {
     const element = ref.current;
-    const {selection} = editor;
 
     if (element) {
       if (!selection || !inFocus || Editor.string(editor, selection) === "") {
         element.removeAttribute("style");
         return;
       }
-
       element.style.display = "block";
     }
   });
@@ -155,7 +155,7 @@ const HoverToolBar = ({editor}: {editor: Editor}) => {
     <div className="relative">
       <Menu
         ref={ref}
-        className="p-1 w-fit absolute -top-14 left-0 hidden mb-2 bg-white border border-black rounded"
+        className="absolute left-0 hidden p-1 mb-2 bg-white border border-black rounded w-fit -top-14"
       >
         <Button
           onMouseDown={(event) => {

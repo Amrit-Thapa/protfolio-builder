@@ -1,3 +1,4 @@
+import {extractTextFromJSON} from "@/utils";
 import {Section} from "./types";
 
 export enum Actions {
@@ -168,7 +169,7 @@ export const reducer = (
       return {...state, profile: {...state.profile, ...payload}};
 
     case Actions.SET_ABOUT_ME:
-      const isUpdated = Object.values(payload).filter((item) => !!item).length;
+      const isUpdated = extractTextFromJSON(payload).length;
       return {
         ...state,
         ...(isUpdated

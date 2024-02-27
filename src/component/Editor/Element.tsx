@@ -41,10 +41,7 @@ const Element = ({attributes, children, element}: RenderElementProps) => {
     case "paraText-one":
       return (
         <h2
-          className={classNames(
-            "text-lg font-normal text-black",
-            "w-full md:max-w-[340px]",
-          )}
+          className={classNames("text-lg font-normal text-black")}
           {...attributes}
         >
           {children}
@@ -68,7 +65,7 @@ const Element = ({attributes, children, element}: RenderElementProps) => {
     case "numbered-list":
       return (
         <ol
-          className="list-decimal text-sm font-medium md:text-base"
+          className="text-sm font-medium list-decimal md:text-base"
           {...attributes}
         >
           <li>{children}</li>

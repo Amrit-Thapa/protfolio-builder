@@ -117,3 +117,25 @@ export const scrollToSection = (sectionId: Section, top?: number) => {
     });
   }
 };
+
+export const extractTextFromJSON = (jsonData: string) => {
+  try {
+    const data = JSON.parse(jsonData);
+    const textValues: string[] = [];
+    if (Array.isArray(data)) {
+      data.forEach((item) => {
+        if (item?.children && Array.isArray(item.children)) {
+          item.children.forEach((child: {text: string}) => {
+            if (child?.text && typeof child.text === "string") {
+              textValues.push(child.text.trim());
+            }
+          });
+        }
+      });
+    }
+    return textValues;
+  } catch (error) {
+    console.error("Error decoding JSON:", error);
+    return [];
+  }
+};
