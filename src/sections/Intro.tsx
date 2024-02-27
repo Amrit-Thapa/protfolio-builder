@@ -3,7 +3,7 @@ import If from "@/component/If";
 import {useAppContext} from "@/context/AppContext";
 import {Actions} from "@/context/reducer";
 import useDeviceType from "@/hooks/useDeviceType";
-import React, {useState} from "react";
+import React from "react";
 import CurrentCompany from "./CurrentCompany";
 import NameAndEmail from "./NameAndEmail";
 import PreviousCompany from "./PreviousCompany";
@@ -13,7 +13,6 @@ const Intro = () => {
   const device = useDeviceType();
   const {state, dispatch} = useAppContext();
   const {intro, activeSection, preview} = state;
-  const [editingSec, setEditingSec] = useState("");
   const isSectionActive = activeSection === "Intro";
 
   return (
@@ -25,45 +24,29 @@ const Intro = () => {
         }
       }}
     >
-      <div
-        onClick={() => setEditingSec("intro")}
-        onBlur={() => {
-          dispatch({type: Actions.SET_EDITING, payload: false});
-          setEditingSec("");
-        }}
-      >
-        <TextEditor
-          initialText={JSON.parse(intro.head)}
-          disabled={!isSectionActive || editingSec !== "intro"}
-          placeholder={IntroPlaceHolder}
-          onChange={(value) =>
-            dispatch({
-              type: Actions.SET_INTRO,
-              payload: {...intro, head: value},
-            })
-          }
-        />
-      </div>
+      <TextEditor
+        initialText={JSON.parse(intro.head)}
+        disabled={!isSectionActive}
+        placeholder={IntroPlaceHolder}
+        onChange={(value) =>
+          dispatch({
+            type: Actions.SET_INTRO,
+            payload: {...intro, head: value},
+          })
+        }
+      />
 
-      <div
-        onClick={() => setEditingSec("desc")}
-        onBlur={() => {
-          dispatch({type: Actions.SET_EDITING, payload: false});
-          setEditingSec("");
-        }}
-      >
-        <TextEditor
-          initialText={JSON.parse(intro.desc)}
-          disabled={!isSectionActive || editingSec !== "desc"}
-          placeholder={decPlaceHolder}
-          onChange={(value) =>
-            dispatch({
-              type: Actions.SET_INTRO,
-              payload: {...intro, desc: value},
-            })
-          }
-        />
-      </div>
+      <TextEditor
+        initialText={JSON.parse(intro.desc)}
+        disabled={!isSectionActive}
+        placeholder={decPlaceHolder}
+        onChange={(value) =>
+          dispatch({
+            type: Actions.SET_INTRO,
+            payload: {...intro, desc: value},
+          })
+        }
+      />
       <If condition={device === "phone"}>
         <div className="mt-5">
           <NameAndEmail />
@@ -76,14 +59,14 @@ const Intro = () => {
     </div>
   );
 };
-const IntroPlaceHolder = ({children, attributes}: RenderElementProps) => (
+const IntroPlaceHolder = ({attributes}: RenderElementProps) => (
   <div {...attributes}>
     <div className="font-medium  md:text-7xl mt-4 md:mt-0 text-4xl md:!leading-[84px] w-full">
       Click to add title
     </div>
   </div>
 );
-const decPlaceHolder = ({children, attributes}: RenderElementProps) => (
+const decPlaceHolder = ({attributes}: RenderElementProps) => (
   <div {...attributes}>
     <div className="text-lg font-normal ">click to add subtitle</div>
   </div>
