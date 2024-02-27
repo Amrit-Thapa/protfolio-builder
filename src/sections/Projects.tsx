@@ -152,19 +152,31 @@ const Projects = () => {
                   <If condition={isSectionActive}>
                     <input
                       className="bg-transparent outline-none font-medium text-sm text-[#0085FF]"
-                      placeholder="Link"
+                      placeholder="🔗 Link title here"
                       disabled={disableEditing}
+                      onClick={(e) => {
+                        if (!disableEditing) {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }
+                      }}
                       value={project.link}
+                      onBlur={() => {
+                        const url = prompt("Enter link Url");
+                        if (url) {
+                          handleChange(project.id, "linkUrl", url);
+                        }
+                      }}
                       onChange={(e) =>
                         handleChange(project.id, "link", e.target.value)
                       }
                     />
                   </If>
-                  <If condition={!isSectionActive && !!project.link}>
+                  <If condition={!isSectionActive && !!project.linkUrl}>
                     <a
-                      href={project.link}
+                      href={project.linkUrl}
                       target="_blank"
-                      className="text-sm text-[#0085FF]"
+                      className="text-sm "
                     >
                       <span>{project.link}</span>
                     </a>
@@ -218,6 +230,7 @@ const Projects = () => {
                         logo: "",
                         title: "Enter Project title",
                         link: "🔗 Add link",
+                        linkUrl: "",
                         description:
                           '[{"type":"","children":[{"text":"Add description"}]}]',
                       },

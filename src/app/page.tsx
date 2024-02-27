@@ -43,14 +43,7 @@ export default function Home() {
           <Intro />
           {section.map((item) => {
             return (
-              <div
-                className="mt-10 md:mt-20"
-                id={item}
-                key={item}
-                onClick={() =>
-                  dispatch({type: Actions.SET_ACTIVE_SECTION, payload: item})
-                }
-              >
+              <div className="mt-10 md:mt-20" id={item} key={item}>
                 {sectionMap[item]}
               </div>
             );

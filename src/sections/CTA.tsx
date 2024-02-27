@@ -149,7 +149,13 @@ const CTA = () => {
                       disabled={disableEditing}
                       className="bg-transparent outline-none font-medium text-sm text-[#0085FF]"
                       value={cta.link}
-                      placeholder="Add link"
+                      placeholder="Add link title here"
+                      onBlur={() => {
+                        const url = prompt("Enter link Url");
+                        if (url) {
+                          handleChange(cta.id, "linkUrl", url);
+                        }
+                      }}
                       onClick={(e) => {
                         if (isSectionActive) {
                           e.preventDefault();
@@ -162,12 +168,8 @@ const CTA = () => {
                     />
                   </If>
 
-                  <If condition={!isSectionActive && !!cta.link}>
-                    <a
-                      href={cta.link}
-                      target="_blank"
-                      className="text-sm text-[#0085FF]"
-                    >
+                  <If condition={!isSectionActive && !!cta.linkUrl}>
+                    <a href={cta.linkUrl} target="_blank" className="text-sm">
                       <span>🔗 {cta.link}</span>
                     </a>
                   </If>
@@ -191,6 +193,7 @@ const CTA = () => {
                         title: "",
                         icon: "",
                         link: "",
+                        linkUrl: "",
                         description:
                           '[{"type":"","children":[{"text":"Add description..."}]}]',
                       },

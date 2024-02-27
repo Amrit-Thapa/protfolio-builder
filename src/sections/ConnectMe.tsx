@@ -12,6 +12,7 @@ import ActionController, {
   SaveButton,
 } from "@/component/ActionController";
 import TextEditor from "@/component/Editor";
+import {ExternalLink} from "lucide-react";
 
 const ConnectMe = () => {
   const {state, dispatch} = useAppContext();
@@ -90,7 +91,7 @@ const ConnectMe = () => {
 
         <If
           condition={
-            isSectionActive || !!(!isSectionActive && contactUpdates.link)
+            isSectionActive || !!(!disableEditing && contactUpdates.link)
           }
         >
           <input
@@ -98,6 +99,23 @@ const ConnectMe = () => {
             value={contactUpdates.link}
             placeholder="Add link"
             disabled={disableEditing}
+            onClick={(e) => {
+              if (!disableEditing) {
+                e.preventDefault();
+                e.stopPropagation();
+              }
+            }}
+            onBlur={() => {
+              const url = prompt("Enter link Url");
+              if (url) {
+                setUpdates((prev) => {
+                  return {
+                    ...prev,
+                    linkUrl: url,
+                  };
+                });
+              }
+            }}
             onChange={(e) =>
               setUpdates((prev) => {
                 return {
@@ -107,6 +125,12 @@ const ConnectMe = () => {
               })
             }
           />
+        </If>
+        <If condition={!!contactUpdates.linkUrl}>
+          <span>{contactUpdates?.link}</span>
+          <a href={contactUpdates.linkUrl} target="_blank">
+            <ExternalLink size={13} />
+          </a>
         </If>
       </div>
     </ActionController>

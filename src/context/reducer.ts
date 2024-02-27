@@ -58,7 +58,8 @@ export const initialState = {
         id: "project_1",
         logo: "",
         title: "Enter Project title",
-        link: "🔗 Add link",
+        link: "",
+        linkUrl: "",
         description: '[{"type":"","children":[{"text":"Add description"}]}]',
       },
     ],
@@ -83,6 +84,7 @@ export const initialState = {
         title: "",
         icon: "",
         link: "",
+        linkUrl: "",
         description: '[{"type":"","children":[{"text":"Add description..."}]}]',
       },
     ],
@@ -90,7 +92,8 @@ export const initialState = {
   connect: {
     head: '[{"type":"heading-two","children":[{"text":"Enter Title here \\n"}]},{"type":"","children":[{"text":"Add subtitle here... \\n"}]}]',
     icon: "",
-    link: "Add link",
+    link: "",
+    linkUrl: "",
   },
 };
 
