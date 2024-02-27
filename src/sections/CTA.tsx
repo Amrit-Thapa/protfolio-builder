@@ -14,16 +14,15 @@ import ActionController, {
 } from "@/component/ActionController";
 import {Actions} from "@/context/reducer";
 import TextEditor from "@/component/Editor";
-import {Descendant} from "slate";
+import {RenderElementProps} from "slate-react";
+import {removeUnUpdatedItem} from "@/utils";
 
 const CTA = () => {
   const {state, dispatch} = useAppContext();
   const {cta, activeSection, editing} = state;
   const [ctaUpdates, setUpdates] = useState(cta);
   const isSectionActive = activeSection === Section.CTA;
-  const disableEditing = !isSectionActive || (isSectionActive && !editing);
-
-  const [editingSec, setEditSec] = useState("");
+  const enableEditing = isSectionActive && editing;
 
   const handleChange = (id: string, key: string, value: string) => {
     setUpdates((prev) => {
@@ -56,6 +55,7 @@ const CTA = () => {
   const onEditClick = (e: React.SyntheticEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
     dispatch({type: Actions.SET_EDITING, payload: true});
   };
 
@@ -74,27 +74,15 @@ const CTA = () => {
         )}
       </ActionGroup>
 
-      <div
-        onClick={(e) => {
-          if (isSectionActive) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-          if (!disableEditing) {
-            setEditSec("head");
-          }
-        }}
-      >
-        <TextEditor
-          initialText={JSON.parse(ctaUpdates.head)}
-          disabled={disableEditing || editingSec !== "head"}
-          onChange={(value) =>
-            setUpdates((prev) => {
-              return {...prev, head: value};
-            })
-          }
-        />
-      </div>
+      <TextEditor
+        initialText={JSON.parse(ctaUpdates.head)}
+        disabled={!enableEditing}
+        onChange={(value) =>
+          setUpdates((prev) => {
+            return {...prev, head: value};
+          })
+        }
+      />
 
       <div className="flex flex-wrap gap-4 mt-5">
         {ctaUpdates.items.map((cta) => {
@@ -109,34 +97,33 @@ const CTA = () => {
                     isSectionActive || !!(!isSectionActive && cta.icon)
                   }
                 >
-                  <ImagePicker
-                    height={50}
-                    width={50}
-                    id={`${cta.id}_logo`}
-                    className="rounded"
-                    disabled={false}
-                    src={cta.icon || imageIcon.src}
-                    onChange={(b64) =>
-                      handleChange(cta.id, "icon", b64 as string)
-                    }
-                  />
+                  <div
+                    onClick={(e) => {
+                      if (!enableEditing) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }
+                    }}
+                  >
+                    <ImagePicker
+                      height={50}
+                      width={50}
+                      id={`${cta.id}_logo`}
+                      className="rounded"
+                      disabled={false}
+                      src={cta.icon || imageIcon.src}
+                      onChange={(b64) =>
+                        handleChange(cta.id, "icon", b64 as string)
+                      }
+                    />
+                  </div>
                 </If>
 
-                <div
-                  onClick={(e) => {
-                    if (isSectionActive) {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }
-                    if (!disableEditing) {
-                      setEditSec(cta.id + "des");
-                    }
-                  }}
-                  className="mt-5 text-black"
-                >
+                <div className="mt-5 text-black">
                   <TextEditor
                     initialText={JSON.parse(cta.description)}
-                    disabled={disableEditing || editingSec !== cta.id + "des"}
+                    disabled={!enableEditing}
+                    placeholder={CtaPlaceHolder}
                     onChange={(value) =>
                       handleChange(cta.id, "description", value)
                     }
@@ -146,20 +133,15 @@ const CTA = () => {
                 <div>
                   <If condition={isSectionActive}>
                     <input
-                      disabled={disableEditing}
+                      disabled={!enableEditing}
                       className="bg-transparent outline-none font-medium text-sm text-[#0085FF]"
                       value={cta.link}
                       placeholder="Add link title here"
                       onBlur={() => {
+                        if (!cta.link) return;
                         const url = prompt("Enter link Url");
                         if (url) {
                           handleChange(cta.id, "linkUrl", url);
-                        }
-                      }}
-                      onClick={(e) => {
-                        if (isSectionActive) {
-                          e.preventDefault();
-                          e.stopPropagation();
                         }
                       }}
                       onChange={(e) =>
@@ -170,7 +152,7 @@ const CTA = () => {
 
                   <If condition={!isSectionActive && !!cta.linkUrl}>
                     <a href={cta.linkUrl} target="_blank" className="text-sm">
-                      <span>🔗 {cta.link}</span>
+                      <span>{cta.link}</span>
                     </a>
                   </If>
                 </div>
@@ -178,7 +160,7 @@ const CTA = () => {
             </div>
           );
         })}
-        {isSectionActive && (
+        {enableEditing && (
           <div className="rounded-2xl border p-3 w-[355px] min-h-[222px] flex items-center justify-center bg-[#EFEFEF]">
             <div
               className="cursor-pointer"
@@ -213,3 +195,9 @@ const CTA = () => {
 };
 
 export default CTA;
+
+const CtaPlaceHolder = ({attributes}: RenderElementProps) => (
+  <div {...attributes}>
+    <div className="text-sm font-normal">Write description here...</div>
+  </div>
+);

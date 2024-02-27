@@ -15,7 +15,6 @@ import ActionController, {
 } from "@/component/ActionController";
 import {Actions} from "@/context/reducer";
 import TextEditor from "@/component/Editor";
-import {Descendant} from "slate";
 
 const Projects = () => {
   const {state, dispatch} = useAppContext();
