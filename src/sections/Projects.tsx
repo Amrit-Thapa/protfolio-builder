@@ -21,8 +21,7 @@ const Projects = () => {
   const {projects, activeSection, editing} = state;
   const [projectUpdates, setUpdates] = useState(projects);
   const isSectionActive = activeSection === Section.Projects;
-  const disableEditing = !isSectionActive || (isSectionActive && !editing);
-  const [editingSec, setEditSec] = useState("");
+  const enableEditing = isSectionActive && editing;
 
   const handleChange = (id: string, key: string, value: string) => {
     setUpdates((prev) => {
@@ -79,27 +78,15 @@ const Projects = () => {
         )}
       </ActionGroup>
 
-      <div
-        onClick={(e) => {
-          if (isSectionActive) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-          if (!disableEditing) {
-            setEditSec("head");
-          }
+      <TextEditor
+        initialText={JSON.parse(projectUpdates.head)}
+        disabled={!enableEditing}
+        onChange={(value) => {
+          setUpdates((prev) => {
+            return {...prev, head: value};
+          });
         }}
-      >
-        <TextEditor
-          initialText={JSON.parse(projectUpdates.head)}
-          disabled={disableEditing || editingSec !== "head"}
-          onChange={(value) => {
-            setUpdates((prev) => {
-              return {...prev, head: value};
-            });
-          }}
-        />
-      </div>
+      />
 
       <div className="flex flex-wrap gap-4 mt-5">
         {projectUpdates.items?.map((project) => {
@@ -109,38 +96,33 @@ const Projects = () => {
               key={project.id}
             >
               <div className="flex flex-col gap-2">
-                <If
-                  condition={
-                    isSectionActive || !!(!isSectionActive && project.logo)
-                  }
-                >
-                  <ImagePicker
-                    src={project.logo || imageIcon.src}
-                    height={50}
-                    width={50}
-                    id={`${project.id}_logo`}
-                    onChange={(b64) =>
-                      handleChange(project.id, "logo", b64 as string)
-                    }
-                  />
-                </If>
-
-                <If
-                  condition={
-                    isSectionActive || !!(!isSectionActive && project.title)
-                  }
-                >
-                  <input
-                    disabled={disableEditing}
-                    className="mt-3 text-base font-medium text-black bg-transparent outline-none"
-                    value={project.title}
-                    placeholder="Enter project title"
+                <If condition={isSectionActive || !!project.logo}>
+                  <div
                     onClick={(e) => {
-                      if (isSectionActive) {
+                      if (!enableEditing) {
                         e.preventDefault();
                         e.stopPropagation();
                       }
                     }}
+                  >
+                    <ImagePicker
+                      src={project.logo || imageIcon.src}
+                      height={50}
+                      width={50}
+                      id={`${project.id}_logo`}
+                      onChange={(b64) =>
+                        handleChange(project.id, "logo", b64 as string)
+                      }
+                    />
+                  </div>
+                </If>
+
+                <If condition={isSectionActive || !!project.title}>
+                  <input
+                    disabled={!enableEditing}
+                    className="mt-3 text-base font-medium text-black bg-transparent outline-none"
+                    value={project.title}
+                    placeholder="Enter project title"
                     onChange={(e) =>
                       handleChange(project.id, "title", e.target.value)
                     }
@@ -152,15 +134,10 @@ const Projects = () => {
                     <input
                       className="bg-transparent outline-none font-medium text-sm text-[#0085FF]"
                       placeholder="🔗 Link title here"
-                      disabled={disableEditing}
-                      onClick={(e) => {
-                        if (!disableEditing) {
-                          e.preventDefault();
-                          e.stopPropagation();
-                        }
-                      }}
+                      disabled={!enableEditing}
                       value={project.link}
                       onBlur={() => {
+                        if (!project.link) return;
                         const url = prompt("Enter link Url");
                         if (url) {
                           handleChange(project.id, "linkUrl", url);
@@ -181,29 +158,11 @@ const Projects = () => {
                     </a>
                   </If>
                 </div>
-                <If
-                  condition={
-                    isSectionActive ||
-                    !!(!isSectionActive && project.description)
-                  }
-                >
-                  <div
-                    onClick={(e) => {
-                      if (isSectionActive) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                      }
-                      if (!disableEditing) {
-                        setEditSec(project.id + "des");
-                      }
-                    }}
-                    className="mt-3 text-black"
-                  >
+                <If condition={isSectionActive || !!project.description}>
+                  <div className="mt-3 text-black">
                     <TextEditor
                       initialText={JSON.parse(project.description)}
-                      disabled={
-                        disableEditing || editingSec !== project.id + "des"
-                      }
+                      disabled={!enableEditing}
                       onChange={(value) => {
                         handleChange(project.id, "description", value);
                       }}
@@ -214,7 +173,7 @@ const Projects = () => {
             </div>
           );
         })}
-        {isSectionActive && editing && (
+        {enableEditing && (
           <div className="rounded-2xl border p-3 w-[355px] min-h-[222px] flex items-center justify-center bg-[#EFEFEF]">
             <div
               className="cursor-pointer"
