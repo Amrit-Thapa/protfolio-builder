@@ -6,7 +6,7 @@ const CurrentCompany = () => {
   const {experience} = state;
   return (
     <div>
-      {experience.items.length && experience.items?.[0] && (
+      {experience.items.length && experience.items?.[0]?.logo && (
         <div className="mt-5 font-medium">
           <div className="text-[#828282] text-sm">Currently</div>
           <div className="flex items-center gap-4 mt-2">
