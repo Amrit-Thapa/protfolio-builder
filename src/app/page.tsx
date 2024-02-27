@@ -17,6 +17,7 @@ import MainContainer, {
   SectionContainer,
   StickyLeftContainer,
 } from "@/component/Container";
+import {Actions} from "@/context/reducer";
 
 const sectionMap = {
   [Section.AboutMe]: <AboutMe />,
@@ -28,8 +29,8 @@ const sectionMap = {
 };
 
 export default function Home() {
-  const {state} = useAppContext();
-  const {section} = state;
+  const {state, dispatch} = useAppContext();
+  const {section, activeSection, editing, preview, publish} = state;
   return (
     <>
       <Header />
@@ -42,9 +43,22 @@ export default function Home() {
           <Intro />
           {section.map((item) => {
             return (
-              <SectionContainer id={item} key={item}>
-                {sectionMap[item]}
-              </SectionContainer>
+              <div
+                onClick={() => {
+                  if (
+                    (activeSection === item && editing) ||
+                    preview ||
+                    publish
+                  ) {
+                    return;
+                  }
+                  dispatch({type: Actions.SET_ACTIVE_SECTION, payload: item});
+                }}
+              >
+                <SectionContainer id={item} key={item}>
+                  {sectionMap[item]}
+                </SectionContainer>
+              </div>
             );
           })}
         </RightContainer>
