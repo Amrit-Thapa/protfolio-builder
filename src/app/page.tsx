@@ -27,7 +27,7 @@ const sectionMap = {
 
 export default function Home() {
   const {state, dispatch} = useAppContext();
-  const {section} = state;
+  const {section, preview, publish} = state;
   return (
     <>
       <Header />
@@ -40,7 +40,15 @@ export default function Home() {
           <Profile />
         </div>
         <div className="md:w-[852px]  w-full md:p-10">
-          <Intro />
+          <div
+            onClick={() => {
+              if (!preview || !publish) {
+                dispatch({type: Actions.SET_ACTIVE_SECTION, payload: "Intro"});
+              }
+            }}
+          >
+            <Intro />
+          </div>
           {section.map((item) => {
             return (
               <div className="mt-10 md:mt-20" id={item} key={item}>
