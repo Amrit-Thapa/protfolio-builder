@@ -1,4 +1,9 @@
 "use client";
+import MainContainer, {
+  RightContainer,
+  SectionContainer,
+  StickyLeftContainer,
+} from "@/component/Container";
 import {useAppContext} from "@/context/AppContext";
 import {Actions} from "@/context/reducer";
 import {Section} from "@/context/types";
@@ -39,33 +44,23 @@ const Publish = () => {
           e.preventDefault();
         }}
       ></div>
-      <div className="h-[30px] mt-[50px] w-full px-5 md:px-[100px]">
-        <NavBar />
-      </div>
+      <NavBar />
 
-      <div className="flex flex-wrap items-start justify-between px-5 md:flex-nowrap md:px-[100px]">
-        <div className="md:sticky md:top-20 w-[295px]">
+      <MainContainer>
+        <StickyLeftContainer>
           <Profile />
-        </div>
-        <div className="md:w-[852px]  w-full md:p-10">
+        </StickyLeftContainer>
+        <RightContainer>
           <Intro />
           {section.map((item) => {
             return (
-              <div
-                className="mt-10 md:mt-20"
-                id={item}
-                key={item}
-                // onClick={() =>
-                //   dispatch({type: Actions.SET_ACTIVE_SECTION, payload: item})
-                // }
-              >
+              <SectionContainer id={item} key={item}>
                 {sectionMap[item]}
-              </div>
+              </SectionContainer>
             );
           })}
-        </div>
-      </div>
-      {/* <AddSection /> */}
+        </RightContainer>
+      </MainContainer>
     </>
   );
 };
