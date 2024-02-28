@@ -77,7 +77,7 @@ const Skills = () => {
   };
 
   return (
-    <ActionController active={isSectionActive || !viewOnly}>
+    <ActionController active={isSectionActive}>
       <ActionGroup>
         {editing ? (
           <>
@@ -111,7 +111,7 @@ const Skills = () => {
             />
           </div>
         ))}
-        {(enableEditing || !viewOnly) && (
+        {enableEditing && (
           <div className="rounded-2xl border p-3 w-[355px] min-h-[530px] flex items-center justify-center bg-[#EFEFEF]">
             <div
               className="cursor-pointer"
