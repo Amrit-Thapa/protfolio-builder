@@ -44,6 +44,7 @@ export default function Home() {
           {section.map((item) => {
             return (
               <div
+                key={item}
                 onClick={() => {
                   if (
                     (activeSection === item && editing) ||
@@ -55,7 +56,7 @@ export default function Home() {
                   dispatch({type: Actions.SET_ACTIVE_SECTION, payload: item});
                 }}
               >
-                <SectionContainer id={item} key={item}>
+                <SectionContainer id={item}>
                   {sectionMap[item]}
                 </SectionContainer>
               </div>
