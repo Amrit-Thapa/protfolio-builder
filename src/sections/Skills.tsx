@@ -41,11 +41,13 @@ const Skills = () => {
   };
 
   const onCancelClick = (e: SyntheticEvent) => {
+    e.stopPropagation();
     setUpdates(skills);
     dispatch({type: Actions.SET_EDITING, payload: false});
   };
 
   const onSaveClick = (e: SyntheticEvent) => {
+    e.stopPropagation();
     const values = skillUpdate
       .map((item) => item.value)
       .filter((value) => value);
@@ -69,10 +71,12 @@ const Skills = () => {
   };
 
   const onDeleteClick = (e: SyntheticEvent) => {
+    e.stopPropagation();
     dispatch({type: Actions.REMOVE_SECTION, payload: Section.Skills});
   };
 
   const onEditClick = (e: SyntheticEvent) => {
+    e.stopPropagation();
     dispatch({type: Actions.SET_EDITING, payload: true});
   };
 

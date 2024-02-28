@@ -13,13 +13,15 @@ import ActionController, {
 } from "@/component/ActionController";
 import TextEditor from "@/component/Editor";
 import {ExternalLink} from "lucide-react";
+import {RenderElementProps} from "slate-react";
 
 const ConnectMe = () => {
   const {state, dispatch} = useAppContext();
-  const {connect, activeSection, editing} = state;
+  const {connect, activeSection, editing, preview, publish} = state;
   const [contactUpdates, setUpdates] = useState(connect);
   const isSectionActive = activeSection === Section.ContactMe;
-  const disableEditing = !isSectionActive || (isSectionActive && !editing);
+  const enableEditing = isSectionActive && editing;
+  const viewOnly = preview || publish;
 
   const onSaveClick = (e: SyntheticEvent) => {
     e.stopPropagation();
@@ -50,62 +52,52 @@ const ConnectMe = () => {
           </>
         )}
       </ActionGroup>
-      <div
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-      >
-        <TextEditor
-          initialText={JSON.parse(contactUpdates.head)}
-          disabled={disableEditing}
-          onChange={(value) =>
-            setUpdates((prev) => {
-              return {...prev, head: value};
-            })
-          }
-        />
-      </div>
+      <TextEditor
+        initialText={JSON.parse(contactUpdates.head)}
+        disabled={!enableEditing || viewOnly}
+        placeholder={ContactMePlaceHolder}
+        onChange={(value) =>
+          setUpdates((prev) => {
+            return {...prev, head: value};
+          })
+        }
+      />
 
       <div className="flex items-center gap-3 mt-5">
-        <If
-          condition={
-            isSectionActive || !!(!isSectionActive && contactUpdates.icon)
-          }
-        >
-          <ImagePicker
-            src={contactUpdates.icon || imageIcon.src}
-            height={50}
-            width={50}
-            id="ContactMe_logo"
-            onChange={(b64) =>
-              setUpdates((prev) => {
-                return {
-                  ...prev,
-                  icon: b64 as string,
-                };
-              })
-            }
-          />
-        </If>
-
-        <If
-          condition={
-            isSectionActive || !!(!disableEditing && contactUpdates.link)
-          }
-        >
-          <input
-            className="bg-transparent outline-none font-medium text-sm text-[#0085FF]"
-            value={contactUpdates.link}
-            placeholder="Add link"
-            disabled={disableEditing}
+        <If condition={enableEditing || !!contactUpdates.icon}>
+          <div
             onClick={(e) => {
-              if (!disableEditing) {
+              if (!enableEditing || viewOnly) {
                 e.preventDefault();
                 e.stopPropagation();
               }
             }}
+          >
+            <ImagePicker
+              src={contactUpdates.icon || imageIcon.src}
+              height={50}
+              width={50}
+              id="ContactMe_logo"
+              onChange={(b64) =>
+                setUpdates((prev) => {
+                  return {
+                    ...prev,
+                    icon: b64 as string,
+                  };
+                })
+              }
+            />
+          </div>
+        </If>
+
+        <If condition={enableEditing || !contactUpdates.linkUrl}>
+          <input
+            className="bg-transparent outline-none font-medium text-sm text-[#0085FF]"
+            value={contactUpdates.link}
+            placeholder="Add link"
+            disabled={!enableEditing || viewOnly}
             onBlur={() => {
+              if (!contactUpdates.link) return;
               const url = prompt("Enter link Url");
               if (url) {
                 setUpdates((prev) => {
@@ -126,7 +118,7 @@ const ConnectMe = () => {
             }
           />
         </If>
-        <If condition={!!contactUpdates.linkUrl}>
+        <If condition={!!contactUpdates.linkUrl && !enableEditing}>
           <span>{contactUpdates?.link}</span>
           <a href={contactUpdates.linkUrl} target="_blank">
             <ExternalLink size={13} />
@@ -138,3 +130,11 @@ const ConnectMe = () => {
 };
 
 export default ConnectMe;
+
+const ContactMePlaceHolder = ({attributes}: RenderElementProps) => (
+  <div {...attributes}>
+    <div className="text-2xl font-bold md:text-3xl">Lets connect!</div>
+    <br></br>
+    <div className="text-lg font-normal">Start writing</div>
+  </div>
+);
