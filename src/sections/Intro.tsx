@@ -12,21 +12,22 @@ import {RenderElementProps} from "slate-react";
 const Intro = () => {
   const device = useDeviceType();
   const {state, dispatch} = useAppContext();
-  const {intro, activeSection, preview} = state;
+  const {intro, activeSection, preview, publish} = state;
   const isSectionActive = activeSection === "Intro";
+  const viewOnly = publish || preview;
 
   return (
     <div
       className="md:mt-20 md:min-h-[330px] flex flex-col justify-center"
       onClick={() => {
-        if (!preview) {
+        if (!viewOnly) {
           dispatch({type: Actions.SET_ACTIVE_SECTION, payload: "Intro"});
         }
       }}
     >
       <TextEditor
         initialText={JSON.parse(intro.head)}
-        disabled={!isSectionActive}
+        disabled={!isSectionActive || viewOnly}
         placeholder={IntroPlaceHolder}
         onChange={(value) =>
           dispatch({
@@ -38,7 +39,7 @@ const Intro = () => {
 
       <TextEditor
         initialText={JSON.parse(intro.desc)}
-        disabled={!isSectionActive}
+        disabled={!isSectionActive || viewOnly}
         placeholder={decPlaceHolder}
         onChange={(value) =>
           dispatch({

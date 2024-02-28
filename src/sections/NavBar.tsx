@@ -9,25 +9,38 @@ import {scrollToSection} from "@/utils";
 const NavBar = () => {
   const device = useDeviceType();
   const {state} = useAppContext();
+  const {activeSection, preview, publish, editing} = state;
   const [pageIcon, setPageIcon] = useState(state.pageIcon);
   const [pageTitle, setPageTitle] = useState(state.pageTitle);
+
+  const enableEditing = activeSection === "Intro" && editing;
+  const viewOnly = publish || preview;
 
   return (
     <div className="h-[30px] mt-[50px] w-full px-5 md:px-[100px]">
       <div className="flex justify-between">
         <div className="flex items-end gap-3">
-          <ImagePicker
-            src={pageIcon || imageIcon.src}
-            height={25}
-            width={25}
-            disabled={false}
-            onChange={(b64) => setPageIcon(b64 as string)}
-            id="page-icon"
-            className="inline"
-          />
+          <div
+            onClick={(e) => {
+              if (preview || publish) {
+                e.preventDefault();
+                e.stopPropagation();
+              }
+            }}
+          >
+            <ImagePicker
+              src={pageIcon || imageIcon.src}
+              height={25}
+              width={25}
+              onChange={(b64) => setPageIcon(b64 as string)}
+              id="page-icon"
+              className="inline"
+            />
+          </div>
           <input
             className="text-base font-medium bg-transparent outline-none"
             placeholder="Enter site title"
+            disabled={!enableEditing || viewOnly}
             value={pageTitle}
             onChange={(e) => setPageTitle(e.target.value)}
           />

@@ -37,15 +37,7 @@ const Publish = () => {
 
   return (
     <>
-      <div
-        className="fixed inset-0 z-[50]"
-        onClick={(e) => {
-          e.stopPropagation;
-          e.preventDefault();
-        }}
-      ></div>
       <NavBar />
-
       <MainContainer>
         <StickyLeftContainer>
           <Profile />

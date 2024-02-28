@@ -14,12 +14,13 @@ const Profile = () => {
   const {profile, preview, publish, activeSection} = state;
   const [profileUpdate, setProfileUpdate] = useState(profile);
   const disabled = preview || publish || activeSection !== "Intro";
+  const viewOnly = publish || preview;
 
   return (
     <div className="mt-10 md:mt-28">
       <div
         onClick={(e) => {
-          if (disabled) {
+          if (disabled || viewOnly) {
             e.preventDefault();
             e.stopPropagation();
           }
@@ -29,7 +30,6 @@ const Profile = () => {
           src={profileUpdate.profileImage || imageIcon.src}
           height={295}
           width={295}
-          disabled={false}
           onChange={(b64) => {
             setProfileUpdate((prev) => {
               return {
