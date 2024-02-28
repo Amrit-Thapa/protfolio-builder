@@ -1,6 +1,5 @@
-import Image from "next/image";
-import plusIcon from "@/../public/assets/icons/plus.png";
 import {useAppContext} from "../context/AppContext";
+import {Plus} from "lucide-react";
 import classNames from "classnames";
 import React, {SyntheticEvent, useState} from "react";
 import {Section} from "@/context/types";
@@ -18,11 +17,20 @@ import {extractTextFromJSON} from "@/utils";
 
 const Skills = () => {
   const {state, dispatch} = useAppContext();
-  const {skills, editing, activeSection} = state;
+  const {skills, editing, activeSection, preview, publish} = state;
   const [skillUpdate, setUpdates] =
     useState<{id: string; value: string}[]>(skills);
   const isSectionActive = activeSection === Section.Skills;
   const enableEditing = isSectionActive && editing;
+  const viewOnly = preview || publish;
+
+  console.log({
+    enableEditing,
+    isSectionActive,
+    editing,
+    preview,
+    publish,
+  });
 
   const handleChange = (id: string, key: string, value: string) => {
     setUpdates((prev) => {
@@ -33,45 +41,43 @@ const Skills = () => {
   };
 
   const onCancelClick = (e: SyntheticEvent) => {
-    e.stopPropagation();
     setUpdates(skills);
     dispatch({type: Actions.SET_EDITING, payload: false});
   };
 
   const onSaveClick = (e: SyntheticEvent) => {
-    e.stopPropagation();
-
     const values = skillUpdate
       .map((item) => item.value)
       .filter((value) => value);
-    let val: number[] = [];
+
+    let updatedFlag: number[] = [];
+
     values.forEach((element) => {
-      val.push(extractTextFromJSON(element).length);
+      updatedFlag.push(extractTextFromJSON(element).length);
     });
 
     const updatedSkill = [...skillUpdate];
 
-    for (let i = val.length - 1; i >= 0; i--) {
-      if (val[i] === 0) {
+    for (let i = updatedFlag.length - 1; i >= 0; i--) {
+      if (updatedFlag[i] === 0) {
         updatedSkill.splice(i, 1);
       }
     }
+
     setUpdates(updatedSkill);
     dispatch({type: Actions.SET_SKILL, payload: updatedSkill});
   };
 
   const onDeleteClick = (e: SyntheticEvent) => {
-    e.stopPropagation();
     dispatch({type: Actions.REMOVE_SECTION, payload: Section.Skills});
   };
 
   const onEditClick = (e: SyntheticEvent) => {
-    e.stopPropagation();
     dispatch({type: Actions.SET_EDITING, payload: true});
   };
 
   return (
-    <ActionController active={isSectionActive}>
+    <ActionController active={isSectionActive || !viewOnly}>
       <ActionGroup>
         {editing ? (
           <>
@@ -97,7 +103,7 @@ const Skills = () => {
             <TextEditor
               id={skill.id}
               initialText={JSON.parse(skill?.value)}
-              disabled={!enableEditing}
+              disabled={!enableEditing || viewOnly}
               onChange={(value) => {
                 handleChange(skill.id, "value", value);
               }}
@@ -105,7 +111,7 @@ const Skills = () => {
             />
           </div>
         ))}
-        {isSectionActive && editing && (
+        {(enableEditing || !viewOnly) && (
           <div className="rounded-2xl border p-3 w-[355px] min-h-[530px] flex items-center justify-center bg-[#EFEFEF]">
             <div
               className="cursor-pointer"
@@ -120,7 +126,7 @@ const Skills = () => {
                 ])
               }
             >
-              <Image src={plusIcon} alt="add" className="m-auto" />
+              <Plus className="m-auto" />
               Add new card
             </div>
           </div>
