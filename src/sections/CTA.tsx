@@ -110,7 +110,6 @@ const CTA = () => {
                       width={50}
                       id={`${cta.id}_logo`}
                       className="rounded"
-                      disabled={false}
                       src={cta.icon || imageIcon.src}
                       onChange={(b64) =>
                         handleChange(cta.id, "icon", b64 as string)
