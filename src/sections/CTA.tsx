@@ -1,7 +1,5 @@
 import React, {useState} from "react";
 import imageIcon from "@/../public/assets/icons/imageIcon.png";
-import Image from "next/image";
-import plusIcon from "@/../public/assets/icons/plus.png";
 import ImagePicker from "../component/ImagePicker";
 import {useAppContext} from "@/context/AppContext";
 import If from "@/component/If";
@@ -16,6 +14,7 @@ import {Actions} from "@/context/reducer";
 import TextEditor from "@/component/Editor";
 import {RenderElementProps} from "slate-react";
 import {removeUnUpdatedItem} from "@/utils";
+import {Plus} from "lucide-react";
 
 const CTA = () => {
   const {state, dispatch} = useAppContext();
@@ -183,7 +182,7 @@ const CTA = () => {
                 })
               }
             >
-              <Image src={plusIcon} alt="add" className="m-auto" />
+              <Plus className="m-auto" />
               Add new card
             </div>
           </div>

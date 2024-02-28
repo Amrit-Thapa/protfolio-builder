@@ -1,7 +1,5 @@
 import imageIcon from "@/../public/assets/icons/imageIcon.png";
 import ImagePicker from "../component/ImagePicker";
-import Image from "next/image";
-import plusIcon from "@/../public/assets/icons/plus.png";
 import {useAppContext} from "@/context/AppContext";
 import If from "@/component/If";
 import {Section} from "@/context/types";
@@ -15,13 +13,15 @@ import ActionController, {
 } from "@/component/ActionController";
 import {Actions} from "@/context/reducer";
 import TextEditor from "@/component/Editor";
+import {Plus} from "lucide-react";
 
 const Projects = () => {
   const {state, dispatch} = useAppContext();
-  const {projects, activeSection, editing} = state;
+  const {projects, activeSection, editing, publish, preview} = state;
   const [projectUpdates, setUpdates] = useState(projects);
   const isSectionActive = activeSection === Section.Projects;
   const enableEditing = isSectionActive && editing;
+  const viewOnly = publish || preview;
 
   const handleChange = (id: string, key: string, value: string) => {
     setUpdates((prev) => {
@@ -80,7 +80,7 @@ const Projects = () => {
 
       <TextEditor
         initialText={JSON.parse(projectUpdates.head)}
-        disabled={!enableEditing}
+        disabled={!enableEditing || viewOnly}
         onChange={(value) => {
           setUpdates((prev) => {
             return {...prev, head: value};
@@ -99,7 +99,7 @@ const Projects = () => {
                 <If condition={isSectionActive || !!project.logo}>
                   <div
                     onClick={(e) => {
-                      if (!enableEditing) {
+                      if (!enableEditing || viewOnly) {
                         e.preventDefault();
                         e.stopPropagation();
                       }
@@ -119,7 +119,7 @@ const Projects = () => {
 
                 <If condition={isSectionActive || !!project.title}>
                   <input
-                    disabled={!enableEditing}
+                    disabled={!enableEditing || viewOnly}
                     className="mt-3 text-base font-medium text-black bg-transparent outline-none"
                     value={project.title}
                     placeholder="Enter project title"
@@ -134,7 +134,7 @@ const Projects = () => {
                     <input
                       className="bg-transparent outline-none font-medium text-sm text-[#0085FF]"
                       placeholder="🔗 Link title here"
-                      disabled={!enableEditing}
+                      disabled={!enableEditing || viewOnly}
                       value={project.link}
                       onBlur={() => {
                         if (!project.link) return;
@@ -162,7 +162,7 @@ const Projects = () => {
                   <div className="mt-3 text-black">
                     <TextEditor
                       initialText={JSON.parse(project.description)}
-                      disabled={!enableEditing}
+                      disabled={!enableEditing || viewOnly}
                       onChange={(value) => {
                         handleChange(project.id, "description", value);
                       }}
@@ -197,7 +197,7 @@ const Projects = () => {
                 })
               }
             >
-              <Image src={plusIcon} alt="add" className="m-auto" />
+              <Plus className="m-auto" />
               Add new card
             </div>
           </div>

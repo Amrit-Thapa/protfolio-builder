@@ -2,9 +2,7 @@ import classNames from "classnames";
 import React, {useState} from "react";
 import imageIcon from "@/../public/assets/icons/imageIcon.png";
 import {useAppContext} from "../context/AppContext";
-import Image from "next/image";
 import ImagePicker from "../component/ImagePicker";
-import plusIcon from "@/../public/assets/icons/plus.png";
 import {removeUnUpdatedItem} from "@/utils";
 import If from "@/component/If";
 import {Section} from "@/context/types";
@@ -18,6 +16,7 @@ import ActionController, {
 import {Actions} from "@/context/reducer";
 import TextEditor from "@/component/Editor";
 import {Descendant} from "slate";
+import {Plus} from "lucide-react";
 
 const Experience = () => {
   const {state, dispatch} = useAppContext();
@@ -219,7 +218,7 @@ const Experience = () => {
                 })
               }
             >
-              <Image src={plusIcon} alt="add" className="m-auto" />
+              <Plus className="m-auto" />
               Add new card
             </div>
           </div>
