@@ -21,7 +21,10 @@ const Intro = () => {
       className="md:mt-20 md:min-h-[330px] flex flex-col justify-center"
       onClick={() => {
         if (!viewOnly) {
-          dispatch({type: Actions.SET_ACTIVE_SECTION, payload: "Intro"});
+          dispatch({
+            type: Actions.SET_ACTIVE_SECTION,
+            payload: "Intro",
+          });
         }
       }}
     >

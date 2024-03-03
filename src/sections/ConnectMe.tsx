@@ -90,7 +90,7 @@ const ConnectMe = () => {
           </div>
         </If>
 
-        <If condition={enableEditing || !contactUpdates.linkUrl}>
+        <If condition={enableEditing}>
           <input
             className="bg-transparent outline-none font-medium text-sm text-[#0085FF]"
             value={contactUpdates.link}

@@ -9,11 +9,10 @@ import {scrollToSection} from "@/utils";
 const NavBar = () => {
   const device = useDeviceType();
   const {state} = useAppContext();
-  const {activeSection, preview, publish, editing} = state;
+  const {activeSection, preview, publish} = state;
   const [pageIcon, setPageIcon] = useState(state.pageIcon);
   const [pageTitle, setPageTitle] = useState(state.pageTitle);
-
-  const enableEditing = activeSection === "Intro" && editing;
+  const isSectionActive = activeSection === "Intro";
   const viewOnly = publish || preview;
 
   return (
@@ -22,7 +21,7 @@ const NavBar = () => {
         <div className="flex items-end gap-3">
           <div
             onClick={(e) => {
-              if (preview || publish) {
+              if (viewOnly || !isSectionActive) {
                 e.preventDefault();
                 e.stopPropagation();
               }
@@ -40,7 +39,7 @@ const NavBar = () => {
           <input
             className="text-base font-medium bg-transparent outline-none"
             placeholder="Enter site title"
-            disabled={!enableEditing || viewOnly}
+            disabled={!isSectionActive || viewOnly}
             value={pageTitle}
             onChange={(e) => setPageTitle(e.target.value)}
           />
